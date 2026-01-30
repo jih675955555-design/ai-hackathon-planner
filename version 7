@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전사 AI 기획 해커톤 - AX 기획서 작성 도구</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-input: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .logo-text h1 {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            font-size: 12px;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 24px 40px;
+        }
+
+        .progress-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            z-index: 2;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .step-number {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 3px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.2);
+        }
+
+        .step.completed .step-number {
+            border-color: var(--success);
+            background: var(--success);
+            color: white;
+        }
+
+        .step.completed .step-number::after {
+            content: '✓';
+        }
+
+        .step.completed .step-number span {
+            display: none;
+        }
+
+        .step-label {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-align: center;
+            max-width: 100px;
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .step.completed .step-label {
+            color: var(--success);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 40px;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .emoji {
+            font-size: 28px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title .badge {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .badge-required {
+            background: #fef2f2;
+            color: var(--danger);
+        }
+
+        .badge-optional {
+            background: #f0fdf4;
+            color: var(--success);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+            margin-left: 2px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: var(--bg-input);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* Hint Button */
+        .hint-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #fef3c7;
+            color: #92400e;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 10px;
+        }
+
+        .hint-btn:hover {
+            background: #fde68a;
+        }
+
+        .hint-content {
+            display: none;
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.7;
+        }
+
+        .hint-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .hint-content strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #78350f;
+        }
+
+        .hint-content ul {
+            margin-left: 20px;
+        }
+
+        .hint-content li {
+            margin-bottom: 4px;
+        }
+
+        /* Validation Status */
+        .validation-box {
+            background: var(--bg-input);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .validation-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .validation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            background: white;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .validation-item.pass {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        .validation-item.fail {
+            border-color: var(--warning);
+            background: #fffbeb;
+        }
+
+        .validation-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+            background: var(--border);
+            color: var(--text-muted);
+        }
+
+        .validation-item.pass .validation-icon {
+            background: var(--success);
+            color: white;
+        }
+
+        .validation-item.fail .validation-icon {
+            background: var(--warning);
+            color: white;
+        }
+
+        .validation-text {
+            flex: 1;
+        }
+
+        .validation-text strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .validation-text span {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        /* ROI Calculator */
+        .roi-calculator {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            border-radius: var(--radius);
+            padding: 28px;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .roi-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .roi-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .roi-item label {
+            display: block;
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .roi-item .value {
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .roi-item .unit {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: var(--bg-input);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+
+        .flow-item {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 120px;
+        }
+
+        .flow-item .system {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+
+        .flow-ai {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+        }
+
+        .flow-ai .system {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Task Table */
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .task-table th,
+        .task-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .task-table th {
+            background: var(--bg-input);
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .task-table tbody tr:hover {
+            background: var(--bg-input);
+        }
+
+        .task-table input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .task-table input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .add-task-btn {
+            margin-top: 12px;
+            padding: 10px 20px;
+            background: var(--bg-input);
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .add-task-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: white;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-buttons .btn {
+            padding: 14px 32px;
+            font-size: 15px;
+        }
+
+        /* Preview Section */
+        .preview-container {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .preview-header h1 {
+            font-size: 24px;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .preview-header h2 {
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .preview-section {
+            margin-bottom: 28px;
+        }
+
+        .preview-section h3 {
+            font-size: 16px;
+            color: var(--secondary);
+            padding: 10px 16px;
+            background: var(--bg-input);
+            border-left: 4px solid var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .preview-content {
+            padding: 0 16px;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .preview-table th {
+            background: var(--bg-input);
+            font-weight: 600;
+            width: 150px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--secondary);
+        }
+
+        .modal p {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--secondary);
+            color: white;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .roi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+            .main-container {
+                padding: 20px;
+            }
+            .progress-container {
+                padding: 16px 20px;
+            }
+            .step-label {
+                display: none;
+            }
+            .roi-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Data Tech Tags */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 8px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            border-color: var(--primary);
+        }
+
+        .tech-tag.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Export buttons */
+        .export-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        /* Effect Items */
+        .effect-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .effect-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-input);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .effect-icon {
+            font-size: 20px;
+        }
+
+        .effect-type {
+            font-weight: 600;
+            color: var(--secondary);
+            flex: 1;
+        }
+
+        .effect-content {
+            padding: 20px;
+        }
+
+        .effect-content.hidden {
+            display: none;
+        }
+
+        /* Toggle Switch */
+        .effect-toggle {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+
+        .effect-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .effect-toggle input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        .effect-toggle input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+
+        .export-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .export-pdf {
+            background: #dc2626;
+            color: white;
+        }
+
+        .export-pdf:hover {
+            background: #b91c1c;
+        }
+
+        .export-word {
+            background: #2b579a;
+            color: white;
+        }
+
+        .export-word:hover {
+            background: #1e3f6f;
+        }
+
+        .export-print {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .export-print:hover {
+            background: #1e293b;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .progress-container, .nav-buttons, .export-buttons, .validation-box, .card-title .hint-btn {
+                display: none !important;
+            }
+            .main-container {
+                padding: 0;
+                max-width: 100%;
+            }
+            .form-section {
+                display: none !important;
+            }
+            #step6 {
+                display: block !important;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+            .preview-container {
+                border: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🚀</div>
+                <div class="logo-text">
+                    <h1>전사 AI 기획 해커톤</h1>
+                    <span>AX 실행과제 기획서 작성 도구</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-ghost" onclick="loadData()">
+                    <span>📂</span> 불러오기
+                </button>
+                <button class="btn btn-ghost" onclick="saveData()">
+                    <span>💾</span> 저장하기
+                </button>
+                <button class="btn btn-primary" onclick="goToStep(6)">
+                    <span>📄</span> 미리보기
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="progress-container">
+        <div class="progress-wrapper">
+            <div class="progress-steps">
+                <div class="progress-line" id="progressLine"></div>
+                <div class="step active" onclick="goToStep(1)">
+                    <div class="step-number"><span>1</span></div>
+                    <div class="step-label">기본정보 & Pain Point</div>
+                </div>
+                <div class="step" onclick="goToStep(2)">
+                    <div class="step-number"><span>2</span></div>
+                    <div class="step-label">As-Is 현황</div>
+                </div>
+                <div class="step" onclick="goToStep(3)">
+                    <div class="step-number"><span>3</span></div>
+                    <div class="step-label">To-Be 시나리오</div>
+                </div>
+                <div class="step" onclick="goToStep(4)">
+                    <div class="step-number"><span>4</span></div>
+                    <div class="step-label">데이터 & 기술</div>
+                </div>
+                <div class="step" onclick="goToStep(5)">
+                    <div class="step-number"><span>5</span></div>
+                    <div class="step-label">ROI 산출</div>
+                </div>
+                <div class="step" onclick="goToStep(6)">
+                    <div class="step-number"><span>6</span></div>
+                    <div class="step-label">최종 검토</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-container">
+<section class="form-section active" id="step1">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">💡</span>
+                    기본 정보 & Pain Point 발굴
+                </h2>
+                <p class="section-desc">AI 도입으로 해결하고자 하는 업무 문제를 구체적으로 정의합니다. 현업의 실제 어려움을 명확히 기술해주세요.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    과제 기본 정보
+                    <span class="badge badge-required">필수</span>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">실행과제명 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="projectName" placeholder="예: 교육 이수 현황 자동 관리 AI 비서">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">과제핵심목표 <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="coreProject" placeholder="예: 교육 이수율 100% 달성 및 관리 업무 자동화">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">담당 부서</label>
+                        <input type="text" class="form-input" id="department" placeholder="예: HRD팀">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">AI Champion 성명</label>
+                        <input type="text" class="form-input" id="champion" placeholder="예: 홍길동">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    과제 정의 (How)
+                    <button class="hint-btn" onclick="toggleHint('hint1')">💡 예시 보기</button>
+                </div>
+                <div class="hint-content" id="hint1">
+                    <strong>✅ 좋은 예시</strong>
+                    <p>"AI가 교육 플랫폼과 인사 시스템 데이터를 자동 연계하여..."</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">과제 정의 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="projectDefinition" placeholder="이 과제가 무엇을 하는지, 어떤 기술을 통해 해결하는지 명확하게 정의해주세요."></textarea>
+                    <p class="form-help">Tip: AI, 자동화, 분석 등의 키워드를 포함하여 기술적 해결 방법을 묘사하세요.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    해결해야 할 문제 (Pain Point)
+                    <button class="hint-btn" onclick="toggleHint('hint2')">💡 작성 가이드</button>
+                </div>
+                <div class="hint-content" id="hint2">
+                    <strong>✅ 구체화 체크리스트</strong>
+                    <ul>
+                        <li>시간, 비용, 오류 등 구체적인 어려움을 언급하세요.</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">현재 업무의 어려움과 비효율성 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="painPoint" placeholder="예: 월별 취합에 2시간 소요, 수작업 입력으로 인한 오류 발생 빈번 등 구체적인 고통 요소를 작성하세요."></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">도입 예상 효과 (Connection)</div>
+                <div class="form-group">
+                    <label class="form-label">AI 도입 시 기대되는 효과 및 활용 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="expectedEffect" placeholder="예: 데이터를 연동하여 실시간으로 파악 가능, 업무 프로세스에 통합되어 자동화 실현"></textarea>
+                </div>
+            </div>
+
+            <div class="validation-box">
+                <div class="validation-title">📋 자가진단 체크리스트</div>
+                
+                <div class="validation-item" id="v1-painpoint">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>Pain Point 구체성</strong>
+                        <span>'시간', '비용', '오류', '수작업' 등 구체적인 문제 키워드가 포함되었나요?</span>
+                    </div>
+                </div>
+
+                <div class="validation-item" id="v1-how">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>해결 방법의 명확성</strong>
+                        <span>AI가 수행할 역할(자동화, 분석, 예측 등)이 명시되었나요?</span>
+                    </div>
+                </div>
+
+                <div class="validation-item" id="v1-connection">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>연결 고리</strong>
+                        <span>업무 프로세스와의 연계(연동, 통합, 활용)가 고려되었나요?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn btn-primary" onclick="nextStep()">다음 단계 →</button>
+            </div>
+        </section>
+        <section class="form-section" id="step2">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">📊</span>
+                    As-Is 현황 분석
+                </h2>
+                <p class="section-desc">AI 도입 전 현재 업무 프로세스를 상세히 분석합니다. 각 단계별 소요 시간과 시스템을 명시해주세요.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    현재 업무 프로세스 (As-Is)
+                    <button class="hint-btn" onclick="toggleHint('hint3')">💡 예시 보기</button>
+                </div>
+                <div class="hint-content" id="hint3">
+                    <strong>✅ As-Is 시나리오 예시</strong>
+                    <div class="flow-container" style="margin-top: 12px;">
+                        <div class="flow-item">
+                            <span class="system">교육 플랫폼</span>
+                            <span>[HR팀] 각 교육별 수료자 명단 다운로드</span>
+                        </div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-item">
+                            <span class="system">Excel</span>
+                            <span>부서별/직급별 이수 현황 수동 정리</span>
+                        </div>
+                        <span class="flow-arrow">→</span>
+                        <div class="flow-item">
+                            <span class="system">Email</span>
+                            <span>[HR팀] 미이수자 독려 메일 개별 발송</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 12px; font-size: 13px;">※ 각 단계별로 소요 시간과 사용 시스템을 함께 기재해주세요.</p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">현재 업무 흐름 설명 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="현재 업무가 어떤 순서로 진행되는지 단계별로 설명해주세요.
+
+예시:
+1. [HR팀] 각 교육별 수료자 명단 취합 (소요시간: 30분)
+2. [HR팀] 부서별/직급별 이수 현황 Excel 정리 (소요시간: 1시간)
+3. [HR팀] 법정필수교육 미이수자 수동 확인 (소요시간: 45분)
+4. [HR팀] 미이수자 대상 독려 메일 개별 발송 (소요시간: 30분)"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">현재 프로세스의 문제점</div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">시간 비효율</label>
+                        <textarea class="form-textarea" id="asisTimeProblem" placeholder="예: 월별 교육 이수 현황 취합에 평균 2시간 이상 소요, 법정필수교육 미이수자 확인에만 45분 필요. 독려 메일 개별 발송으로 반복 작업 발생."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">품질/정확도 이슈</label>
+                        <textarea class="form-textarea" id="asisQualityProblem" placeholder="예: 수작업 취합 과정에서 누락 및 오기입 발생, 부서 간 명단 불일치로 미이수자 파악 정확도 저하. 교육 이수 기한 임박 인원 사전 파악 어려움."></textarea>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">시스템/데이터 이슈</label>
+                        <textarea class="form-textarea" id="asisSystemProblem" placeholder="예: 교육 플랫폼과 인사 시스템 간 연동 미흡, 교육별 수료 데이터 형식 상이. 퇴사자/부서이동자 반영이 수동으로 이루어져 데이터 정합성 저하."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">기타 문제점</label>
+                        <textarea class="form-textarea" id="asisOtherProblem" placeholder="예: 담당자 부재 시 현황 파악 지연, 법정교육 미이수에 따른 컴플라이언스 리스크 존재. 교육 이력 기반 역량 분석 및 추천 불가."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">현재 사용 시스템 및 도구</div>
+                <div class="form-group">
+                    <label class="form-label">관련 시스템 목록</label>
+                    <div class="tech-tags" id="systemTags">
+                        <span class="tech-tag" onclick="toggleTag(this)">SAP</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">PLM</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">Word</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">Veeva</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">Excel</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">SharePoint</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">Email</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">수작업</span>
+                    </div>
+                    <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="기타 시스템이 있다면 입력해주세요 (쉼표로 구분)">
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
+                <button class="btn btn-primary" onclick="nextStep()">다음 단계 →</button>
+            </div>
+        </section>
+
+        <section class="form-section" id="step3">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">🎯</span>
+                    To-Be 시나리오 설계
+                </h2>
+                <p class="section-desc">AI 도입 후 변화될 업무 프로세스를 설계합니다. AI가 담당할 영역과 사람이 담당할 영역을 명확히 구분해주세요.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    AI 도입 후 업무 프로세스 (To-Be)
+                    <button class="hint-btn" onclick="toggleHint('hint4')">💡 설계 가이드</button>
+                </div>
+                <div class="hint-content" id="hint4">
+                    <strong>✅ Pass 기준: Process 재설계</strong>
+                    <ul>
+                        <li>업무의 As-Is(현재)와 AI 도입 후 To-Be(미래) 프로세스 변화가 단계별로 명확</li>
+                        <li>AI가 단독 처리하는 영역과 사람의 영역이 명확히 분리</li>
+                        <li>Human-in-the-loop: AI 결과물을 인간이 어떻게 검증하고 보완할지 설계</li>
+                    </ul>
+                    <br>
+                    <strong>❌ 재검토 사유</strong>
+                    <ul>
+                        <li>기능 나열: 전후 맥락 없이 AI가 한 번에 모든 문제를 해결해줄 것이라는 막연한 기대</li>
+                        <li>검증 부재: AI 결과물의 신뢰성을 확인하는 단계가 고려되지 않음</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">AI 도입 후 업무 흐름 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="AI 도입 후 변화될 업무 흐름을 단계별로 설명해주세요.
+
+예시:
+1. [HR팀] 교육 이수 현황 조회 요청을 시스템에 입력 (소요시간: 5분)
+2. [AI] 교육 플랫폼/인사 시스템 데이터를 자동 연계하여 부서별·직급별 이수 현황 분석 및 미이수자 리스트 자동 생성 (자동)
+3. [HR팀] AI가 생성한 현황 리포트를 확인하고 법정필수교육 미이수자 대상 독려 메일 일괄 발송 (소요시간: 10분)
+4. [HR팀] AI 분석 결과 검증 및 피드백 입력 (소요시간: 5분)"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">AI 역할 정의</div>
+                <div class="form-group">
+                    <label class="form-label">AI가 수행할 작업 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="aiRole" placeholder="예:
+- 교육 플랫폼과 인사 시스템 데이터 자동 연계 및 취합
+- 부서별/직급별 교육 이수 현황 자동 분석
+- 법정필수교육 미이수자 자동 추출 및 리스트 생성
+- 교육 이수 기한 임박 인원 사전 알림
+- 미이수자 대상 독려 메일 템플릿 자동 생성"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">사람이 수행할 작업 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="humanRole" placeholder="예:
+- AI가 생성한 현황 리포트 적합성 검토
+- 미이수 사유 확인 및 예외 처리 판단
+- 독려 메일 최종 발송 승인
+- 교육 정책 변경 시 AI 기준 업데이트
+- AI 분석 결과에 대한 피드백 제공"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">AI 상호작용 설계</div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">입력 (Input)</label>
+                        <textarea class="form-textarea" id="aiInput" placeholder="예: 조회 기준일, 대상 부서/직급, 교육 유형(법정필수/직무/선택), 조회 기간"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">출력 (Output)</label>
+                        <textarea class="form-textarea" id="aiOutput" placeholder="예: 부서별 이수율 현황 대시보드, 미이수자 명단(이름/부서/미이수 교육명/기한), 기한 임박 알림 리스트, 독려 메일 초안"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">예외 처리 방안</label>
+                    <textarea class="form-textarea" id="exceptionHandling" placeholder="예: 퇴사자/휴직자는 자동 제외 처리, 부서 이동자는 현재 소속 기준 반영, 데이터 불일치 발생 시 담당자에게 검토 요청 알림 발송, 신규 교육 등록 시 기준 매핑 확인 요청"></textarea>
+                    <p class="form-help">AI가 정보를 찾지 못했을 때 "모른다"고 답하게 하는 등 오작동 방지 문구를 포함해주세요.</p>
+                </div>
+            </div>
+
+            <div class="validation-box">
+                <div class="validation-title">📋 자가진단 체크리스트</div>
+                <div class="validation-item" id="v3-process">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>Process 재설계</strong>
+                        <span>As-Is → To-Be 프로세스 변화가 단계별로 명확하게 도식화되어 있나요?</span>
+                    </div>
+                </div>
+                <div class="validation-item" id="v3-humanloop">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>Human-in-the-loop</strong>
+                        <span>AI의 결과물을 인간이 어떻게 검증하고 보완할지 'Human-in-the-loop' 체계가 포함되어 있나요?</span>
+                    </div>
+                </div>
+                <div class="validation-item" id="v3-exception">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>예외 처리</strong>
+                        <span>AI가 정보를 찾지 못했을 때 "모른다"고 답하게 하는 등 오작동 방지 문구가 포함되어 있나요?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
+                <button class="btn btn-primary" onclick="nextStep()">다음 단계 →</button>
+            </div>
+        </section>
+
+        <section class="form-section" id="step4">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">🗄️</span>
+                    데이터 & 기술 검토
+                </h2>
+                <p class="section-desc">AI 구현에 필요한 데이터와 기술 요소를 검토합니다. 데이터 확보 가능성이 프로젝트 성공의 핵심입니다.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    필요 데이터
+                    <button class="hint-btn" onclick="toggleHint('hint5')">💡 데이터 체크리스트</button>
+                </div>
+                <div class="hint-content" id="hint5">
+                    <strong>✅ Pass 기준: 데이터 전략</strong>
+                    <ul>
+                        <li>샘플 데이터 분석: 실제 활용할 데이터 샘플에 대한 구조를 파악</li>
+                        <li>전처리 방안: 데이터의 노이즈(불필요한 정보) 제거 등 가공 방안 수립</li>
+                        <li>최신성 유지: 데이터가 주기적으로 업데이트되어야 하는지, 갱신 주기 정의</li>
+                        <li>보안/Compliance: 개인정보 비식별화나 사내 보안 규정 준수 여부 검토</li>
+                    </ul>
+                    <br>
+                    <strong>❌ 재검토 사유</strong>
+                    <ul>
+                        <li>데이터 부재: 아이디어는 있으나, 이를 뒷받침할 문서나 데이터가 디지털화되어 있지 않음</li>
+                        <li>막연한 기대: "인터넷에 있는 정보" 등 참조 대상이 너무 광범위</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">필요한 데이터 목록 <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="requiredData" placeholder="예:
+- 교육 플랫폼 수료 데이터 (교육명, 수료일, 수료자 정보)
+- 인사 시스템 데이터 (사번, 성명, 부서, 직급, 입사일, 재직상태)
+- 법정필수교육 목록 및 이수 주기 정보
+- 부서별/직급별 필수 교육 매핑 정보"></textarea>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">데이터 소스/위치</label>
+                        <textarea class="form-textarea" id="dataSource" placeholder="예:
+- 사내 교육 플랫폼 (LMS) DB
+- 인사 시스템 (HR System) DB
+- 법정교육 관리 대장 (Excel/SharePoint)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">데이터 형태/포맷</label>
+                        <textarea class="form-textarea" id="dataFormat" placeholder="예:
+- 정형 데이터: DB 테이블 (SQL)
+- 반정형: Excel, CSV
+- 교육 이수 기록: API 연동"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">데이터 품질 및 전처리</div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">예상 데이터 품질 이슈</label>
+                        <textarea class="form-textarea" id="dataQualityIssue" placeholder="예:
+- 교육 플랫폼별 데이터 형식 불일치
+- 퇴사자/휴직자 상태 반영 지연
+- 부서 코드 매핑 불일치
+- 교육명 표기 불일치 (약어/풀네임)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">전처리/정제 계획</label>
+                        <textarea class="form-textarea" id="dataPreprocessing" placeholder="예:
+- 교육명 표준화 사전 구축
+- 부서 코드 매핑 테이블 정비
+- 인사 시스템 연동으로 재직상태 실시간 반영
+- 중복 수료 기록 제거 로직 적용"></textarea>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label class="form-label">데이터 갱신 주기</label>
+                        <select class="form-select" id="dataUpdateCycle">
+                            <option value="">선택해주세요</option>
+                            <option value="realtime">실시간</option>
+                            <option value="daily">일 1회</option>
+                            <option value="weekly">주 1회</option>
+                            <option value="monthly">월 1회</option>
+                            <option value="quarterly">분기 1회</option>
+                            <option value="onetime">1회성 (갱신 불필요)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">보안/컴플라이언스 고려사항</label>
+                        <textarea class="form-textarea" id="dataSecurity" placeholder="예:
+- 개인정보 포함 여부: 성명, 사번 포함
+- 접근 권한: HR팀 및 각 부서장으로 제한
+- 데이터 보관: 사내 서버, 외부 반출 불가
+- 개인정보 처리 동의: 입사 시 동의 완료"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">관련 AI 기술</div>
+                <div class="form-group">
+                    <label class="form-label">적용 예정 AI 기술</label>
+                    <div class="tech-tags" id="techTags">
+                        <span class="tech-tag" onclick="toggleTag(this)">LLM (대규모 언어모델)</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">RAG (검색증강생성)</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">텍스트 요약</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">텍스트 분류</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">이미지 인식</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">OCR</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">추천 시스템</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">예측 분석</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">자연어 처리</span>
+                        <span class="tech-tag" onclick="toggleTag(this)">음성 인식</span>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label class="form-label">기술 적용 방안 설명</label>
+                    <textarea class="form-textarea" id="techDescription" placeholder="예: LLM 기반 자연어 질의로 교육 현황 조회, 데이터 자동 연계 및 분석을 통한 리포트 생성, 미이수자 패턴 분석을 통한 사전 알림 기능 구현"></textarea>
+                </div>
+            </div>
+
+            <div class="validation-box">
+                <div class="validation-title">📋 자가진단 체크리스트</div>
+                <div class="validation-item" id="v4-datasample">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>샘플 데이터 분석</strong>
+                        <span>실제 활용할 데이터 샘플에 대한 구조를 파악했나요?</span>
+                    </div>
+                </div>
+                <div class="validation-item" id="v4-preprocessing">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>전처리 방안</strong>
+                        <span>데이터의 노이즈(불필요한 정보) 제거 등 가공 방안이 수립되어 있나요?</span>
+                    </div>
+                </div>
+                <div class="validation-item" id="v4-security">
+                    <div class="validation-icon">?</div>
+                    <div class="validation-text">
+                        <strong>보안/Compliance</strong>
+                        <span>개인정보 비식별화나 사내 보안 규정 준수 여부를 검토했나요?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
+                <button class="btn btn-primary" onclick="nextStep()">다음 단계 →</button>
+            </div>
+        </section>
+
+        <section class="form-section" id="step5">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">📈</span>
+                    기대 효과 & ROI 산출
+                </h2>
+                <p class="section-desc">AI 도입으로 인한 정량적/정성적 효과를 구체적으로 작성합니다. 수치와 산출 근거를 함께 제시해주세요.</p>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border: none;">
+                <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">
+                    🎯 핵심 기대효과 (한 줄 요약)
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="예: 교육 이수 현황 관리 시간 85% 단축 (월 2시간 45분 → 20분) 및 법정교육 미이수 리스크 제로화">
+                </div>
+                <div class="grid-2" style="margin-top: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" style="color: rgba(255,255,255,0.8); font-size: 13px;">예상 수행 기간</label>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="number" class="form-input" id="projectDuration" style="width: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center;" placeholder="10">
+                            <span style="color: rgba(255,255,255,0.8);">개월</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    📊 정량적 효과
+                    <button class="hint-btn" onclick="toggleHint('hint6')">💡 작성 가이드</button>
+                </div>
+                <div class="hint-content" id="hint6">
+                    <strong>✅ Pass 기준</strong>
+                    <p>단순 편의를 넘어, 구체적인 수치로 효과가 추산되어야 합니다.</p>
+                    <br>
+                    <strong>📝 효과 유형별 예시</strong>
+                    <ul>
+                        <li><strong>시간 절감:</strong> 연간 10,000시간 절감 (20명 × 1건/주 × 1시간 × 52주 × 80%)</li>
+                        <li><strong>비용 절감:</strong> 외주 비용 연 5,000만원 절감 (월 500만원 × 10건)</li>
+                        <li><strong>매출 증대:</strong> 고객 응대 속도 향상 → 재구매율 5% 상승 예상</li>
+                        <li><strong>품질 향상:</strong> 불량률 2% → 0.5%로 감소 (연간 불량 비용 3억원 절감)</li>
+                    </ul>
+                </div>
+
+                <div class="effect-item">
+                    <div class="effect-header">
+                        <span class="effect-icon">⏱️</span>
+                        <span class="effect-type">시간 절감</span>
+                        <label class="effect-toggle">
+                            <input type="checkbox" id="effect_time_enabled" checked onchange="toggleEffectSection('time')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="effect-content" id="effect_time_content">
+                        <div class="form-group">
+                            <label class="form-label">효과 내용</label>
+                            <textarea class="form-textarea" id="effect_time_value" style="min-height: 80px;" placeholder="예: 교육 이수 현황 관리 시간 85% 절감 (월간 약 2시간 25분 절감)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">산출 근거</label>
+                            <textarea class="form-textarea" id="effect_time_basis" style="min-height: 80px;" placeholder="예: 현재 월 2시간 45분 소요 (취합 30분 + 정리 1시간 + 확인 45분 + 발송 30분)
+AI 도입 후 월 20분 소요 (조회 5분 + 확인 10분 + 피드백 5분)
+절감 시간: 2시간 25분/월 × 12개월 = 연간 29시간 절감"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="effect-item">
+                    <div class="effect-header">
+                        <span class="effect-icon">💰</span>
+                        <span class="effect-type">비용 절감</span>
+                        <label class="effect-toggle">
+                            <input type="checkbox" id="effect_cost_enabled" onchange="toggleEffectSection('cost')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="effect-content hidden" id="effect_cost_content">
+                        <div class="form-group">
+                            <label class="form-label">효과 내용</label>
+                            <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="예: 법정교육 미이수로 인한 과태료 리스크 제거 (건당 최대 500만원)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">산출 근거</label>
+                            <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="예: 법정필수교육 미이수 시 과태료 부과 가능 (산업안전보건교육 등)
+연간 평균 미이수 발생 건수 5건 × 건당 과태료 100~500만원 = 리스크 비용 최대 2,500만원
+AI 도입으로 미이수 사전 예방 → 리스크 제거"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="effect-item">
+                    <div class="effect-header">
+                        <span class="effect-icon">📈</span>
+                        <span class="effect-type">매출/수익 증대</span>
+                        <label class="effect-toggle">
+                            <input type="checkbox" id="effect_revenue_enabled" onchange="toggleEffectSection('revenue')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="effect-content hidden" id="effect_revenue_content">
+                        <div class="form-group">
+                            <label class="form-label">효과 내용</label>
+                            <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="예: 고객 응대 속도 향상으로 CS 만족도 10%p 상승, 재구매율 5% 증가 예상"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">산출 근거</label>
+                            <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="예: 현재 평균 응대 시간 30분 → 5분으로 단축
+CS 만족도 조사 결과 응대 속도와 재구매율 상관관계 분석 기반"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="effect-item">
+                    <div class="effect-header">
+                        <span class="effect-icon">✅</span>
+                        <span class="effect-type">품질/정확도 향상</span>
+                        <label class="effect-toggle">
+                            <input type="checkbox" id="effect_quality_enabled" onchange="toggleEffectSection('quality')">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="effect-content hidden" id="effect_quality_content">
+                        <div class="form-group">
+                            <label class="form-label">효과 내용</label>
+                            <textarea class="form-textarea" id="effect_quality_value" style="min-height: 80px;" placeholder="예: 교육 이수 현황 파악 정확도 99% 이상 달성, 미이수자 누락률 0%"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">산출 근거</label>
+                            <textarea class="form-textarea" id="effect_quality_basis" style="min-height: 80px;" placeholder="예: 현재 수작업 취합 시 누락/오기입률 약 5%
+AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
+미이수자 자동 추출로 누락 제로화"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    ✨ 정성적 효과
+                    <button class="hint-btn" onclick="toggleHint('hint7')">💡 예시 보기</button>
+                </div>
+                <div class="hint-content" id="hint7">
+                    <strong>정성적 효과 예시</strong>
+                    <ul>
+                        <li>담당자별 업무 품질 편차 감소</li>
+                        <li>신규 입사자 적응 기간 단축 (6개월 → 2개월)</li>
+                        <li>암묵지의 형식지화로 조직 지식 자산화</li>
+                        <li>반복 업무 감소로 직원 업무 만족도 향상</li>
+                        <li>데이터 기반 의사결정 문화 정착</li>
+                        <li>부서 간 협업 효율성 증가</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">기대되는 정성적 효과</label>
+                    <textarea class="form-textarea" id="qualitativeValue" style="min-height: 120px;" placeholder="예:
+- 담당자 업무 부담 경감 - 단순 반복 취합 업무에서 벗어나 교육 기획/개선 업무에 집중
+- 컴플라이언스 리스크 사전 예방 - 기한 임박 알림으로 미이수 사전 방지
+- 데이터 기반 교육 운영 - 이수 현황 분석을 통한 교육 정책 수립 근거 확보
+- 담당자 부재 시에도 업무 연속성 확보 - AI가 현황 자동 생성"></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🚀 확장 가능성</div>
+                <div class="form-group">
+                    <label class="form-label">타 부서/전사 확대 적용 가능성</label>
+                    <textarea class="form-textarea" id="scalability" placeholder="예:
+- 1단계: HR팀 법정필수교육 관리 적용 (2개월)
+- 2단계: 전사 직무교육/리더십교육 확대 (4개월)
+- 3단계: 해외 법인 교육 현황 통합 관리 (8개월)
+
+유사 적용 가능 업무:
+- 자격증/면허 갱신 관리
+- 안전교육 이수 관리 (생산/연구 부서)
+- 신입사원 온보딩 교육 관리"></textarea>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
+                <button class="btn btn-primary" onclick="nextStep()">다음 단계 →</button>
+            </div>
+        </section>
+
+        <section class="form-section" id="step6">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="emoji">✅</span>
+                    최종 검토 & 기획서 생성
+                </h2>
+                <p class="section-desc">작성한 내용을 최종 검토하고 기획서를 생성합니다.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title">실행을 위한 필요 Task</div>
+                <table class="task-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%;">No.</th>
+                            <th style="width: 55%;">실행을 위한 필요 Task</th>
+                            <th style="width: 20%;">선행 Task</th>
+                            <th style="width: 20%;">수행 기간</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                        <tr>
+                            <td>1</td>
+                            <td><input type="text" id="task1_desc" placeholder="예: [시스템] 교육 플랫폼-인사 시스템 간 API 연동 개발"></td>
+                            <td><input type="text" id="task1_prereq" placeholder="없음"></td>
+                            <td><input type="text" id="task1_duration" placeholder="1M"></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><input type="text" id="task2_desc" placeholder="예: [데이터] 교육명 표준화 및 부서코드 매핑 테이블 정비"></td>
+                            <td><input type="text" id="task2_prereq" placeholder="없음"></td>
+                            <td><input type="text" id="task2_duration" placeholder="2주"></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><input type="text" id="task3_desc" placeholder="예: [AI기능] 교육 이수 현황 자동 분석 및 리포트 생성 기능 개발"></td>
+                            <td><input type="text" id="task3_prereq" placeholder="1,2"></td>
+                            <td><input type="text" id="task3_duration" placeholder="1M"></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><input type="text" id="task4_desc" placeholder="예: [AI기능] 미이수자 자동 추출 및 독려 메일 자동 생성 기능 개발"></td>
+                            <td><input type="text" id="task4_prereq" placeholder="3"></td>
+                            <td><input type="text" id="task4_duration" placeholder="2주"></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><input type="text" id="task5_desc" placeholder="예: [테스트] 파일럿 운영 및 피드백 반영"></td>
+                            <td><input type="text" id="task5_prereq" placeholder="4"></td>
+                            <td><input type="text" id="task5_duration" placeholder="1M"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 최종 평가 기준 체크</div>
+                <div class="validation-box" style="margin-top: 0; background: white;">
+                    <h4 style="margin-bottom: 16px; color: var(--secondary);">① 문제 정의 및 해결 논리</h4>
+                    <div class="validation-item" id="vf-tobe">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>To-Be 도식화</strong>
+                            <span>업무의 As-Is(현재)와 AI 도입 후 To-Be(미래) 프로세스 변화가 단계별로 명확</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-roi">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>ROI 산출</strong>
+                            <span>시간 단축(Hours)이나 비용 절감 효과가 정량적인 수치로 추산</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-scalability">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>확장성</strong>
+                            <span>해당 기획이 타 부서나 전사적으로 확대 적용 가능한 모델</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-aicollab">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>AI 협업</strong>
+                            <span>AI가 단독 처리하는 영역과 사람의 영역이 명확히 분리</span>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 24px 0 16px; color: var(--secondary);">② 데이터 전략</h4>
+                    <div class="validation-item" id="vf-datasample">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>샘플 데이터 분석</strong>
+                            <span>실제 활용할 데이터 샘플에 대한 구조를 파악</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-dataprocess">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>전처리 방안</strong>
+                            <span>데이터의 노이즈 제거 등 가공 방안 수립</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-compliance">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>보안/Compliance</strong>
+                            <span>개인정보 비식별화나 사내 보안 규정 준수 여부 검토</span>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 24px 0 16px; color: var(--secondary);">③ AI 워킹 로직 및 시나리오</h4>
+                    <div class="validation-item" id="vf-interaction">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>상호작용 로직</strong>
+                            <span>사용자와 AI 간의 질의응답 순서나 피드백 루프가 정교하게 설계</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-validation">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>검증 프로세스</strong>
+                            <span>AI의 결과물을 인간이 어떻게 검증하고 보완할지 Human-in-the-loop 체계 포함</span>
+                        </div>
+                    </div>
+                    <div class="validation-item" id="vf-exception">
+                        <div class="validation-icon">?</div>
+                        <div class="validation-text">
+                            <strong>예외 처리</strong>
+                            <span>AI가 정보를 찾지 못했을 때 "모른다"고 답하게 하는 등 오작동 방지 문구 포함</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📄 기획서 미리보기</div>
+                <div class="preview-container" id="previewContainer">
+                    </div>
+            </div>
+
+            <div class="export-buttons">
+                <button class="export-btn export-pdf" onclick="exportToPDF()">
+                    <span>📕</span> PDF로 저장하기
+                </button>
+                <button class="export-btn export-word" onclick="exportToWord()">
+                    <span>📝</span> Word로 저장하기
+                </button>
+                <button class="export-btn export-print" onclick="window.print()">
+                    <span>🖨️</span> 인쇄하기
+                </button>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
+                <button class="btn btn-success" onclick="submitPlan()">🎉 기획서 제출 완료</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="toast" id="toast">
+        <span id="toastIcon">✓</span>
+        <span id="toastMessage">저장되었습니다.</span>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h3 id="modalTitle">저장된 데이터 불러오기</h3>
+            <p id="modalMessage">이전에 저장된 기획서 데이터가 있습니다. 불러오시겠습니까?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-outline" onclick="closeModal()">취소</button>
+                <button class="btn btn-primary" onclick="confirmLoad()">불러오기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let currentStep = 1;
+        const totalSteps = 6;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSavedData();
+            updateProgress();
+            setupAutoSave();
+            setupValidation();
+        });
+
+        // --- [Utility] Security: XSS 방지를 위한 HTML Escape 함수 ---
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // --- [Utility] Text Formatting: 줄바꿈 처리 ---
+        function formatText(text) {
+            if (!text) return '-';
+            // 먼저 HTML 태그를 무력화(escape)한 뒤, 줄바꿈 문자를 <br>로 변환
+            return escapeHtml(text).replace(/\n/g, '<br>');
+        }
+
+        // Step Navigation
+        function goToStep(step) {
+            if (step < 1 || step > totalSteps) return;
+            
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+            
+            currentStep = step;
+            updateProgress();
+            
+            if (step === 6) {
+                generatePreview();
+                runFinalValidation();
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        // Progress Bar Update
+        function updateProgress() {
+            const steps = document.querySelectorAll('.step');
+            const progressLine = document.getElementById('progressLine');
+            
+            steps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else if (index + 1 < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+            
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            // 부모 컨테이너 너비 계산 시 안전장치 추가
+            const container = document.querySelector('.progress-steps');
+            const maxWidth = container ? container.offsetWidth - 80 : 0; 
+            progressLine.style.width = `${(progress / 100) * maxWidth}px`;
+        }
+
+        // Hint Toggle
+        function toggleHint(hintId) {
+            const hint = document.getElementById(hintId);
+            if(hint) hint.classList.toggle('show');
+        }
+
+        // Tag Toggle
+        function toggleTag(element) {
+            element.classList.toggle('selected');
+        }
+
+        // Get Selected Tags
+        function getSelectedTags(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return [];
+            const selected = container.querySelectorAll('.tech-tag.selected');
+            return Array.from(selected).map(tag => tag.textContent);
+        }
+
+        // Save Data
+        function saveData() {
+            const data = collectFormData();
+            localStorage.setItem('aiHackathonPlan', JSON.stringify(data));
+            localStorage.setItem('aiHackathonPlanDate', new Date().toISOString());
+            showToast('저장되었습니다.', 'success');
+        }
+
+        // Load Data
+        function loadData() {
+            const saved = localStorage.getItem('aiHackathonPlan');
+            if (saved) {
+                showModal('저장된 데이터 불러오기', '이전에 저장된 기획서 데이터를 불러오시겠습니까?');
+            } else {
+                showToast('저장된 데이터가 없습니다.');
+            }
+        }
+
+        function confirmLoad() {
+            const saved = localStorage.getItem('aiHackathonPlan');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    populateFormData(data);
+                    showToast('데이터를 불러왔습니다.', 'success');
+                } catch (e) {
+                    console.error('Data Load Error:', e);
+                    showToast('데이터가 손상되어 불러올 수 없습니다.', 'default');
+                }
+            }
+            closeModal();
+        }
+
+        // Check for saved data on load
+        function checkSavedData() {
+            const saved = localStorage.getItem('aiHackathonPlan');
+            const savedDate = localStorage.getItem('aiHackathonPlanDate');
+            if (saved && savedDate) {
+                const date = new Date(savedDate);
+                const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR');
+                showModal('저장된 데이터 발견', `${dateStr}에 저장된 기획서가 있습니다. 불러오시겠습니까?`);
+            }
+        }
+
+        // Auto-save setup
+        function setupAutoSave() {
+            let timeout;
+            document.querySelectorAll('input, textarea, select').forEach(element => {
+                element.addEventListener('input', () => {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        const data = collectFormData();
+                        localStorage.setItem('aiHackathonPlan', JSON.stringify(data));
+                        localStorage.setItem('aiHackathonPlanDate', new Date().toISOString());
+                    }, 3000);
+                });
+            });
+        }
+
+        // Effect Section Toggle
+        function toggleEffectSection(type) {
+            const checkbox = document.getElementById(`effect_${type}_enabled`);
+            const content = document.getElementById(`effect_${type}_content`);
+            if (checkbox && content) {
+                if (checkbox.checked) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            }
+        }
+
+        // Collect form data
+        function collectFormData() {
+            // Helper to safely get value
+            const getVal = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value : '';
+            };
+
+            return {
+                // Step 1
+                projectName: getVal('projectName'),
+                coreProject: getVal('coreProject'),
+                department: getVal('department'),
+                champion: getVal('champion'),
+                projectDefinition: getVal('projectDefinition'),
+                painPoint: getVal('painPoint'),
+                expectedEffect: getVal('expectedEffect'),
+                
+                // Step 2
+                asisDescription: getVal('asisDescription'),
+                asisTimeProblem: getVal('asisTimeProblem'),
+                asisQualityProblem: getVal('asisQualityProblem'),
+                asisSystemProblem: getVal('asisSystemProblem'),
+                asisOtherProblem: getVal('asisOtherProblem'),
+                systems: getSelectedTags('systemTags'),
+                customSystems: getVal('customSystems'),
+                
+                // Step 3
+                tobeDescription: getVal('tobeDescription'),
+                aiRole: getVal('aiRole'),
+                humanRole: getVal('humanRole'),
+                aiInput: getVal('aiInput'),
+                aiOutput: getVal('aiOutput'),
+                exceptionHandling: getVal('exceptionHandling'),
+                
+                // Step 4
+                requiredData: getVal('requiredData'),
+                dataSource: getVal('dataSource'),
+                dataFormat: getVal('dataFormat'),
+                dataQualityIssue: getVal('dataQualityIssue'),
+                dataPreprocessing: getVal('dataPreprocessing'),
+                dataUpdateCycle: getVal('dataUpdateCycle'),
+                dataSecurity: getVal('dataSecurity'),
+                techTags: getSelectedTags('techTags'),
+                techDescription: getVal('techDescription'),
+                
+                // Step 5
+                keyBenefit: getVal('keyBenefit'),
+                projectDuration: getVal('projectDuration'),
+                
+                // 정량적 효과
+                effect_time_enabled: document.getElementById('effect_time_enabled')?.checked || false,
+                effect_time_value: getVal('effect_time_value'),
+                effect_time_basis: getVal('effect_time_basis'),
+                
+                effect_cost_enabled: document.getElementById('effect_cost_enabled')?.checked || false,
+                effect_cost_value: getVal('effect_cost_value'),
+                effect_cost_basis: getVal('effect_cost_basis'),
+                
+                effect_revenue_enabled: document.getElementById('effect_revenue_enabled')?.checked || false,
+                effect_revenue_value: getVal('effect_revenue_value'),
+                effect_revenue_basis: getVal('effect_revenue_basis'),
+                
+                effect_quality_enabled: document.getElementById('effect_quality_enabled')?.checked || false,
+                effect_quality_value: getVal('effect_quality_value'),
+                effect_quality_basis: getVal('effect_quality_basis'),
+                
+                // 정성적 효과
+                qualitativeValue: getVal('qualitativeValue'),
+                scalability: getVal('scalability'),
+                
+                // Step 6 Tasks
+                task1: { desc: getVal('task1_desc'), prereq: getVal('task1_prereq'), duration: getVal('task1_duration') },
+                task2: { desc: getVal('task2_desc'), prereq: getVal('task2_prereq'), duration: getVal('task2_duration') },
+                task3: { desc: getVal('task3_desc'), prereq: getVal('task3_prereq'), duration: getVal('task3_duration') },
+                task4: { desc: getVal('task4_desc'), prereq: getVal('task4_prereq'), duration: getVal('task4_duration') },
+                task5: { desc: getVal('task5_desc'), prereq: getVal('task5_prereq'), duration: getVal('task5_duration') }
+            };
+        }
+
+        // Populate form with saved data
+        function populateFormData(data) {
+            if (!data) return;
+
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el && val !== undefined) el.value = val;
+            };
+
+            // Step 1
+            setVal('projectName', data.projectName);
+            setVal('coreProject', data.coreProject);
+            setVal('department', data.department);
+            setVal('champion', data.champion);
+            setVal('projectDefinition', data.projectDefinition);
+            setVal('painPoint', data.painPoint);
+            setVal('expectedEffect', data.expectedEffect);
+            
+            // Step 2
+            setVal('asisDescription', data.asisDescription);
+            setVal('asisTimeProblem', data.asisTimeProblem);
+            setVal('asisQualityProblem', data.asisQualityProblem);
+            setVal('asisSystemProblem', data.asisSystemProblem);
+            setVal('asisOtherProblem', data.asisOtherProblem);
+            setVal('customSystems', data.customSystems);
+            
+            // Restore system tags
+            if (data.systems && Array.isArray(data.systems)) {
+                document.querySelectorAll('#systemTags .tech-tag').forEach(tag => {
+                    // Reset first
+                    tag.classList.remove('selected');
+                    if (data.systems.includes(tag.textContent)) {
+                        tag.classList.add('selected');
+                    }
+                });
+            }
+            
+            // Step 3
+            setVal('tobeDescription', data.tobeDescription);
+            setVal('aiRole', data.aiRole);
+            setVal('humanRole', data.humanRole);
+            setVal('aiInput', data.aiInput);
+            setVal('aiOutput', data.aiOutput);
+            setVal('exceptionHandling', data.exceptionHandling);
+            
+            // Step 4
+            setVal('requiredData', data.requiredData);
+            setVal('dataSource', data.dataSource);
+            setVal('dataFormat', data.dataFormat);
+            setVal('dataQualityIssue', data.dataQualityIssue);
+            setVal('dataPreprocessing', data.dataPreprocessing);
+            setVal('dataUpdateCycle', data.dataUpdateCycle);
+            setVal('dataSecurity', data.dataSecurity);
+            setVal('techDescription', data.techDescription);
+            
+            // Restore tech tags
+            if (data.techTags && Array.isArray(data.techTags)) {
+                document.querySelectorAll('#techTags .tech-tag').forEach(tag => {
+                    tag.classList.remove('selected');
+                    if (data.techTags.includes(tag.textContent)) {
+                        tag.classList.add('selected');
+                    }
+                });
+            }
+            
+            // Step 5
+            setVal('keyBenefit', data.keyBenefit);
+            setVal('projectDuration', data.projectDuration);
+            
+            // Helper for effects
+            const setEffect = (type, enabled, val, basis) => {
+                const chk = document.getElementById(`effect_${type}_enabled`);
+                if (chk) {
+                    chk.checked = !!enabled;
+                    toggleEffectSection(type);
+                }
+                setVal(`effect_${type}_value`, val);
+                setVal(`effect_${type}_basis`, basis);
+            };
+
+            setEffect('time', data.effect_time_enabled, data.effect_time_value, data.effect_time_basis);
+            setEffect('cost', data.effect_cost_enabled, data.effect_cost_value, data.effect_cost_basis);
+            setEffect('revenue', data.effect_revenue_enabled, data.effect_revenue_value, data.effect_revenue_basis);
+            setEffect('quality', data.effect_quality_enabled, data.effect_quality_value, data.effect_quality_basis);
+            
+            // 정성적 효과
+            setVal('qualitativeValue', data.qualitativeValue);
+            setVal('scalability', data.scalability);
+            
+            // Tasks (안전한 접근을 위해 Optional Chaining 사용)
+            setVal('task1_desc', data.task1?.desc);
+            setVal('task1_prereq', data.task1?.prereq);
+            setVal('task1_duration', data.task1?.duration);
+
+            setVal('task2_desc', data.task2?.desc);
+            setVal('task2_prereq', data.task2?.prereq);
+            setVal('task2_duration', data.task2?.duration);
+
+            setVal('task3_desc', data.task3?.desc);
+            setVal('task3_prereq', data.task3?.prereq);
+            setVal('task3_duration', data.task3?.duration);
+
+            setVal('task4_desc', data.task4?.desc);
+            setVal('task4_prereq', data.task4?.prereq);
+            setVal('task4_duration', data.task4?.duration);
+
+            setVal('task5_desc', data.task5?.desc);
+            setVal('task5_prereq', data.task5?.prereq);
+            setVal('task5_duration', data.task5?.duration);
+        }
+
+        // Validation
+  // Validation
+        function setupValidation() {
+            // Step 1의 주요 필드 3개에 대해 입력 감지 리스너 등록
+            const fields = ['painPoint', 'projectDefinition', 'expectedEffect'];
+            fields.forEach(fieldId => {
+                const el = document.getElementById(fieldId);
+                if (el) {
+                    el.addEventListener('input', validateStep1); 
+                    el.addEventListener('blur', validateStep1);
+                }
+            });
+        }
+
+        function validateStep1() {
+            // 1. 값 가져오기
+            const getVal = (id) => {
+                const el = document.getElementById(id);
+                return el ? el.value.trim() : '';
+            };
+            
+            const painPointVal = getVal('painPoint');
+            const definitionVal = getVal('projectDefinition');
+            const effectVal = getVal('expectedEffect');
+
+            // 2. 검증 로직 정의
+            // Pain Point: 20자 이상 + 핵심 키워드 포함
+            const isPainPointValid = painPointVal.length >= 10 && 
+                                     /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복/.test(painPointVal);
+            updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
+
+            // How: 20자 이상 + 핵심 키워드 포함
+            const isDefinitionValid = definitionVal.length >= 10 && 
+                                      /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성/.test(definitionVal);
+            updateValidationUI('v1-how', isDefinitionValid, definitionVal.length > 0);
+
+            // Connection: 20자 이상 + 핵심 키워드 포함
+            const isConnectionValid = effectVal.length >= 10 && 
+                                      /연계|연동|통해|기반|활용|통합|프로세스|시스템/.test(effectVal);
+            updateValidationUI('v1-connection', isConnectionValid, effectVal.length > 0);
+        }
+
+        // [UI 업데이트 헬퍼 함수]
+        function updateValidationUI(elementId, isValid, hasInput) {
+            const item = document.getElementById(elementId);
+            if (!item) return;
+
+            const icon = item.querySelector('.validation-icon');
+            item.classList.remove('pass', 'fail');
+
+            if (isValid) {
+                item.classList.add('pass');
+                icon.textContent = '✓';
+                icon.style.backgroundColor = 'var(--success)';
+                icon.style.color = 'white';
+            } else if (hasInput) {
+                item.classList.add('fail');
+                icon.textContent = '!';
+                icon.style.backgroundColor = 'var(--warning)';
+                icon.style.color = 'white';
+            } else {
+                icon.textContent = '?';
+                icon.style.backgroundColor = 'var(--border)';
+                icon.style.color = 'var(--text-muted)';
+            }
+        }
+        function runFinalValidation() {
+            const data = collectFormData();
+            
+            // Helper
+            const check = (id, condition) => updateValidation(id, condition);
+
+            check('vf-tobe', (data.tobeDescription || '').length > 100);
+            
+            const hasQuantitativeEffect = 
+                (data.effect_time_enabled && data.effect_time_value.length > 20) ||
+                (data.effect_cost_enabled && data.effect_cost_value.length > 20) ||
+                (data.effect_revenue_enabled && data.effect_revenue_value.length > 20) ||
+                (data.effect_quality_enabled && data.effect_quality_value.length > 20);
+            check('vf-roi', hasQuantitativeEffect);
+            
+            check('vf-scalability', (data.scalability || '').length > 30);
+            check('vf-aicollab', (data.aiRole || '').length > 30 && (data.humanRole || '').length > 30);
+            check('vf-datasample', (data.requiredData || '').length > 30 && (data.dataSource || '').length > 20);
+            check('vf-dataprocess', (data.dataPreprocessing || '').length > 20);
+            check('vf-compliance', (data.dataSecurity || '').length > 10);
+            check('vf-interaction', (data.aiInput || '').length > 20 && (data.aiOutput || '').length > 20);
+            check('vf-validation', (data.humanRole || '').includes('검토') || (data.humanRole || '').includes('검증') || (data.humanRole || '').includes('확인'));
+            check('vf-exception', (data.exceptionHandling || '').length > 20);
+        }
+
+        function updateValidation(id, pass) {
+            const item = document.getElementById(id);
+            if (!item) return;
+            if (pass) {
+                item.classList.add('pass');
+                item.classList.remove('fail');
+                item.querySelector('.validation-icon').textContent = '✓';
+            } else {
+                item.classList.add('fail');
+                item.classList.remove('pass');
+                item.querySelector('.validation-icon').textContent = '!';
+            }
+        }
+
+        // Generate Preview - 실시간 데이터 반영 (XSS 방지 적용)
+        function generatePreview() {
+            const data = collectFormData();
+            const container = document.getElementById('previewContainer');
+            
+            // 정량적 효과 HTML 생성
+            let quantitativeEffectsHTML = '';
+            
+            if (data.effect_time_enabled && data.effect_time_value) {
+                quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>⏱️ 시간 절감</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_time_value)}</p>
+                        ${data.effect_time_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_time_basis)}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            if (data.effect_cost_enabled && data.effect_cost_value) {
+                quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>💰 비용 절감</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_cost_value)}</p>
+                        ${data.effect_cost_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_cost_basis)}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            if (data.effect_revenue_enabled && data.effect_revenue_value) {
+                quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>📈 매출/수익 증대</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_revenue_value)}</p>
+                        ${data.effect_revenue_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_revenue_basis)}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            if (data.effect_quality_enabled && data.effect_quality_value) {
+                quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>✅ 품질/정확도 향상</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_quality_value)}</p>
+                        ${data.effect_quality_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_quality_basis)}</p>` : ''}
+                    </div>
+                `;
+            }
+
+            // Task 테이블 HTML 생성
+            let taskTableHTML = '';
+            const tasks = [data.task1, data.task2, data.task3, data.task4, data.task5];
+            const validTasks = tasks.filter(t => t && t.desc);
+            if (validTasks.length > 0) {
+                taskTableHTML = `
+                    <table class="preview-table">
+                        <tr><th style="width: 10%;">No.</th><th>Task</th><th style="width: 15%;">선행</th><th style="width: 15%;">기간</th></tr>
+                        ${validTasks.map((t, i) => `<tr><td>${i+1}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
+                    </table>
+                `;
+            }
+            
+            // 시스템 태그 조합
+            const systemList = [...(data.systems || []), data.customSystems].filter(Boolean).join(', ');
+
+            container.innerHTML = `
+                <div class="preview-header">
+                    <h1>실행과제 정의서</h1>
+                    <h2>${escapeHtml(data.projectName) || '[실행과제명]'}</h2>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>1. 개요</h3>
+                    <table class="preview-table">
+                        <tr><th>실행과제명</th><td>${escapeHtml(data.projectName) || '-'}</td></tr>
+                        <tr><th>핵심과제명</th><td>${escapeHtml(data.coreProject) || '-'}</td></tr>
+                        <tr><th>소속 부서</th><td>${escapeHtml(data.department) || '-'}</td></tr>
+                        <tr><th>AI Champion</th><td>${escapeHtml(data.champion) || '-'}</td></tr>
+                        <tr><th>과제 정의</th><td>${escapeHtml(data.projectDefinition) || '-'}</td></tr>
+                        <tr><th>해결해야 할 문제</th><td>${formatText(data.painPoint)}</td></tr>
+                        <tr><th>도입 예상효과</th><td>${formatText(data.expectedEffect)}</td></tr>
+                        <tr><th>과제 수행기간</th><td>${escapeHtml(data.projectDuration) || '-'}개월</td></tr>
+                    </table>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>2. As-Is 현황</h3>
+                    <div class="preview-content">
+                        <p><strong>현재 업무 프로세스:</strong></p>
+                        <p>${formatText(data.asisDescription)}</p>
+                        <br>
+                        <p><strong>문제점:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${data.asisTimeProblem ? `<li>시간 비효율: ${escapeHtml(data.asisTimeProblem)}</li>` : ''}
+                            ${data.asisQualityProblem ? `<li>품질/정확도 이슈: ${escapeHtml(data.asisQualityProblem)}</li>` : ''}
+                            ${data.asisSystemProblem ? `<li>시스템/데이터 이슈: ${escapeHtml(data.asisSystemProblem)}</li>` : ''}
+                            ${data.asisOtherProblem ? `<li>기타: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
+                        </ul>
+                        <br>
+                        <p><strong>사용 시스템:</strong> ${escapeHtml(systemList) || '-'}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>3. To-Be 시나리오 (AI 도입 후)</h3>
+                    <div class="preview-content">
+                        <p><strong>변화된 업무 프로세스:</strong></p>
+                        <p>${formatText(data.tobeDescription)}</p>
+                        <br>
+                        <p><strong>AI 역할:</strong></p>
+                        <p>${formatText(data.aiRole)}</p>
+                        <br>
+                        <p><strong>사람 역할:</strong></p>
+                        <p>${formatText(data.humanRole)}</p>
+                        <br>
+                        <p><strong>AI Input/Output:</strong></p>
+                        <p>• 입력: ${escapeHtml(data.aiInput) || '-'}</p>
+                        <p>• 출력: ${escapeHtml(data.aiOutput) || '-'}</p>
+                        <br>
+                        <p><strong>예외 처리:</strong></p>
+                        <p>${formatText(data.exceptionHandling)}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>4. 데이터 & 기술</h3>
+                    <div class="preview-content">
+                        <p><strong>필요 데이터:</strong></p>
+                        <p>${formatText(data.requiredData)}</p>
+                        <br>
+                        <p><strong>데이터 소스:</strong> ${formatText(data.dataSource)}</p>
+                        <p><strong>데이터 형태:</strong> ${formatText(data.dataFormat)}</p>
+                        <p><strong>갱신 주기:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
+                        <br>
+                        <p><strong>전처리 계획:</strong></p>
+                        <p>${formatText(data.dataPreprocessing)}</p>
+                        <br>
+                        <p><strong>보안 고려사항:</strong></p>
+                        <p>${formatText(data.dataSecurity)}</p>
+                        <br>
+                        <p><strong>관련 기술:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
+                        <p>${escapeHtml(data.techDescription) || ''}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>5. 기대 효과 & ROI</h3>
+                    <div class="preview-content">
+                        ${data.keyBenefit ? `
+                            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <strong>🎯 핵심 기대효과:</strong> ${escapeHtml(data.keyBenefit)}
+                            </div>
+                        ` : ''}
+                        
+                        <p><strong>📊 정량적 효과</strong></p>
+                        ${quantitativeEffectsHTML || '<p style="color: #94a3b8;">등록된 정량적 효과가 없습니다.</p>'}
+                        
+                        <br>
+                        <p><strong>✨ 정성적 효과</strong></p>
+                        <p>${formatText(data.qualitativeValue)}</p>
+                        
+                        <br>
+                        <p><strong>🚀 확장 가능성</strong></p>
+                        <p>${formatText(data.scalability)}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>6. 실행 Task</h3>
+                    <div class="preview-content">
+                        ${taskTableHTML || '<p>등록된 Task가 없습니다.</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Export to PDF
+        function exportToPDF() {
+            const data = collectFormData();
+            const element = document.getElementById('previewContainer');
+            
+            // 먼저 미리보기 업데이트
+            generatePreview();
+            
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `AI기획서_${data.projectName || '제목없음'}_${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                },
+                pagebreak: { mode: 'avoid-all', before: '.preview-section' }
+            };
+            
+            showToast('PDF 생성 중...', 'default');
+            
+            html2pdf().set(opt).from(element).save().then(() => {
+                showToast('PDF가 저장되었습니다.', 'success');
+            }).catch(err => {
+                console.error('PDF 생성 오류:', err);
+                showToast('PDF 생성 중 오류가 발생했습니다.', 'default');
+            });
+        }
+
+        // Export to Word (HTML 기반)
+        function exportToWord() {
+            const data = collectFormData();
+            
+            // 먼저 미리보기 업데이트
+            generatePreview();
+            
+            const previewContent = document.getElementById('previewContainer').innerHTML;
+            
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; line-height: 1.6; padding: 20px; }
+                        h1 { text-align: center; color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; }
+                        h2 { text-align: center; color: #1e40af; }
+                        h3 { background: #f1f5f9; padding: 10px 16px; border-left: 4px solid #1a56db; margin-top: 24px; }
+                        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+                        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+                        th { background: #f1f5f9; font-weight: bold; width: 150px; }
+                        p { margin: 8px 0; }
+                        ul { margin-left: 20px; }
+                        strong { color: #0f172a; }
+                    </style>
+                </head>
+                <body>
+                    ${previewContent}
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob(['\ufeff' + htmlContent], { type: 'application/msword;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `AI기획서_${data.projectName || '제목없음'}_${new Date().toISOString().split('T')[0]}.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showToast('Word 문서가 저장되었습니다.', 'success');
+        }
+
+        // Submit
+        function submitPlan() {
+            saveData();
+            showToast('🎉 기획서가 저장되었습니다! 3월 말까지 제출해주세요.', 'success');
+        }
+
+        // Modal
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        // Toast
+        function showToast(message, type = 'default') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toastIcon.textContent = type === 'success' ? '✓' : 'ℹ';
+            
+            toast.classList.remove('success');
+            if (type === 'success') {
+                toast.classList.add('success');
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
