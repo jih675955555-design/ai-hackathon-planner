@@ -1202,7 +1202,12 @@
         </p>
     </div>
 </div>
-
+   <div class="form-group">
+        <label class="form-label">과제 정의 <span class="required">*</span></label>
+        <textarea class="form-textarea" id="projectDefinition" placeholder="예: 법정필수교육 이수 현황을 수작업으로 관리하여 발생하는 누락 문제를 해결하기 위해, AI가 교육 플랫폼과 인사 시스템 데이터를 자동 연계하여 미이수자를 실시간 파악하고 독려 메일을 자동 발송함으로써, 교육 이수율 100% 달성을 실현한다."></textarea>
+        <p class="form-help">Tip: "[문제 상황]을 해결하기 위해, AI가 [구체적인 방법]을 통해 [특정 단계]를 수행함으로써, [목표]를 달성한다" 형식으로 작성하세요.</p>
+    </div>
+</div>
             <div class="card">
                 <div class="card-title">
                     해결해야 할 문제 (Pain Point)
