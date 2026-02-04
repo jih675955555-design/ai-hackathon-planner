@@ -1150,22 +1150,58 @@
                     과제 정의 (How)
                     <button class="hint-btn" onclick="toggleHint('hint1')">💡 작성 가이드</button>
                 </div>
-                <div class="hint-content" id="hint1">
-                    <strong>✅ 좋은 예시 (Pass 기준)</strong>
-                    <p>"문제가 발생한 제품에 대해 과거 품질 문제에서 해당 제품과 유사한 아이템을 인식하고, 검토해야 하는 문제점 및 해결 방법을 추천함"</p>
-                    <br>
-                    <strong>❌ 피해야 할 예시 (재검토 사유)</strong>
-                    <ul>
-                        <li>AI가 알아서 해주면 좋겠다 → How의 부재</li>
-                        <li>업무가 힘들다 → Pain Point가 구체적이지 않음</li>
-                    </ul>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">과제 정의 <span class="required">*</span></label>
-                    <textarea class="form-textarea" id="projectDefinition" placeholder="이 과제가 무엇을 하는지, 어떤 기술을 통해 해결하는지 명확하게 정의해주세요."></textarea>
-                    <p class="form-help">Tip: "~를 통해 ~를 달성한다" 형식으로 작성하면 좋습니다.</p>
-                </div>
-            </div>
+               <div class="hint-content" id="hint1">
+    <strong>✅ 좋은 예시 (Pass 기준)</strong>
+    <p style="background: #f0fdf4; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #10b981;">
+        "법정필수교육 및 직무교육 이수 현황을 <u>수작업으로 관리하여 발생하는 누락 및 지연 문제</u>를 해결하기 위해, 
+        AI가 <u>교육 플랫폼과 인사 시스템 데이터를 자동 연계</u>하여 미이수자를 실시간 파악하고 
+        <u>독려 메일을 자동 발송</u>함으로써, 교육 이수율 100% 달성 및 관리 업무 효율화를 실현한다."
+    </p>
+    
+    <div style="margin-top: 16px; padding: 12px; background: #eff6ff; border-radius: 8px;">
+        <strong style="color: #1e40af;">📌 위 예시가 좋은 이유</strong>
+        <table style="width: 100%; margin-top: 8px; font-size: 13px;">
+            <tr>
+                <td style="padding: 8px; vertical-align: top; width: 30%;"><strong>① Pain Point 구체성</strong></td>
+                <td style="padding: 8px;">"수작업으로 관리하여 발생하는 누락 및 지연 문제" → 현업의 어려움이 구체적으로 명시됨</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; vertical-align: top;"><strong>② 해결 방법의 명확성</strong></td>
+                <td style="padding: 8px;">"교육 플랫폼과 인사 시스템 데이터를 자동 연계" → AI가 무엇을 어떻게 하는지 작동 논리가 명확함</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; vertical-align: top;"><strong>③ 연결 고리</strong></td>
+                <td style="padding: 8px;">"미이수자를 실시간 파악하고 독려 메일을 자동 발송" → 업무 프로세스 중 AI 활용 지점이 특정됨</td>
+            </tr>
+        </table>
+    </div>
+    
+    <br>
+    <strong>❌ 피해야 할 예시 (재검토 사유)</strong>
+    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #ef4444;">
+        <p style="margin-bottom: 8px;">"AI가 교육 관리를 알아서 해주면 좋겠다"</p>
+        <ul style="margin-left: 16px; font-size: 13px; color: #991b1b;">
+            <li>① Pain Point 구체성 ✗ → 어떤 문제인지 불명확</li>
+            <li>② 해결 방법의 명확성 ✗ → "알아서"는 작동 논리가 아님</li>
+            <li>③ 연결 고리 ✗ → 어느 업무에 AI를 쓸지 불명확</li>
+        </ul>
+    </div>
+    <div style="background: #fef2f2; padding: 12px; border-radius: 8px; margin: 8px 0; border-left: 4px solid #ef4444;">
+        <p style="margin-bottom: 8px;">"교육 관리 업무가 힘들어서 AI로 자동화하고 싶다"</p>
+        <ul style="margin-left: 16px; font-size: 13px; color: #991b1b;">
+            <li>① Pain Point 구체성 ✗ → "힘들다"는 구체적이지 않음 (시간? 정확도? 반복?)</li>
+            <li>② 해결 방법의 명확성 ✗ → "자동화"만으로는 How가 없음</li>
+            <li>③ 연결 고리 ✗ → 어느 단계를 자동화할지 불명확</li>
+        </ul>
+    </div>
+    
+    <div style="margin-top: 16px; padding: 12px; background: #fefce8; border-radius: 8px;">
+        <strong style="color: #854d0e;">💡 작성 Tip</strong>
+        <p style="font-size: 13px; margin-top: 4px;">
+            "[문제 상황]을 해결하기 위해, AI가 [구체적인 방법]을 통해 [업무 프로세스의 특정 단계]를 수행함으로써, [목표]를 달성한다" 형식으로 작성해보세요.
+        </p>
+    </div>
+</div>
 
             <div class="card">
                 <div class="card-title">
