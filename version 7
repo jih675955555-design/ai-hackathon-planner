@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전사 AI 기획 해커톤 - AX 기획서 작성 도구</title>
+    <title>전사 AI 기획 해커톤 - 기획서 작성 도구</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -1148,16 +1148,22 @@
             <div class="card">
                 <div class="card-title">
                     과제 정의 (How)
-                    <button class="hint-btn" onclick="toggleHint('hint1')">💡 예시 보기</button>
+                    <button class="hint-btn" onclick="toggleHint('hint1')">💡 작성 가이드</button>
                 </div>
                 <div class="hint-content" id="hint1">
-                    <strong>✅ 좋은 예시</strong>
-                    <p>"AI가 교육 플랫폼과 인사 시스템 데이터를 자동 연계하여..."</p>
+                    <strong>✅ 좋은 예시 (Pass 기준)</strong>
+                    <p>"문제가 발생한 제품에 대해 과거 품질 문제에서 해당 제품과 유사한 아이템을 인식하고, 검토해야 하는 문제점 및 해결 방법을 추천함"</p>
+                    <br>
+                    <strong>❌ 피해야 할 예시 (재검토 사유)</strong>
+                    <ul>
+                        <li>AI가 알아서 해주면 좋겠다 → How의 부재</li>
+                        <li>업무가 힘들다 → Pain Point가 구체적이지 않음</li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label class="form-label">과제 정의 <span class="required">*</span></label>
                     <textarea class="form-textarea" id="projectDefinition" placeholder="이 과제가 무엇을 하는지, 어떤 기술을 통해 해결하는지 명확하게 정의해주세요."></textarea>
-                    <p class="form-help">Tip: AI, 자동화, 분석 등의 키워드를 포함하여 기술적 해결 방법을 묘사하세요.</p>
+                    <p class="form-help">Tip: "~를 통해 ~를 달성한다" 형식으로 작성하면 좋습니다.</p>
                 </div>
             </div>
 
@@ -1193,7 +1199,7 @@
                     <div class="validation-icon">?</div>
                     <div class="validation-text">
                         <strong>Pain Point 구체성</strong>
-                        <span>'시간', '비용', '오류', '수작업' 등 구체적인 문제 키워드가 포함되었나요?</span>
+                        <span>현업의 어려움과 비효율성(Pain Point)이 구체적으로 기술되어 있나요?</span>
                     </div>
                 </div>
 
@@ -1201,7 +1207,7 @@
                     <div class="validation-icon">?</div>
                     <div class="validation-text">
                         <strong>해결 방법의 명확성</strong>
-                        <span>AI가 수행할 역할(자동화, 분석, 예측 등)이 명시되었나요?</span>
+                        <span>"AI가 알아서 해줬으면"이 아닌, 구체적인 작동 논리가 있나요?</span>
                     </div>
                 </div>
 
@@ -1209,7 +1215,7 @@
                     <div class="validation-icon">?</div>
                     <div class="validation-text">
                         <strong>연결 고리</strong>
-                        <span>업무 프로세스와의 연계(연동, 통합, 활용)가 고려되었나요?</span>
+                        <span>업무 프로세스 중 어디에 AI를 활용할 지 결정되어 있나요?</span>
                     </div>
                 </div>
             </div>
@@ -2333,17 +2339,17 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
 
             // 2. 검증 로직 정의
             // Pain Point: 20자 이상 + 핵심 키워드 포함
-            const isPainPointValid = painPointVal.length >= 10 && 
+            const isPainPointValid = painPointVal.length >= 20 && 
                                      /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복/.test(painPointVal);
             updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
 
             // How: 20자 이상 + 핵심 키워드 포함
-            const isDefinitionValid = definitionVal.length >= 10 && 
+            const isDefinitionValid = definitionVal.length >= 20 && 
                                       /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성/.test(definitionVal);
             updateValidationUI('v1-how', isDefinitionValid, definitionVal.length > 0);
 
             // Connection: 20자 이상 + 핵심 키워드 포함
-            const isConnectionValid = effectVal.length >= 10 && 
+            const isConnectionValid = effectVal.length >= 20 && 
                                       /연계|연동|통해|기반|활용|통합|프로세스|시스템/.test(effectVal);
             updateValidationUI('v1-connection', isConnectionValid, effectVal.length > 0);
         }
@@ -2516,7 +2522,7 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
                 <div class="preview-section">
                     <h3>3. To-Be 시나리오 (AI 도입 후)</h3>
                     <div class="preview-content">
-                        <p><strong>변화된 업무 프로세스:</strong></p>
+                        <p><strong>변화될 업무 프로세스:</strong></p>
                         <p>${formatText(data.tobeDescription)}</p>
                         <br>
                         <p><strong>AI 역할:</strong></p>
