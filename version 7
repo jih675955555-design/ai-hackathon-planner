@@ -2022,13 +2022,46 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
     // State Management
     let currentStep = 1;
     const totalSteps = 6;
+
+    function storageAvailable() {
+      try {
+        const testKey = '__ai_hackathon_storage_test__';
+        localStorage.setItem(testKey, '1');
+        localStorage.removeItem(testKey);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function safeSetItem(key, value) {
+      if (!storageAvailable()) return false;
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function safeGetItem(key) {
+      if (!storageAvailable()) return null;
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
       checkSavedData();
       updateProgress();
       setupAutoSave();
       setupValidation();
+      validateStep1();
     });
+
+    window.addEventListener('resize', updateProgress);
     // --- [Utility] Security: XSS 방지를 위한 HTML Escape 함수 ---
     function escapeHtml(text) {
       if (!text) return '';
@@ -2112,13 +2145,17 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
     // Save Data
     function saveData() {
       const data = collectFormData();
-      localStorage.setItem('aiHackathonPlan', JSON.stringify(data));
-      localStorage.setItem('aiHackathonPlanDate', new Date().toISOString());
-      showToast('저장되었습니다.', 'success');
+      const saved = safeSetItem('aiHackathonPlan', JSON.stringify(data));
+      const dated = safeSetItem('aiHackathonPlanDate', new Date().toISOString());
+      if (saved && dated) {
+        showToast('저장되었습니다.', 'success');
+      } else {
+        showToast('브라우저 저장소를 사용할 수 없어 저장하지 못했습니다.');
+      }
     }
     // Load Data
     function loadData() {
-      const saved = localStorage.getItem('aiHackathonPlan');
+      const saved = safeGetItem('aiHackathonPlan');
       if (saved) {
         showModal('저장된 데이터 불러오기', '이전에 저장된 기획서 데이터를 불러오시겠습니까?');
       } else {
@@ -2127,7 +2164,7 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
     }
 
     function confirmLoad() {
-      const saved = localStorage.getItem('aiHackathonPlan');
+      const saved = safeGetItem('aiHackathonPlan');
       if (saved) {
         try {
           const data = JSON.parse(saved);
@@ -2142,8 +2179,8 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
     }
     // Check for saved data on load
     function checkSavedData() {
-      const saved = localStorage.getItem('aiHackathonPlan');
-      const savedDate = localStorage.getItem('aiHackathonPlanDate');
+      const saved = safeGetItem('aiHackathonPlan');
+      const savedDate = safeGetItem('aiHackathonPlanDate');
       if (saved && savedDate) {
         const date = new Date(savedDate);
         const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR');
@@ -2154,14 +2191,17 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
     function setupAutoSave() {
       let timeout;
       document.querySelectorAll('input, textarea, select').forEach(element => {
-        element.addEventListener('input', () => {
+        const saveHandler = () => {
           clearTimeout(timeout);
           timeout = setTimeout(() => {
             const data = collectFormData();
-            localStorage.setItem('aiHackathonPlan', JSON.stringify(data));
-            localStorage.setItem('aiHackathonPlanDate', new Date().toISOString());
+            safeSetItem('aiHackathonPlan', JSON.stringify(data));
+            safeSetItem('aiHackathonPlanDate', new Date().toISOString());
           }, 3000);
-        });
+        };
+
+        element.addEventListener('input', saveHandler);
+        element.addEventListener('change', saveHandler);
       });
     }
     // Effect Section Toggle
