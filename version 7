@@ -1147,7 +1147,7 @@
           <span class="emoji">💡</span>
           기본 정보 & Pain Point 발굴
         </h2>
-        <p class="section-desc">AI 도입으로 해결하고자 하는 업무 문제를 구체적으로 정의합니다. 현업의 실제 어려움을 명확히 기술해주세요.</p>
+        <p class="section-desc">AI 도입으로 해결하고자 하는 업무 문제를 구체적으로 정의합니다. 단순히 불편한 일이 아니라, 비즈니스 성과로 직결될 문제를 찾습니다.</p>
       </div>
 
       <div class="card">
@@ -1242,11 +1242,14 @@
         <div class="hint-content" id="hint2">
           <strong>✅ 구체화 체크리스트</strong>
           <ul>
-            <li>현재 이 업무에 얼마나 시간이 소요되나요?</li>
-            <li>담당자의 경험과 지식에 얼마나 의존하나요?</li>
-            <li>실수나 오류가 발생할 가능성은?</li>
-            <li>데이터가 어디에 분산되어 있나요?</li>
+            <li>이 업무에서 가장 자주 발생하는 실수/누락/지연은 무엇인가요?</li>
+            <li>정보가 흩어져 있는 위치는 어디인가요? (시스템/파일/메일/메신저 등)</li>
+            <li>어느 단계가 프로세스를 느리게 만드나요? </li>
             <li>반복적으로 수행하는 작업은 무엇인가요?</li>
+          </ul>
+          <strong>❌ 피해야 할 표현</strong>
+          <ul>
+            <li>“힘들다/비효율적이다/자동화하고 싶다”처럼 현상·원인·영향·증거가 없는 문장</li>
           </ul>
         </div>
         <div class="form-group">
@@ -1260,34 +1263,43 @@
         <div class="card-title">도입 예상 효과 (Connection)</div>
         <div class="form-group">
           <label class="form-label">AI 도입 시 기대되는 효과 및 활용 <span class="required">*</span></label>
-          <textarea class="form-textarea" id="expectedEffect" placeholder="예: 데이터를 연동하여 실시간으로 파악 가능, 업무 프로세스에 통합되어 자동화 실현"></textarea>
+          <textarea class="form-textarea" id="expectedEffect" placeholder="예: 
+업무 흐름을 생성→검증→실행→학습 루프로 재설계하여, 반복 업무는 자동화하고 핵심 판단은 고도화한다.
+                                                                           
+역할 기반 멀티 에이전트 협업(Planner/Executor/Verifier 등)으로 병목 구간을 줄이고 산출물 품질 편차를 낮춘다.
+                                                                           
+업무 이력과 지식을 공통 메모리(지식베이스)로 축적해, 같은 유형의 문제는 더 빠르고 더 정확하게 해결되도록 지속 개선한다.
+                                                                           
+표준화된 체크/검증 단계를 포함해 오류·누락을 사전에 차단하고, 재작업 시간을 감소시킨다.
+                                                                           
+시스템/도구 연계를 통해 실행까지 이어지는 end-to-end 흐름을 만들고, 사람이 하던 핸드오프를 최소화한다."></textarea>
         </div>
       </div>
 
       <div class="validation-box">
         <div class="validation-title">📋 자가진단 체크리스트</div>
 
-        <div class="validation-item" id="v1-painpoint">
-          <div class="validation-icon">?</div>
-          <div class="validation-text">
-            <strong>Pain Point 구체성</strong>
-            <span>현업의 어려움과 비효율성(Pain Point)이 구체적으로 기술되어 있나요?</span>
-          </div>
-        </div>
-
         <div class="validation-item" id="v1-how">
           <div class="validation-icon">?</div>
           <div class="validation-text">
-            <strong>해결 방법의 명확성</strong>
-            <span>"AI가 알아서 해줬으면"이 아닌, 구체적인 작동 논리가 있나요?</span>
+            <strong>과제 정의의 명확성</strong>
+            <span>“AI를 도입한다”가 아니라, 해결할 대상(업무 범위)과 목표(무엇을 개선할지)가 한 문장으로 명확히 정의되어 있나요?</span>
+          </div>
+        </div>
+
+        <div class="validation-item" id="v1-painpoint">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Pain Point 구체화</strong>
+            <span>누가/언제/어떤 업무에서 어떤 불편·오류·지연이 발생하는지, 사례(1~2줄)와 함께 구체적으로 적혀 있나요?</span>
           </div>
         </div>
 
         <div class="validation-item" id="v1-connection">
           <div class="validation-icon">?</div>
           <div class="validation-text">
-            <strong>연결 고리</strong>
-            <span>업무 프로세스 중 어디에 AI를 활용할 지 결정되어 있나요?</span>
+            <strong>기대효과의 연결성</strong>
+            <span>위 Pain Point가 해결되면 달라지는 결과가 시간·비용·품질·리스크 중 1개 이상으로 간단히 연결되어 있나요?</span>
           </div>
         </div>
       </div>
@@ -1303,7 +1315,7 @@
           <span class="emoji">📊</span>
           As-Is 현황 분석
         </h2>
-        <p class="section-desc">AI 도입 전 현재 업무 프로세스를 상세히 분석합니다. 각 단계별 소요 시간과 시스템을 명시해주세요.</p>
+        <p class="section-desc">AI 도입 전 현재 업무 프로세스를 상세히 분석합니다. Step 1에서 도출한 Pain Point 의 근본 원인을 파악합니다. </p>
       </div>
 
       <div class="card">
@@ -1312,59 +1324,71 @@
           <button class="hint-btn" onclick="toggleHint('hint3')">💡 예시 보기</button>
         </div>
         <div class="hint-content" id="hint3">
-          <strong>✅ As-Is 시나리오 예시</strong>
-          <div class="flow-container" style="margin-top: 12px;">
-            <div class="flow-item">
-              <span class="system">교육 플랫폼</span>
-              <span>[HR팀] 각 교육별 수료자 명단 다운로드</span>
-            </div>
-            <span class="flow-arrow">→</span>
-            <div class="flow-item">
-              <span class="system">Excel</span>
-              <span>부서별/직급별 이수 현황 수동 정리</span>
-            </div>
-            <span class="flow-arrow">→</span>
-            <div class="flow-item">
-              <span class="system">Email</span>
-              <span>[HR팀] 미이수자 독려 메일 개별 발송</span>
-            </div>
-          </div>
+          <strong>🧭 작성 가이드: As-Is는 “지금 어떻게 굴러가는지”를 재현하는 단계입니다</strong>
+          <ul>
+            <li>단계(흐름) 을 5~8개로 나눠 순서대로 적습니다. (요청→수집→정형화→검토→승인/전달→실행→기록)</li>
+            <li>각 단계마다 누가(역할/부서), 무엇을(행동), 어디서(시스템/도구), 얼마나(시간/빈도)를 최소 1개 이상 포함합니다.</li>
+            <li>데이터가 이동하는 지점(다운로드/첨부/복붙/버전관리/재입력)을 반드시 표시합니다. → 병목이 여기서 잘 나옵니다.</li>
+            <li>검토/승인 왕복이 있다면 “몇 회 왕복”과 “왜 생기는지(누락/기준 불명/형식 상이 등)”를 한 줄로 적습니다.</li>
+            <li>숫자는 월/분기 단위 총량 중심으로 씁니다. (예: 월 2회, 월 총 6시간)</li>
+          </ul>
+
           <p style="margin-top: 12px; font-size: 13px;">※ 각 단계별로 소요 시간과 사용 시스템을 함께 기재해주세요.</p>
         </div>
+
         <div class="form-group">
           <label class="form-label">현재 업무 흐름 설명 <span class="required">*</span></label>
-          <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="현재 업무가 어떤 순서로 진행되는지 단계별로 설명해주세요.
+          <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="예시:
+[요청] 현업에서 “X 현황/보고” 요청이 월 2회 발생한다.
 
-예시:
-1. [HR팀] 각 교육별 수료자 명단 취합 (소요시간: 30분)
-2. [HR팀] 부서별/직급별 이수 현황 Excel 정리 (소요시간: 1시간)
-3. [HR팀] 법정필수교육 미이수자 수동 확인 (소요시간: 45분)
-4. [HR팀] 미이수자 대상 독려 메일 개별 발송 (소요시간: 30분)"></textarea>
+[수집] 담당자가 시스템 A/B, 공유폴더, 이메일 첨부에서 데이터를 내려받아 취합한다(총 30~60분).
+
+[정형화] 형식이 달라 엑셀에서 컬럼 재정의/정렬/중복제거를 수작업으로 수행한다(60~120분).
+
+[검토] 팀 내 검증 체크(누락/오류/기준 위반)를 사람 기준으로 반복한다(1~2회 왕복).
+
+[승인/전달] 요약본을 메일로 공유하고 승인 코멘트를 반영해 최종본을 확정한다.
+
+[실행] 확정본을 바탕으로 시스템 입력/조치/공지/요청을 수행한다.
+
+[기록] 산출물은 폴더에 저장되지만, 다음번 유사 건에서 재활용이 어려워 처음부터 반복한다."" ></textarea>
         </div>
       </div>
-
-      <div class="card">
-        <div class="card-title">현재 프로세스의 문제점</div>
+      </div>
+      <div class=" card">
+        <div class="card-title">현재 프로세스의 문제점 (실제 있는 세션만 작성해도 됩니다.)</div>
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label">시간 비효율</label>
-            <textarea class="form-textarea" id="asisTimeProblem" placeholder="예: 월별 교육 이수 현황 취합에 평균 2시간 이상 소요, 법정필수교육 미이수자 확인에만 45분 필요. 독려 메일 개별 발송으로 반복 작업 발생."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">품질/정확도 이슈</label>
-            <textarea class="form-textarea" id="asisQualityProblem" placeholder="예: 수작업 취합 과정에서 누락 및 오기입 발생, 부서 간 명단 불일치로 미이수자 파악 정확도 저하. 교육 이수 기한 임박 인원 사전 파악 어려움."></textarea>
-          </div>
+            <textarea class="form-textarea" id="asisTimeProblem" placeholder="예:
+- 월 2회 요청 건마다 취합/정형화/검토에 총 3~5시간 소요 (월 총 6~10시간)
+- 데이터 수집(다운로드/첨부 확인) 30~60분, 정형화(엑셀 정리) 60~120분, 검토/왕복 60~120분
+- 승인 코멘트 반영으로 재작업이 평균 1~2회 발생"></textarea>
         </div>
-        <div class="grid-2">
-          <div class="form-group">
-            <label class="form-label">시스템/데이터 이슈</label>
-            <textarea class="form-textarea" id="asisSystemProblem" placeholder="예: 교육 플랫폼과 인사 시스템 간 연동 미흡, 교육별 수료 데이터 형식 상이. 퇴사자/부서이동자 반영이 수동으로 이루어져 데이터 정합성 저하."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">기타 문제점</label>
-            <textarea class="form-textarea" id="asisOtherProblem" placeholder="예: 담당자 부재 시 현황 파악 지연, 법정교육 미이수에 따른 컴플라이언스 리스크 존재. 교육 이력 기반 역량 분석 및 추천 불가."></textarea>
-          </div>
+        <div class="form-group">
+          <label class="form-label">품질/정확도 이슈</label>
+          <textarea class="form-textarea" id="asisQualityProblem" placeholder="예:
+- 수작업 취합/복붙 과정에서 누락·중복·오기입 발생 (버전별 숫자 불일치)
+- 기준(집계 규칙/필터 조건)이 문서·사람마다 달라 결과 편차 발생
+- 최신 데이터 반영 지연으로 ‘보고 시점’ 기준 정확도가 떨어짐"></textarea>
         </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">시스템/데이터 이슈</label>
+          <textarea class="form-textarea" id="asisSystemProblem" placeholder="예:
+- 시스템 A/B 간 데이터 포맷(컬럼명/코드/날짜 형식) 불일치로 수작업 변환 필요
+- 데이터가 공유폴더/메일 첨부/엑셀로 분산되어 단일 소스가 없음
+- 권한/접근 제한 또는 조회 조건 차이로 동일 데이터 재현이 어려움"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">기타 문제점</label>
+          <textarea class="form-textarea" id="asisOtherProblem" placeholder="예:
+- 담당자 부재 시 진행 중단(업무 인수인계/맥락 부족)
+- 검토/승인 커뮤니케이션이 메일 중심이라 히스토리 추적이 어려움
+- 산출물은 저장되지만 ‘재사용 가능한 형태’가 아니라 다음번에도 처음부터 반복"></textarea>
+        </div>
+      </div>
       </div>
 
       <div class="card">
@@ -1984,8 +2008,6 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
       </div>
 
       <div class="export-buttons">
-        <button class="export-btn export-pdf" onclick="exportToPDF()">
-          <span>📕</span> PDF로 저장하기
         </button>
         <button class="export-btn export-word" onclick="exportToWord()">
           <span>📝</span> Word로 저장하기
@@ -2062,7 +2084,6 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
       validateStep3();
       validateStep4();
     });
-
     window.addEventListener('resize', updateProgress);
     // --- [Utility] Security: XSS 방지를 위한 HTML Escape 함수 ---
     function escapeHtml(text) {
@@ -2207,7 +2228,6 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
             safeSetItem('aiHackathonPlanDate', new Date().toISOString());
           }, 3000);
         };
-
         element.addEventListener('input', saveHandler);
         element.addEventListener('change', saveHandler);
       });
@@ -2417,7 +2437,6 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
           el.addEventListener('blur', validateStep1);
         }
       });
-
       const step3Fields = ['tobeDescription', 'humanRole', 'exceptionHandling'];
       step3Fields.forEach(fieldId => {
         const el = document.getElementById(fieldId);
@@ -2426,7 +2445,6 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
           el.addEventListener('blur', validateStep3);
         }
       });
-
       const step4Fields = ['requiredData', 'dataPreprocessing', 'dataSecurity'];
       step4Fields.forEach(fieldId => {
         const el = document.getElementById(fieldId);
@@ -2445,15 +2463,12 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
       const painPointVal = getVal('painPoint');
       const definitionVal = getVal('projectDefinition');
       const effectVal = getVal('expectedEffect');
-
       const isPainPointValid = painPointVal.length >= 20 &&
         /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복/.test(painPointVal);
       updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
-
       const isDefinitionValid = definitionVal.length >= 20 &&
         /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성/.test(definitionVal);
       updateValidationUI('v1-how', isDefinitionValid, definitionVal.length > 0);
-
       const isConnectionValid = effectVal.length >= 20 &&
         /연계|연동|통해|기반|활용|통합|프로세스|시스템/.test(effectVal);
       updateValidationUI('v1-connection', isConnectionValid, effectVal.length > 0);
@@ -2464,15 +2479,12 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
         const el = document.getElementById(id);
         return el ? el.value.trim() : '';
       };
-
       const tobeDescription = getVal('tobeDescription');
       const humanRole = getVal('humanRole');
       const exceptionHandling = getVal('exceptionHandling');
-
       const processValid = tobeDescription.length >= 80 && /AI|자동|단계|프로세스|흐름/.test(tobeDescription);
       const humanLoopValid = humanRole.length >= 30 && /검토|검증|승인|확인|피드백/.test(humanRole);
       const exceptionValid = exceptionHandling.length >= 20 && /모른다|예외|오류|불일치|검토 요청|알림/.test(exceptionHandling);
-
       updateValidationUI('v3-process', processValid, tobeDescription.length > 0);
       updateValidationUI('v3-humanloop', humanLoopValid, humanRole.length > 0);
       updateValidationUI('v3-exception', exceptionValid, exceptionHandling.length > 0);
@@ -2483,15 +2495,12 @@ AI 자동 연계로 데이터 정합성 확보 → 오류율 1% 미만
         const el = document.getElementById(id);
         return el ? el.value.trim() : '';
       };
-
       const requiredData = getVal('requiredData');
       const dataPreprocessing = getVal('dataPreprocessing');
       const dataSecurity = getVal('dataSecurity');
-
       const dataSampleValid = requiredData.length >= 30 && /데이터|테이블|컬럼|샘플|정보|목록/.test(requiredData);
       const preprocessingValid = dataPreprocessing.length >= 20 && /정제|전처리|표준화|제거|매핑|중복/.test(dataPreprocessing);
       const securityValid = dataSecurity.length >= 15 && /보안|개인정보|권한|컴플라이언스|비식별|접근/.test(dataSecurity);
-
       updateValidationUI('v4-datasample', dataSampleValid, requiredData.length > 0);
       updateValidationUI('v4-preprocessing', preprocessingValid, dataPreprocessing.length > 0);
       updateValidationUI('v4-security', securityValid, dataSecurity.length > 0);
