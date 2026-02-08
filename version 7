@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>전사 AI 기획 해커톤 - 기획서 작성 도구</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root {
       --primary: #1a56db;
@@ -1018,15 +1017,6 @@
       gap: 10px;
     }
 
-    .export-pdf {
-      background: #dc2626;
-      color: white;
-    }
-
-    .export-pdf:hover {
-      background: #b91c1c;
-    }
-
     .export-word {
       background: #2b579a;
       color: white;
@@ -1101,7 +1091,7 @@
         <button class="btn btn-ghost" onclick="saveData()">
           <span>💾</span> 저장하기
         </button>
-        <button class="btn btn-primary" onclick="goToStep(6)">
+        <button class="btn btn-primary" onclick="goToPreview()">
           <span>📄</span> 미리보기
         </button>
       </div>
@@ -2045,7 +2035,6 @@
       </div>
 
       <div class="export-buttons">
-        </button>
         <button class="export-btn export-word" onclick="exportToWord()">
           <span>📝</span> Word로 저장하기
         </button>
@@ -2137,6 +2126,13 @@
       if (!text) return '-';
       // 먼저 HTML 태그를 무력화(escape)한 뒤, 줄바꿈 문자를 <br>로 변환
       return escapeHtml(text).replace(/\n/g, '<br>');
+    }
+    // Go directly to preview section
+    function goToPreview() {
+      goToStep(6);
+      setTimeout(() => {
+        document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
     // Step Navigation
     function goToStep(step) {
@@ -2781,42 +2777,6 @@
                     </div>
                 </div>
             `;
-    }
-    // Export to PDF
-    function exportToPDF() {
-      const data = collectFormData();
-      const element = document.getElementById('previewContainer');
-      // 먼저 미리보기 업데이트
-      generatePreview();
-      const opt = {
-        margin: [10, 10, 10, 10],
-        filename: `AI기획서_${data.projectName || '제목없음'}_${new Date().toISOString().split('T')[0]}.pdf`,
-        image: {
-          type: 'jpeg',
-          quality: 0.98
-        },
-        html2canvas: {
-          scale: 2,
-          useCORS: true,
-          letterRendering: true
-        },
-        jsPDF: {
-          unit: 'mm',
-          format: 'a4',
-          orientation: 'portrait'
-        },
-        pagebreak: {
-          mode: 'avoid-all',
-          before: '.preview-section'
-        }
-      };
-      showToast('PDF 생성 중...', 'default');
-      html2pdf().set(opt).from(element).save().then(() => {
-        showToast('PDF가 저장되었습니다.', 'success');
-      }).catch(err => {
-        console.error('PDF 생성 오류:', err);
-        showToast('PDF 생성 중 오류가 발생했습니다.', 'default');
-      });
     }
     // Export to Word (HTML 기반)
     function exportToWord() {
