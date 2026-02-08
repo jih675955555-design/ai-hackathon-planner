@@ -911,14 +911,6 @@
       border-color: var(--primary);
     }
 
-    /* Export buttons */
-    .export-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-      flex-wrap: wrap;
-    }
-
     /* Effect Items */
     .effect-item {
       border: 1px solid var(--border);
@@ -1026,22 +1018,12 @@
       background: #1e3f6f;
     }
 
-    .export-print {
-      background: var(--secondary);
-      color: white;
-    }
-
-    .export-print:hover {
-      background: #1e293b;
-    }
-
     /* Print Styles */
     @media print {
 
       .header,
       .progress-container,
       .nav-buttons,
-      .export-buttons,
       .validation-box,
       .card-title .hint-btn {
         display: none !important;
@@ -2034,18 +2016,11 @@
         </div>
       </div>
 
-      <div class="export-buttons">
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
         <button class="export-btn export-word" onclick="exportToWord()">
           <span>📝</span> Word로 저장하기
         </button>
-        <button class="export-btn export-print" onclick="window.print()">
-          <span>🖨️</span> 인쇄하기
-        </button>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
-        <button class="btn btn-success" onclick="submitPlan()">🎉 기획서 제출 완료</button>
       </div>
     </section>
   </main>
@@ -2819,11 +2794,6 @@
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       showToast('Word 문서가 저장되었습니다.', 'success');
-    }
-    // Submit
-    function submitPlan() {
-      saveData();
-      showToast('🎉 기획서가 저장되었습니다! 3월 말까지 제출해주세요.', 'success');
     }
     // Modal
     function showModal(title, message) {
