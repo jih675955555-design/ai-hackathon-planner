@@ -993,31 +993,6 @@
       transform: translateX(22px);
     }
 
-    .export-btn {
-      flex: 1;
-      min-width: 200px;
-      padding: 16px 24px;
-      border-radius: var(--radius-sm);
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .export-word {
-      background: #2b579a;
-      color: white;
-    }
-
-    .export-word:hover {
-      background: #1e3f6f;
-    }
-
     /* Print Styles */
     @media print {
 
@@ -2018,9 +1993,7 @@
 
       <div class="nav-buttons">
         <button class="btn btn-outline" onclick="prevStep()">← 이전 단계</button>
-        <button class="export-btn export-word" onclick="exportToWord()">
-          <span>📝</span> Word로 저장하기
-        </button>
+        <button class="btn btn-primary" onclick="exportToWord()">📝 Word로 저장하기</button>
       </div>
     </section>
   </main>
