@@ -1091,7 +1091,7 @@
         <button class="btn btn-ghost" onclick="saveData()">
           <span>💾</span> 저장하기
         </button>
-        <button class="btn btn-primary" onclick="goToStep(6)">
+        <button class="btn btn-primary" onclick="goToPreview()">
           <span>📄</span> 미리보기
         </button>
       </div>
@@ -2126,6 +2126,13 @@
       if (!text) return '-';
       // 먼저 HTML 태그를 무력화(escape)한 뒤, 줄바꿈 문자를 <br>로 변환
       return escapeHtml(text).replace(/\n/g, '<br>');
+    }
+    // Go directly to preview section
+    function goToPreview() {
+      goToStep(6);
+      setTimeout(() => {
+        document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     }
     // Step Navigation
     function goToStep(step) {
