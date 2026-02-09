@@ -1170,10 +1170,10 @@
         <div class="hint-content" id="hint2">
           <strong>✅ 구체화 체크리스트</strong>
           <ul>
-            <li>이 업무에서 가장 자주 발생하는 실수/누락/지연은 무엇인가요?</li>
-            <li>정보가 흩어져 있는 위치는 어디인가요? (시스템/파일/메일/메신저 등)</li>
-            <li>어느 단계가 프로세스를 느리게 만드나요? </li>
-            <li>반복적으로 수행하는 작업은 무엇인가요?</li>
+            <li>어떤 단계가 프로세스를 느리게 만드나? </li>
+            <li>어디서 오류가 자주 발생하나? </li>
+            <li>어떤 작업이 반복적으로 수행되나? </li>
+            <li>어떤 단계에서 대기 시간이 발생하나?</li>
           </ul>
           <strong>❌ 피해야 할 표현</strong>
           <ul>
@@ -1254,9 +1254,25 @@
         <div class="hint-content" id="hint3">
           <strong>🧭 작성 가이드: As-Is는 “지금 어떻게 굴러가는지”를 재현하는 단계입니다</strong>
           <ul>
-            <li>프로세스 상세화: 업무 프로세스를 5~8개로 나눠 순서대로 적습니다. (예: 요청→수집→정형화→검토→승인/전달→실행→기록)</li>
-            <li>각 단계마다 누가(역할/부서), 무엇을(행동), 어디서(시스템/도구), 얼마나(시간/빈도)를 최소 1개 이상 포함합니다.</li>
-            <li>문제의 영향 파악: 현재 프로세스로 부터 Pain Point 를 숫자로 작성합니다. (정량화)</li>
+            <li> 정량화 (Quantify) : <br>
+              - 해당 업무에 얼마나 시간이 걸리나? (시간/건)<br>
+
+              - 얼마나 자주 발생하나? (빈도/월, 년) <br>
+
+              - 몇 명이 투입되나? (인원)<br>
+
+              - 오류율은 얼마나 되나? (%)<br>
+            </li>
+            <li>프로세스 상세화 (Detail) <br>
+              - 각 단계별 소요 시간 분해 <br>
+              - 수작업 vs 시스템 비율 <br>
+              - 현재 사용하는 툴/시스템은? <br>
+            </li>
+            <li>문제의 영향 파악 (Impact) <br>
+              - 이 문제로 인한 비용은? (인건비, 지연 비용) <br>
+              - 놓치고 있는 기회 비용은? <br>
+              - 품질/고객 만족도에 미치는 영향은? <br>
+            </li>
           </ul>
           <strong>❌ 피해야 할 예시</strong>: 주관적 추정에 의존/뭉뚱그려 말하기/ AI 만능주의
 
@@ -1348,7 +1364,7 @@
           <span class="emoji">🎯</span>
           To-Be 시나리오 설계
         </h2>
-        <p class="section-desc">AI 도입 후 변화될 업무 프로세스를 설계합니다. 업무 단계별로 AI 처리·사람 검증·실행 연계 등을 포함한 운영 시나리오로 작성합니다.</p>
+        <p class="section-desc">AI 도입 후 변화될 업무 프로세스를 설계합니다. “AI-Native Workflow: AI가 있는 세상에서, 이 업무는 어떻게 존재해야 하는가?"</p>
       </div>
 
       <div class="card">
@@ -1483,12 +1499,25 @@
           <button class="hint-btn" onclick="toggleHint('hint5')">💡 데이터 체크리스트</button>
         </div>
         <div class="hint-content" id="hint5">
-          <strong>✅ Pass 기준: 데이터 전략</strong>
+          <strong>✅ Pass 기준: Agentic AI 를 위해 고려해야할 3가지 데이터 유형 과 Tool </strong>
           <ul>
-            <li>샘플 데이터 분석: 실제 활용할 데이터 샘플에 대한 구조를 파악</li>
-            <li>전처리 방안: 데이터의 노이즈(불필요한 정보) 제거 등 가공 방안 수립</li>
-            <li>최신성 유지: 데이터가 주기적으로 업데이트되어야 하는지, 갱신 주기 정의</li>
-            <li>보안/Compliance: 개인정보 비식별화나 사내 보안 규정 준수 여부 검토</li>
+            <li> Input 데이터: Agent의 작업을 위한 원천 데이터 <br>
+              - 사용자 요청 <br>
+              - 계약서, 임상 데이터, 고객 문의 등 <br>
+
+            </li>
+            <li>Knowledge 데이터: Agent 가 참조할 지식/맥락 <br>
+              - 내부 지식 (사내 규정, SOP, 사례집) <br>
+              - 외부 DB, 웹서치 <br>
+            </li>
+            <li> Feedback 데이터: Agent 검증 기준 <br>
+              - 정답 레이블 데이터 (정답 예시) <br>
+              - 품질 기준, 승인 이력 <br>
+            </li>
+            <li> 기타 Tool/Action: Agent 가 사용할 도구/시스템 <br>
+              - 웹서치, 메일발송 <br>
+              - DB 조회 및 분석 등 <br>
+            </li>
           </ul>
           <br>
           <strong>❌ 재검토 사유</strong>
@@ -1667,37 +1696,11 @@
           <br>
           <strong>📝 효과 유형별 예시</strong>
           <ul>
-            <li><strong>시간 절감:</strong> 연간 10,000시간 절감 (20명 × 1건/주 × 1시간 × 52주 × 80%)</li>
-            <li><strong>비용 절감:</strong> 외주 비용 연 5,000만원 절감 (월 500만원 × 10건)</li>
-            <li><strong>품질 향상:</strong> 불량률 2% → 0.5%로 감소 (연간 불량 비용 3억원 절감)</li>
+            <li><strong>비용 절감:</strong> 효율화를 통한 직접 비용 감소. 예시:인건비, 외주비, 운영비 절감 </li>
+            <li><strong>매출/수익 증대:</strong> 새로운 기회 창출. 예시: 처리량 증가, 재구매율 상승 </li>
+            <li><strong>리스크 완화:</strong> 규정 준수, 오류 방지. 예시: 과태료 방지, 컴플라이언스. </li>
+            <li><strong>전략적 가치:</strong> 역량 강화, 경쟁력 확모. 예시: 의사결정 속도, 고객 경험. </li>
           </ul>
-        </div>
-
-        <div class="effect-item">
-          <div class="effect-header">
-            <span class="effect-icon">⏱️</span>
-            <span class="effect-type">시간 절감</span>
-            <label class="effect-toggle">
-              <input type="checkbox" id="effect_time_enabled" checked onchange="toggleEffectSection('time')">
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-          <div class="effect-content" id="effect_time_content">
-            <div class="form-group">
-              <label class="form-label">효과 내용</label>
-              <textarea class="form-textarea" id="effect_time_value" style="min-height: 80px;" placeholder="예:
-- [업무명] 처리 시간 [절감률]% 단축 (월 [As-Is]시간 → 월 [To-Be]시간)
-- [보고/산출물] 리드타임 [As-Is]일 → [To-Be]일 (월 [건수]건 기준)
-- 반복 작업(취합/정리/검토/전달) 중 [특정 단계] 소요시간이 가장 크게 감소"></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">산출 근거</label>
-              <textarea class="form-textarea" id="effect_time_basis" style="min-height: 80px;" placeholder="예- 현재: 월 [N]건 × 건당 [X]분 = 월 [ ]시간
-- 도입 후: 월 [N]건 × 건당 [Y]분 = 월 [ ]시간
-- 절감: 월 [ ]시간(=[As-Is]-[To-Be]) / 연간 [ ]시간(×12)
-(선택) 비용 환산: 연간 [ ]시간 × [시간당 단가] = [ ]원"></textarea>
-            </div>
-          </div>
         </div>
 
         <div class="effect-item">
@@ -1705,11 +1708,11 @@
             <span class="effect-icon">💰</span>
             <span class="effect-type">비용 절감</span>
             <label class="effect-toggle">
-              <input type="checkbox" id="effect_cost_enabled" onchange="toggleEffectSection('cost')">
+              <input type="checkbox" id="effect_cost_enabled" checked onchange="toggleEffectSection('cost')">
               <span class="toggle-slider"></span>
             </label>
           </div>
-          <div class="effect-content hidden" id="effect_cost_content">
+          <div class="effect-content" id="effect_cost_content">
             <div class="form-group">
               <label class="form-label">효과 내용</label>
               <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="예:
@@ -1720,11 +1723,8 @@
             <div class="form-group">
               <label class="form-label">산출 근거</label>
               <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="예
-- 기준: 월 [N]건 × 건당 비용 [X]원
-- 도입 전: 월 [N]×[X]=월 [ ]원
-- 도입 후: 월 [N]×[Y]=월 [ ]원
-- 절감: 월 [ ]원 (x12) = 연 [ ]원
-(선택) 리스크 비용: 발생확률 [ ]% × 영향금액 [ ]원 = 기대손실 [ ]원 → 감소""></textarea>
+(As-Is - To-Be) X 인건비 
+예시: 180시간 → 80시간 = 100시간 × 5만원 = 500만원""></textarea>
             </div>
           </div>
         </div>
@@ -1758,30 +1758,58 @@
           </div>
         </div>
 
-        <div class="effect-item">
+        <div class=" effect-item">
           <div class="effect-header">
-            <span class="effect-icon">✅</span>
-            <span class="effect-type">품질/정확도 향상</span>
+            <span class="effect-icon">🛡️</span>
+            <span class="effect-type">리스크 완화</span>
             <label class="effect-toggle">
-              <input type="checkbox" id="effect_quality_enabled" onchange="toggleEffectSection('quality')">
+              <input type="checkbox" id="effect_risk_enabled" onchange="toggleEffectSection('risk')">
               <span class="toggle-slider"></span>
             </label>
           </div>
-          <div class="effect-content hidden" id="effect_quality_content">
+          <div class="effect-content hidden" id="effect_risk_content">
             <div class="form-group">
               <label class="form-label">효과 내용</label>
-              <textarea class="form-textarea" id="effect_quality_value" style="min-height: 80px;" placeholder="예:
-- 오류/누락률을 [ ]% → [ ]%로 감소 (보고/입력/정산 결과 정합성 향상)
-- 재작업(수정·재검토) 건수를 월 [ ]건 → [ ]건으로 감소
-- 기준 위반/컴플라이언스 리스크 탐지율 향상(미탐/오탐 감소)"></textarea>
+              <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="예:
+- 컴플라이언스 위반 발생률 [ ]% → [ ]%로 감소
+- 핵심 프로세스 오류 건수 월 [ ]건 → [ ]건으로 감소
+- 보안/개인정보 사고 발생 가능성 [ ]% → [ ]%로 완화"></textarea>
             </div>
             <div class="form-group">
               <label class="form-label">산출 근거</label>
-              <textarea class="form-textarea" id="effect_quality_basis" style="min-height: 80px;" placeholder="예: 
-- 기준: 월 처리/보고/입력 [A]건, 현재 오류·누락 [B]건(=B/A)
-- 도입 후 목표: 오류·누락 [B']건(=B'/A)
-- 개선폭: (B-B')건 감소 / 오류율 [ ]%p 개선
-- 재작업 비용/시간: 건당 재작업 [t]분(또는 [c]원) × (B-B') = 월 [ ]분(또는 [ ]원) 절감"></textarea>
+              <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="예:
+- 기준: 월 [N]건 × 건당 리스크 비용 [X]원
+- 도입 전 기대손실: 월 [N]×[X]=월 [ ]원
+- 도입 후 기대손실: 월 [N]×[Y]=월 [ ]원
+- 감소: 월 [ ]원 (x12) = 연 [ ]원"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="effect-item">
+          <div class="effect-header">
+            <span class="effect-icon">🎯</span>
+            <span class="effect-type">전략적 가치</span>
+            <label class="effect-toggle">
+              <input type="checkbox" id="effect_strategic_enabled" onchange="toggleEffectSection('strategic')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="effect-content hidden" id="effect_strategic_content">
+            <div class="form-group">
+              <label class="form-label">효과 내용</label>
+              <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="예:
+- 신규 사업/시장 진입 리드타임 [ ]개월 → [ ]개월 단축
+- 핵심 의사결정 리드타임 [ ]일 → [ ]일로 개선
+- 조직 내 AI 활용 역량 내재화로 전략 과제 추진 속도 향상"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">산출 근거</label>
+              <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="예:
+- 기준: 전략 과제 [N]건, 평균 리드타임 [X]주
+- 도입 후: 평균 리드타임 [Y]주
+- 개선: [X-Y]주 단축 × [N]건
+- 기회비용: 단축 기간 [ ]주 × 예상 매출/성과 [ ]원"></textarea>
             </div>
           </div>
         </div>
@@ -2074,7 +2102,9 @@
     function goToPreview() {
       goToStep(6);
       setTimeout(() => {
-        document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('previewContainer').scrollIntoView({
+          behavior: 'smooth'
+        });
       }, 100);
     }
     // Step Navigation
@@ -2265,18 +2295,18 @@
         keyBenefit: getVal('keyBenefit'),
         projectDuration: getVal('projectDuration'),
         // 정량적 효과
-        effect_time_enabled: document.getElementById('effect_time_enabled')?.checked || false,
-        effect_time_value: getVal('effect_time_value'),
-        effect_time_basis: getVal('effect_time_basis'),
         effect_cost_enabled: document.getElementById('effect_cost_enabled')?.checked || false,
         effect_cost_value: getVal('effect_cost_value'),
         effect_cost_basis: getVal('effect_cost_basis'),
         effect_revenue_enabled: document.getElementById('effect_revenue_enabled')?.checked || false,
         effect_revenue_value: getVal('effect_revenue_value'),
         effect_revenue_basis: getVal('effect_revenue_basis'),
-        effect_quality_enabled: document.getElementById('effect_quality_enabled')?.checked || false,
-        effect_quality_value: getVal('effect_quality_value'),
-        effect_quality_basis: getVal('effect_quality_basis'),
+        effect_risk_enabled: document.getElementById('effect_risk_enabled')?.checked || false,
+        effect_risk_value: getVal('effect_risk_value'),
+        effect_risk_basis: getVal('effect_risk_basis'),
+        effect_strategic_enabled: document.getElementById('effect_strategic_enabled')?.checked || false,
+        effect_strategic_value: getVal('effect_strategic_value'),
+        effect_strategic_basis: getVal('effect_strategic_basis'),
         // 정성적 효과
         qualitativeValue: getVal('qualitativeValue'),
         scalability: getVal('scalability'),
@@ -2378,10 +2408,10 @@
         setVal(`effect_${type}_value`, val);
         setVal(`effect_${type}_basis`, basis);
       };
-      setEffect('time', data.effect_time_enabled, data.effect_time_value, data.effect_time_basis);
       setEffect('cost', data.effect_cost_enabled, data.effect_cost_value, data.effect_cost_basis);
       setEffect('revenue', data.effect_revenue_enabled, data.effect_revenue_value, data.effect_revenue_basis);
-      setEffect('quality', data.effect_quality_enabled, data.effect_quality_value, data.effect_quality_basis);
+      setEffect('risk', data.effect_risk_enabled, data.effect_risk_value, data.effect_risk_basis);
+      setEffect('strategic', data.effect_strategic_enabled, data.effect_strategic_value, data.effect_strategic_basis);
       // 정성적 효과
       setVal('qualitativeValue', data.qualitativeValue);
       setVal('scalability', data.scalability);
@@ -2561,15 +2591,6 @@
       const container = document.getElementById('previewContainer');
       // 정량적 효과 HTML 생성
       let quantitativeEffectsHTML = '';
-      if (data.effect_time_enabled && data.effect_time_value) {
-        quantitativeEffectsHTML += `
-                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
-                        <strong>⏱️ 시간 절감</strong>
-                        <p style="margin: 8px 0;">${formatText(data.effect_time_value)}</p>
-                        ${data.effect_time_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_time_basis)}</p>` : ''}
-                    </div>
-                `;
-      }
       if (data.effect_cost_enabled && data.effect_cost_value) {
         quantitativeEffectsHTML += `
                     <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
@@ -2588,12 +2609,21 @@
                     </div>
                 `;
       }
-      if (data.effect_quality_enabled && data.effect_quality_value) {
+      if (data.effect_risk_enabled && data.effect_risk_value) {
         quantitativeEffectsHTML += `
                     <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
-                        <strong>✅ 품질/정확도 향상</strong>
-                        <p style="margin: 8px 0;">${formatText(data.effect_quality_value)}</p>
-                        ${data.effect_quality_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_quality_basis)}</p>` : ''}
+                        <strong>🛡️ 리스크 완화</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_risk_value)}</p>
+                        ${data.effect_risk_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_risk_basis)}</p>` : ''}
+                    </div>
+                `;
+      }
+      if (data.effect_strategic_enabled && data.effect_strategic_value) {
+        quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>🎯 전략적 가치</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_strategic_value)}</p>
+                        ${data.effect_strategic_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_strategic_basis)}</p>` : ''}
                     </div>
                 `;
       }
