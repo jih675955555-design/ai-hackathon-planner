@@ -1,3 +1,4 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/version 7_en b/version 7_en
 index ca9d89fa2c96123a9742cc58b5e7bf0ab10563e0..65f257526d453c85035fa845ad859bf30c5c0c7e 100644
 --- a/version 7_en	
@@ -1315,3 +1316,6 @@ index ca9d89fa2c96123a9742cc58b5e7bf0ab10563e0..65f257526d453c85035fa845ad859bf3
   <p><strong>✨ Qualitative effects</strong></p>
   <p>${formatText(data.qualitativeValue)}</p>
   
+ 
+EOF
+)
