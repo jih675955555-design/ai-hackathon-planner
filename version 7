@@ -2331,6 +2331,8 @@
         dataPreprocessing: getVal('dataPreprocessing'),
         dataUpdateCycle: getVal('dataUpdateCycle'),
         dataSecurity: getVal('dataSecurity'),
+        feedbackReference: getVal('feedbackReference'),
+        feedbackErrorRule: getVal('feedbackErrorRule'),
         techTags: getSelectedTags('techTags'),
         techDescription: getVal('techDescription'),
         // Step 5
@@ -2427,6 +2429,8 @@
       setVal('dataPreprocessing', data.dataPreprocessing);
       setVal('dataUpdateCycle', data.dataUpdateCycle);
       setVal('dataSecurity', data.dataSecurity);
+      setVal('feedbackReference', data.feedbackReference);
+      setVal('feedbackErrorRule', data.feedbackErrorRule);
       setVal('techDescription', data.techDescription);
       // Restore tech tags
       if (data.techTags && Array.isArray(data.techTags)) {
@@ -2749,7 +2753,7 @@
                 </div>
                 
                 <div class="preview-section">
-                    <h3>4. 데이터 & 기술</h3>
+                    <h3>4. 데이터 및 기술 적용 방안</h3>
                     <div class="preview-content">
                         <p><strong>필요 데이터:</strong></p>
                         <p>${formatText(data.requiredData)}</p>
@@ -2766,6 +2770,12 @@
                         <br>
                         <p><strong>보안/컴플라이언스 고려사항:</strong></p>
                         <p>${formatText(data.dataSecurity)}</p>
+                        <br>
+                        <p><strong>피드백/보정 기준:</strong></p>
+                        <p>${formatText(data.feedbackReference)}</p>
+                        <br>
+                        <p><strong>오류 처리/예외 규칙:</strong></p>
+                        <p>${formatText(data.feedbackErrorRule)}</p>
                         <br>
                         <p><strong>관련 기술:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
                         <br>
