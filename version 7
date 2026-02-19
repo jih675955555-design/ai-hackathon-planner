@@ -2681,13 +2681,13 @@
       }
       // Task 테이블 HTML 생성
       let taskTableHTML = '';
-      const tasks = [data.task1, data.task2, data.task3, data.task4, data.task5];
+      const tasks = [{ no: 1, ...data.task1 }, { no: 2, ...data.task2 }, { no: 3, ...data.task3 }, { no: 4, ...data.task4 }, { no: 5, ...data.task5 }];
       const validTasks = tasks.filter(t => t && t.desc);
       if (validTasks.length > 0) {
         taskTableHTML = `
                     <table class="preview-table">
                         <tr><th style="width: 10%;">No.</th><th>Task</th><th style="width: 15%;">선행</th><th style="width: 15%;">기간</th></tr>
-                        ${validTasks.map((t, i) => `<tr><td>${i+1}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
+                        ${validTasks.map((t) => `<tr><td>${t.no}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
                     </table>
                 `;
       }
@@ -2706,7 +2706,7 @@
                         <tr><th>과제 핵심 목표</th><td>${escapeHtml(data.coreProject) || '-'}</td></tr>
                         <tr><th>담당 부서</th><td>${escapeHtml(data.department) || '-'}</td></tr>
                         <tr><th>AI Champion 성명</th><td>${escapeHtml(data.champion) || '-'}</td></tr>
-                        <tr><th>과제 정의</th><td>${escapeHtml(data.projectDefinition) || '-'}</td></tr>
+                        <tr><th>과제 정의</th><td>${formatText(data.projectDefinition)}</td></tr>
                         <tr><th>해결해야 할 문제</th><td>${formatText(data.painPoint)}</td></tr>
                         <tr><th>도입 예상효과</th><td>${formatText(data.expectedEffect)}</td></tr>
                         <tr><th>과제 수행기간</th><td>${escapeHtml(data.projectDuration) || '-'}개월</td></tr>
@@ -2848,8 +2848,9 @@
       });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
+      const safeName = (data.projectName || '제목없음').trim().replace(/[\/:*?"<>|]/g, '_') || '제목없음';
       link.href = url;
-      link.download = `AI기획서_${data.projectName || '제목없음'}_${new Date().toISOString().split('T')[0]}.doc`;
+      link.download = `AI기획서_${safeName}_${new Date().toISOString().split('T')[0]}.doc`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
