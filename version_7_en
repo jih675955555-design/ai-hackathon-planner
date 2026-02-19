@@ -1043,7 +1043,7 @@
  </div>
  <div class="header-actions">
  <button class="btn btn-ghost" onclick="loadData()">
- <span>📂</span> Load Saved
+ <span>📂</span> Load
  </button>
  <button class="btn btn-ghost" onclick="saveData()">
  <span>💾</span> Save
@@ -2111,8 +2111,7 @@ Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></tex
  // --- [Utility] Text Formatting: ---
  function formatText(text) {
  if (!text) return '-';
- // Escape HTML and preserve line breaks
- return escapeHtml(text).replace(/\n/g, '<br>');
+ // HTML (escape) ,<br>return escapeHtml(text).replace(/\n/g, '<br>');
  }
  // Go directly to preview section
  function goToPreview() {
@@ -2208,7 +2207,7 @@ Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></tex
  function loadData() {
  const saved = safeGetItem('aiHackathonPlan');
  if (saved) {
- showModal('Load saved data', 'Saved data is available. Would you like to load it?');
+ showModal('Saved data Load', ' data Would you like to load it?');
  } else {
  showToast('No saved data found.');
  }
@@ -2220,10 +2219,10 @@ Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></tex
  try {
  const data = JSON.parse(saved);
  populateFormData(data);
- showToast('Data loaded successfully.', 'success');
+ showToast('data .', 'success');
  } catch (e) {
- console.error('Data load error:', e);
- showToast('Failed to load saved data.', 'default');
+ console.error('Data Load Error:', e);
+ showToast('data not found.', 'default');
  }
  }
  closeModal();
@@ -2235,7 +2234,7 @@ Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></tex
  if (saved && savedDate) {
  const date = new Date(savedDate);
  const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR');
- showModal('Load saved data', `Saved data from ${dateStr} was found. Would you like to load it?`);
+ showModal('Saved data ', `${dateStr} exists. Would you like to load it?`);
  }
  }
  // Auto-save setup
@@ -2812,7 +2811,7 @@ Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></tex
  });
  const url = URL.createObjectURL(blob);
  const link = document.createElement('a');
- const safeName = (data.projectName || 'Untitled').trim().replace(/[\/:*?"<>|]/g, '_') || 'Untitled';
+ const safeName = (data.projectName || 'None').trim().replace(/[\/:*?"<>|]/g, '_') || 'None';
  link.href = url;
  link.download = `AI_${safeName}_${new Date().toISOString().split('T')[0]}.doc`;
  document.body.appendChild(link);
