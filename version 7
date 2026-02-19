@@ -1441,7 +1441,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">예외 처리 방안</label>
+          <label class="form-label">예외 처리 방안<span class="required">*</span></label>
           <textarea class="form-textarea" id="exceptionHandling" placeholder="예: 
  - AI가 필요한 정보를 찾지 못하면, 추정해서 작성하지 않고 “확인 필요”로 표시한 뒤 중단한다.
 - 중단 시에는 (1) 누락된 정보가 무엇인지, (2) 필요한 데이터/문서/시스템이 무엇인지, (3) 사용자가 추가로 입력해야 할 질문 1개를 함께 제시한다.
@@ -1564,7 +1564,7 @@
 - 최신 반영 지연: 데이터가 오늘 기준이 아니라 며칠 전 기준인 경우"></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label">전처리/정제 계획</label>
+            <label class="form-label">전처리/정제 계획<span class="required">*</span></label>
             <textarea class="form-textarea" id="dataPreprocessing" placeholder="예:
 - 용어 통일: 부서마다 다르게 쓰는 이름/단위를 하나로 맞춤 
 - 자료 연결: 서로 다른 시스템의 데이터를 사번/문서번호 등으로 연결 
@@ -1588,7 +1588,7 @@
             </select>
           </div>
           <div class="form-group">
-            <label class="form-label">보안/컴플라이언스 고려사항</label>
+            <label class="form-label">보안/컴플라이언스 고려사항<span class="required">*</span></label>
             <textarea class="form-textarea" id="dataSecurity" placeholder="예:
 - 민감정보 포함 여부: 개인정보(이름, 연락처 등)/사내기밀이 포함되는지 
 - 열람 권한: 누가 이 데이터를 볼 수 있는지, 승인이 필요한지 
@@ -1640,11 +1640,18 @@
           </div>
         </div>
         <div class="form-group" style="margin-top: 16px;">
-          <label class="form-label">기술 적용 방안 설명</label>
-          <textarea class="form-textarea" id="techDescription" placeholder="예:
-- 어떤 업무 단계에서 어떤 기술을 쓰는지 2~4줄로 설명
--(예) AI에게 질문하면 요약/정리해주고, 사내 문서에서 근거를 찾아주며, 빈 칸/이상한 값을 자동으로 검사한 뒤, 승인하면 메일/요청을 자동 생성"></textarea>
-          <p class="form-help">Tip: 기술 나열이 아니라, To-Be 단계와 연결되는 적용 흐름을 간단히 적어주세요.</p>
+          <label class="form-label">기술 적용 방안 및 판단 근거 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="예시:
+[적용 방안] AI에게 자연어로 질문하면 사내 문서에서 근거를 찾아 요약해주고, 데이터의 빈 칸/비정상 값을 자동 검사한 뒤, 승인하면 메일/요청을 자동 생성한다.
+[판단 근거] ○○제약에서 품질 문서 검토에 LLM+RAG를 적용해 검토 시간 60% 단축한 사례 확인 (2024 ○○컨퍼런스 발표). ChatGPT에 엑셀 데이터를 넣어 현황 요약을 시도해보니 초안 수준 결과물 생성 가능 확인."></textarea>
+          <p class="form-help">Tip: 아래 두 가지를 함께 적어주세요
+
+            <br>① 적용 방안: 어떤 업무 단계에서 어떤 기술을 어떻게 쓸 것인지
+            <br>② 판단 근거: 왜 이 기술이 우리 업무에 적용 가능하다고 생각하는지 (1개 이상)
+            <br>- 유사한 업무에 AI를 적용한 사례 (기사, 블로그, 영상, 컨퍼런스 자료 등)
+            <br>- ChatGPT 등으로 간단히 시도해본 경험
+            <br>- 참고한 자료의 핵심 내용 </br>
+          </p>
         </div>
       </div>
 
@@ -1669,6 +1676,13 @@
           <div class="validation-text">
             <strong>보안/Compliance</strong>
             <span>개인정보/민감정보 포함 여부와 접근 권한, 저장/반출 정책, 마스킹/비식별 처리 필요 여부가 확인되어 있나요?</span>
+          </div>
+        </div>
+        <div class="validation-item" id="v4-caseevidence">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>기술 판단 근거</strong>
+            <span>선택한 AI 기술이 우리 업무에 적용 가능하다고 판단한 근거(유사 사례, 직접 테스트, 자료 참고 등)가 포함되어 있나요?</span>
           </div>
         </div>
       </div>
@@ -2024,6 +2038,13 @@
             <div class="validation-text">
               <strong>보안/Compliance</strong>
               <span>개인정보/민감정보 포함 여부와 접근 권한, 저장/반출 정책, 마스킹/비식별 처리 필요 여부가 확인되어 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v4-caseevidence">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>기술 판단 근거</strong>
+              <span>선택한 AI 기술이 우리 업무에 적용 가능하다고 판단한 근거(유사 사례, 직접 테스트, 자료 참고 등)가 포함되어 있나요?</span>
             </div>
           </div>
         </div>
@@ -2472,7 +2493,7 @@
           el.addEventListener('blur', validateStep3);
         }
       });
-      const step4Fields = ['requiredData', 'dataPreprocessing', 'dataSecurity'];
+      const step4Fields = ['requiredData', 'dataPreprocessing', 'dataSecurity', 'techDescription'];
       step4Fields.forEach(fieldId => {
         const el = document.getElementById(fieldId);
         if (el) {
@@ -2528,9 +2549,12 @@
       const dataSampleValid = requiredData.length >= 30 && /데이터|테이블|컬럼|샘플|정보|목록/.test(requiredData);
       const preprocessingValid = dataPreprocessing.length >= 20 && /정제|전처리|표준화|제거|매핑|중복/.test(dataPreprocessing);
       const securityValid = dataSecurity.length >= 15 && /보안|개인정보|권한|컴플라이언스|비식별|접근/.test(dataSecurity);
+      const techDescription = getVal('techDescription');
+      const techDescValid = techDescription.length >= 50 && /사례|적용|테스트|확인|근거|판단|데모|경험|참고|발표|기사|블로그|벤더/.test(techDescription);
       updateValidationUI('v4-datasample', dataSampleValid, requiredData.length > 0);
       updateValidationUI('v4-preprocessing', preprocessingValid, dataPreprocessing.length > 0);
       updateValidationUI('v4-security', securityValid, dataSecurity.length > 0);
+      updateValidationUI('v4-caseevidence', techDescValid, techDescription.length > 0);
     }
 
     function updateValidationUI(elementId, isValid, hasInput) {
@@ -2591,6 +2615,9 @@
       check('vf-v4-datasample', dataSampleValid);
       check('vf-v4-preprocessing', preprocessingValid);
       check('vf-v4-security', securityValid);
+      const techDescription = (data.techDescription || '').trim();
+      const techDescValid = techDescription.length >= 50 && /사례|적용|테스트|확인|근거|판단|데모|경험|참고|발표|기사|블로그|벤더/.test(techDescription);
+      check('vf-v4-caseevidence', techDescValid);
     }
 
     function updateValidation(id, pass) {
