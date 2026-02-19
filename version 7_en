@@ -1133,7 +1133,7 @@
  <strong>✅ Project Definition Writing Guide (One-sentence template)</strong>
 
  <p style="background:#eff6ff; padding:12px; border-radius:8px; margin:10px 0; border-left:4px solid #1a56db;">
- <strong style="color:#1e40af;">One-sentence template</strong>“[ ] , AI [ ] [ ] , [] .”</p>
+ <strong style="color:#1e40af;">One-sentence template:</strong> "In [work scope], AI will [action] using [data/input] to improve [time/cost/quality/risk]."</p>
 
  <div style="margin-top:12px; padding:12px; background:#f8fafc; border-radius:8px;">
  <strong style="color:#0f172a;">📌 Checkpoints (3 only)</strong>
@@ -1148,8 +1148,8 @@
  <strong>❌ Avoid these expressions</strong>
  <div style="background:#fef2f2; padding:12px; border-radius:8px; margin:8px 0; border-left:4px solid #ef4444;">
  <ul style="margin-left:16px; font-size:13px; color:#991b1b; line-height:1.7;">
- <li>““We want AI automation/efficiency”” (work·· )</li>
- <li>““AI should do it automatically”” (“unspecified” )</li>
+ <li>"We want AI automation/efficiency" (without specifying the work scope)</li>
+ <li>"AI should handle it automatically" (without defining what "it" means)</li>
  </ul>
  </div>
  </div>
@@ -1175,7 +1175,7 @@
  </ul>
  <strong>❌ Avoid these expressions</strong>
  <ul>
- <li>““It is hard/inefficient/we want automation””without symptoms, causes, impacts, or evidence</li>
+ <li>"It is hard / inefficient / we need automation" without symptoms, root causes, impact, or evidence</li>
  </ul>
  </div>
  <div class="form-group">
@@ -1209,7 +1209,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Project Definition Clarity</strong>
- <span>“adopting AI” , target(Work scope) ( ) ?</span>
+ <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
  </div>
  </div>
 
@@ -1279,12 +1279,12 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
 
  <div class="form-group">
  <label class="form-label">Describe current workflow <span class="required">*</span></label>
- <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="Please provide details in English."" ></textarea>
+ <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
  </div>
- <div class=" card">
- <div class="card-title">Current Issues ( .)</div>
+ <div class="card">
+ <div class="card-title">Current Issues</div>
  <div class="grid-2">
  <div class="form-group">
  <label class="form-label">Time inefficiency</label>
@@ -1310,7 +1310,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="card">
  <div class="card-title">Current system</div>
  <div class="form-group">
- <label class="form-label">related system list</label>
+ <label class="form-label">Related system list</label>
  <div class="tech-tags" id="systemTags">
  <span class="tech-tag" onclick="toggleTag(this)">SAP</span>
  <span class="tech-tag" onclick="toggleTag(this)">PLM</span>
@@ -1319,7 +1319,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <span class="tech-tag" onclick="toggleTag(this)">Excel</span>
  <span class="tech-tag" onclick="toggleTag(this)">SharePoint</span>
  <span class="tech-tag" onclick="toggleTag(this)">Email</span>
- <span class="tech-tag" onclick="toggleTag(this)">manual work</span>
+ <span class="tech-tag" onclick="toggleTag(this)">Manual work</span>
  </div>
  <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="Please provide details in English.">
  </div>
@@ -1335,30 +1335,30 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="section-header">
  <h2 class="section-title">
  <span class="emoji">🎯</span>
- To-Be Scenario design
+ To-Be Scenario Design
  </h2>
- <p class="section-desc">AI Adoption work design. “AI-Native Workflow: AI , work ?"</p>
+ <p class="section-desc">Design the future workflow after AI adoption. Focus on an AI-native process where AI and humans each have clear roles.</p>
  </div>
 
  <div class="card">
- <div class="card-title">AI Adoption work (To-Be)<button class="hint-btn" onclick="toggleHint('hint4')">💡 design guide</button>
+ <div class="card-title">AI Adoption Workflow (To-Be)<button class="hint-btn" onclick="toggleHint('hint4')">💡 Design Guide</button>
  </div>
  <div class="hint-content" id="hint4">
  <strong>✅ Pass criteria: Process design</strong>
  <ul>
- <li>work As-Is(Current) AI Adoption To-Be()</li>
- <li>AI</li>
- <li>Human-in-the-loop: AI design</li>
+ <li>Describe how the current As-Is process changes into the AI-enabled To-Be process.</li>
+ <li>Specify what AI does at each key step.</li>
+ <li>Define human-in-the-loop controls (review, approval, override).</li>
  </ul>
  <br>
- <strong>❌ re-review reasons</strong>
+ <strong>❌ Common reasons for rework</strong>
  <ul>
- <li>feature listing: AI</li>
- <li>lack of validation: AI</li>
+ <li>Only listing AI features without process context</li>
+ <li>No validation checkpoints for AI outputs</li>
  </ul>
  </div>
  <div class="form-group">
- <label class="form-label">AI Adoption work flow<span class="required">*</span></label>
+ <label class="form-label">AI adoption workflow<span class="required">*</span></label>
  <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
@@ -1370,28 +1370,28 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <textarea class="form-textarea" id="aiRole" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">human tasks to perform <span class="required">*</span></label>
+ <label class="form-label">Human tasks to perform <span class="required">*</span></label>
  <textarea class="form-textarea" id="humanRole" placeholder="Please provide details in English."></textarea>
  </div>
- <p class="form-help">Tip: “ ” AI ( ) (··Approval) .</p>
+ <p class="form-help">Tip: Clearly separate AI responsibilities from human responsibilities, especially for review and approval steps.</p>
  </div>
 
  <div class="card">
  <div class="card-title">AI interaction design</div>
  <div class="grid-2">
  <div class="form-group">
- <label class="form-label">Input: Request ///criteria</label>
+ <label class="form-label">Input: request, context, and criteria</label>
  <textarea class="form-textarea" id="aiInput" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">Output: output + evidence + validation result + Execution</label>
+ <label class="form-label">Output: result, evidence, validation outcome, and execution action</label>
  <textarea class="form-textarea" id="aiOutput" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
  <div class="form-group">
  <label class="form-label">Exception handling plan<span class="required">*</span></label>
  <textarea class="form-textarea" id="exceptionHandling" placeholder="Please provide details in English."></textarea>
- <p class="form-help">AI "" week.</p>
+ <p class="form-help">Include fallback actions for missing data, low-confidence output, or policy violations.</p>
  </div>
  </div>
 
@@ -1401,21 +1401,21 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Process design</strong>
- <span>As-Is → To-Be week(/AI/system) output ?</span>
+ <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
  </div>
  </div>
  <div class="validation-item" id="v3-humanloop">
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Human-in-the-loop</strong>
- <span>AI output human , (///) ?</span>
+ <span>Are human review and intervention points clearly defined for AI outputs?</span>
  </div>
  </div>
  <div class="validation-item" id="v3-exception">
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Exception handling</strong>
- <span>data /day/criteria AI “ /” , quarter ?</span>
+ <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
  </div>
  </div>
  </div>
@@ -1432,25 +1432,25 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <span class="emoji">🗄️</span>
  Data & Technology Review
  </h2>
- <p class="section-desc">AI required data Review. data .</p>
+ <p class="section-desc">Review the data, tools, and governance required to operate the AI workflow reliably.</p>
  <button class="hint-btn" onclick="toggleHint('hint5')">💡 Writing Guide </button>
  <div class="hint-content" id="hint5">
- <strong>✅ Pass criteria: Agentic AI 3 data Tool</strong>
+ <strong>✅ Pass criteria: Define all four elements for agentic AI</strong>
  <ul>
- <li>Input data: Agent data<br>- Request<br>- , data,<br>
+ <li>Input data: Information the agent needs at runtime<br>- User requests<br>- Contextual business data<br>
  </li>
- <li>Knowledge data: Agent /<br>- ( policy, SOP, )<br>- DB,<br>
+ <li>Knowledge data: Reference materials for reasoning<br>- Policies, SOPs, and guidelines<br>- Knowledge bases / internal DBs<br>
  </li>
- <li>Feedback data: AI judgment criteria<br>- " ground truth" comparison criteria (e.g., sample data and process details)<br>- '' judgment (e.g., sample data and process details)<br>
+ <li>Feedback data: Evaluation criteria for AI outputs<br>- Ground-truth references for comparison<br>- Rules that define pass/fail decisions<br>
  </li>
- <li>Other Tool/Action: Agent /system<br>- , day<br>- DB time(s)<br>
+ <li>Tools/Actions: External systems the agent can use<br>- APIs or workflow actions<br>- DB queries and automation steps<br>
  </li>
  </ul>
  <br>
- <strong>❌ re-review reasons</strong>
+ <strong>❌ Common reasons for rework</strong>
  <ul>
- <li>data : , data</li>
- <li>: " " target</li>
+ <li>Required data is missing, unclear, or inaccessible</li>
+ <li>No clear criteria for evaluating AI output quality</li>
  </ul>
  </div>
  </div>
@@ -1460,7 +1460,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  Required data
  </div>
  <div class="form-group">
- <label class="form-label">required data list <span class="required">*</span></label>
+ <label class="form-label">Required data list <span class="required">*</span></label>
  <textarea class="form-textarea" id="requiredData" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="grid-2">
@@ -1469,14 +1469,14 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <textarea class="form-textarea" id="dataSource" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">data format/format</label>
+ <label class="form-label">Data format</label>
  <textarea class="form-textarea" id="dataFormat" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
  </div>
 
  <div class="card">
- <div class="card-title">data quality preprocessing</div>
+ <div class="card-title">Data quality & preprocessing</div>
  <div class="grid-2">
  <div class="form-group">
  <label class="form-label">Expected data quality issues</label>
@@ -1508,18 +1508,18 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
 
  <div class="card">
- <div class="card-title">AI criteria</div>
+ <div class="card-title">AI evaluation criteria</div>
  <div class="grid-2">
  <div class="form-group">
  <label class="form-label">Reference benchmark data (ground-truth comparable) </label>
  <textarea class="form-textarea" id="feedbackReference" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label"> Error criteria data (conditions treated as errors) </label>
+ <label class="form-label">Error criteria data (conditions treated as errors)</label>
  <textarea class="form-textarea" id="feedbackErrorRule" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
- <p class="form-help">Tip: "How can you detect when AI is wrong?" criteria .</p>
+ <p class="form-help">Tip: Define clear criteria for detecting when AI output is incorrect.</p>
  </div>
 
  <div class="card">
@@ -1535,15 +1535,14 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <span class="tech-tag" onclick="toggleTag(this)">OCR</span>
  <span class="tech-tag" onclick="toggleTag(this)">Recommendation System</span>
  <span class="tech-tag" onclick="toggleTag(this)">Predictive Analytics</span>
- <span class="tech-tag" onclick="toggleTag(this)">Please enter details.</span>
- <span class="tech-tag" onclick="toggleTag(this)">recognition</span>
+ <span class="tech-tag" onclick="toggleTag(this)">NLP</span>
+ <span class="tech-tag" onclick="toggleTag(this)">Anomaly Detection</span>
  </div>
  </div>
  <div class="form-group" style="margin-top: 16px;">
  <label class="form-label">Application plan and rationale <span class="required">*</span></label>
  <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="Please provide details in English."></textarea>
- <p class="form-help">Tip: week<br>① plan: work<br>② judgment evidence: work (1 )<br>- work AI (, , , )<br>- ChatGPT<br>- content</br>
- </p>
+ <p class="form-help">Tip:<br>① Describe where each technology is applied in the workflow.<br>② Provide rationale with task-level evidence (at least one concrete use case per technology).<br>- Explain why AI is suitable for the task.<br>- Distinguish planned implementation from generic tool usage.</p>
  </div>
  </div>
 
@@ -1552,29 +1551,29 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-item" id="v4-datasample">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>data</strong>
- <span>data ?</span>
+ <strong>Data completeness</strong>
+ <span>Are all required input, knowledge, and feedback data sources defined?</span>
  </div>
  </div>
  <div class="validation-item" id="v4-preprocessing">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>preprocessing plan</strong>
- <span>data (required ) plan ?</span>
+ <strong>Preprocessing plan</strong>
+ <span>Is there a concrete plan to clean, transform, and validate required data?</span>
  </div>
  </div>
  <div class="validation-item" id="v4-security">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>/Compliance</strong>
- <span>personal data/sensitive data , / , / ?</span>
+ <strong>Security / Compliance</strong>
+ <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
  </div>
  </div>
  <div class="validation-item" id="v4-caseevidence">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>judgment evidence</strong>
- <span>AI work judgment evidence( , , ) ?</span>
+ <strong>Decision evidence</strong>
+ <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
  </div>
  </div>
  </div>
@@ -1591,11 +1590,11 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <span class="emoji">📈</span>
  Expected Impact & ROI
  </h2>
- <p class="section-desc">AI Adoption /Qualitative effects . evidence week.</p>
+ <p class="section-desc">Summarize expected quantitative and qualitative impact, with measurable evidence where possible.</p>
  </div>
 
  <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border: none;">
- <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">🎯 expected impact ( summary)</div>
+ <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">🎯 Expected impact summary</div>
  <div class="form-group">
  <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="Please provide details in English.">
  </div>
@@ -1617,21 +1616,21 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
  <div class="hint-content" id="hint6">
  <strong>✅ Pass criteria</strong>
- <p>Please enter details.</p>
+ <p>Provide measurable impact items with assumptions and calculation basis.</p>
  <br>
  <strong>📝 Example</strong>
  <ul>
- <li><strong>Please enter details.</strong>. Example:, week,</li>
- <li><strong>Please enter details.</strong>time(s) . Example: ,</li>
- <li><strong>Please enter details.</strong>policy , error . Example: , .</li>
- <li><strong>Please enter details.</strong>, . Example: , .</li>
+ <li><strong>Cost reduction:</strong> e.g., reduced external spend or labor hours per week/month.</li>
+ <li><strong>Throughput increase:</strong> e.g., number of cases handled per day/week.</li>
+ <li><strong>Risk reduction:</strong> e.g., fewer policy violations or error incidents.</li>
+ <li><strong>Strategic value:</strong> e.g., improved responsiveness or better decision quality.</li>
  </ul>
  </div>
 
  <div class="effect-item">
  <div class="effect-header">
  <span class="effect-icon">💰</span>
- <span class="effect-type">Please enter details.</span>
+ <span class="effect-type">Cost savings</span>
  <label class="effect-toggle">
  <input type="checkbox" id="effect_cost_enabled" checked onchange="toggleEffectSection('cost')">
  <span class="toggle-slider"></span>
@@ -1639,12 +1638,12 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
  <div class="effect-content" id="effect_cost_content">
  <div class="form-group">
- <label class="form-label">content</label>
+ <label class="form-label">Description</label>
  <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">evidence</label>
- <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="Please provide details in English.""></textarea>
+ <label class="form-label">Evidence / basis</label>
+ <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
  </div>
@@ -1652,7 +1651,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class=" effect-item">
  <div class="effect-header">
  <span class="effect-icon">📈</span>
- <span class="effect-type">Please enter details.</span>
+ <span class="effect-type">Revenue uplift</span>
  <label class="effect-toggle">
  <input type="checkbox" id="effect_revenue_enabled" onchange="toggleEffectSection('revenue')">
  <span class="toggle-slider"></span>
@@ -1660,11 +1659,11 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
  <div class="effect-content hidden" id="effect_revenue_content">
  <div class="form-group">
- <label class="form-label">content</label>
+ <label class="form-label">Description</label>
  <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">evidence</label>
+ <label class="form-label">Evidence / basis</label>
  <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
@@ -1673,7 +1672,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class=" effect-item">
  <div class="effect-header">
  <span class="effect-icon">🛡️</span>
- <span class="effect-type">Please enter details.</span>
+ <span class="effect-type">Risk reduction</span>
  <label class="effect-toggle">
  <input type="checkbox" id="effect_risk_enabled" onchange="toggleEffectSection('risk')">
  <span class="toggle-slider"></span>
@@ -1681,11 +1680,11 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
  <div class="effect-content hidden" id="effect_risk_content">
  <div class="form-group">
- <label class="form-label">content</label>
+ <label class="form-label">Description</label>
  <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">evidence</label>
+ <label class="form-label">Evidence / basis</label>
  <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
@@ -1694,7 +1693,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="effect-item">
  <div class="effect-header">
  <span class="effect-icon">🎯</span>
- <span class="effect-type">Please enter details.</span>
+ <span class="effect-type">Strategic impact</span>
  <label class="effect-toggle">
  <input type="checkbox" id="effect_strategic_enabled" onchange="toggleEffectSection('strategic')">
  <span class="toggle-slider"></span>
@@ -1702,11 +1701,11 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  </div>
  <div class="effect-content hidden" id="effect_strategic_content">
  <div class="form-group">
- <label class="form-label">content</label>
+ <label class="form-label">Description</label>
  <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  <div class="form-group">
- <label class="form-label">evidence</label>
+ <label class="form-label">Evidence / basis</label>
  <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
@@ -1719,20 +1718,20 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <button class="hint-btn" onclick="toggleHint('hint7')">💡 Example</button>
  </div>
  <div class="hint-content" id="hint7">
- <strong>Qualitative effects</strong>
+ <strong>Qualitative effects checklist</strong>
  <ul>
- <li>(/Owner/Review/) .</li>
- <li>: , work , , Approval/Review , , .</li>
- <li>: “//day/// ” .</li>
- <li>··· week .</li>
+ <li>Clarify role accountability (executor/owner/reviewer/approver).</li>
+ <li>Describe process improvements such as fewer handoffs, clearer approvals, and better collaboration.</li>
+ <li>Show operational impact (e.g., faster cycle time, fewer rework loops).</li>
+ <li>Explain expected adoption and change-management benefits.</li>
  </ul>
  <strong>Example</strong>
  <ul>
- <li>work (Owner )</li>
- <li>output quality (criteria/ )</li>
- <li>(evidence·judgment )</li>
- <li>/ ( Request repetition )</li>
- <li>(day / Request )</li>
+ <li>Improved ownership clarity for each task</li>
+ <li>More consistent output quality (with defined criteria)</li>
+ <li>Better auditability through evidence-based decisions</li>
+ <li>Reduced communication overhead and repeated requests</li>
+ <li>Improved response speed for daily requests</li>
  </ul>
  </div>
  <div class="form-group">
@@ -1744,7 +1743,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="card">
  <div class="card-title">🚀 Scalability</div>
  <div class="form-group">
- <label class="form-label">Please enter details.</label>
+ <label class="form-label">How can this solution scale to other teams or use cases?</label>
  <textarea class="form-textarea" id="scalability" placeholder="Please provide details in English."></textarea>
  </div>
  </div>
@@ -1758,8 +1757,8 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <section class="form-section" id="step6">
  <div class="section-header">
  <h2 class="section-title">
- <span class="emoji">✅</span>Final Review &</h2>
- <p class="section-desc">content Final Review .</p>
+ <span class="emoji">✅</span>Final Review & Action Plan</h2>
+ <p class="section-desc">Review the full proposal and finalize execution tasks.</p>
  </div>
 
  <div class="card">
@@ -1769,7 +1768,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <tr>
  <th style="width: 5%;">No.</th>
  <th style="width: 55%;">Execution Task</th>
- <th style="width: 20%;">Prereq Task</th>
+ <th style="width: 20%;">Prerequisite Task</th>
  <th style="width: 20%;">Duration</th>
  </tr>
  </thead>
@@ -1817,7 +1816,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Project Definition Clarity</strong>
- <span>“adopting AI” , target(Work scope) ( ) ?</span>
+ <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v1-painpoint">
@@ -1841,21 +1840,21 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Process design</strong>
- <span>As-Is → To-Be week(/AI/system) output ?</span>
+ <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v3-humanloop">
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Human-in-the-loop</strong>
- <span>AI output human , (///) ?</span>
+ <span>Are human review and intervention points clearly defined for AI outputs?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v3-exception">
  <div class="validation-icon">?</div>
  <div class="validation-text">
  <strong>Exception handling</strong>
- <span>data /day/criteria AI “ /” , quarter ?</span>
+ <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
  </div>
  </div>
 
@@ -1864,29 +1863,29 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <div class="validation-item" id="vf-v4-datasample">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>data</strong>
- <span>data ?</span>
+ <strong>Data completeness</strong>
+ <span>Are all required input, knowledge, and feedback data sources defined?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v4-preprocessing">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>preprocessing plan</strong>
- <span>data (required ) plan ?</span>
+ <strong>Preprocessing plan</strong>
+ <span>Is there a concrete plan to clean, transform, and validate required data?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v4-security">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>/Compliance</strong>
- <span>personal data/sensitive data , / , / ?</span>
+ <strong>Security / Compliance</strong>
+ <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
  </div>
  </div>
  <div class="validation-item" id="vf-v4-caseevidence">
  <div class="validation-icon">?</div>
  <div class="validation-text">
- <strong>judgment evidence</strong>
- <span>AI work judgment evidence( , , ) ?</span>
+ <strong>Decision evidence</strong>
+ <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
  </div>
  </div>
  </div>
@@ -1912,7 +1911,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
 
  <div class="modal-overlay" id="modalOverlay">
  <div class="modal">
- <h3 id="modalTitle">Saved data Load</h3>
+ <h3 id="modalTitle">Load saved data</h3>
  <p id="modalMessage">A previously saved proposal exists. Would you like to load it?</p>
  <div class="modal-buttons">
  <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
@@ -2485,7 +2484,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  let quantitativeEffectsHTML = '';
  if (data.effect_cost_enabled && data.effect_cost_value) {
  quantitativeEffectsHTML += `<div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Please enter details.</strong>
+ <strong>Cost savings</strong>
  <p style="margin: 8px 0;">${formatText(data.effect_cost_value)}</p>
  ${data.effect_cost_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_cost_basis)}</p>` : ''}
  </div>
@@ -2494,7 +2493,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  if (data.effect_revenue_enabled && data.effect_revenue_value) {
  quantitativeEffectsHTML += `
  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Please enter details.</strong>
+ <strong>Revenue uplift</strong>
  <p style="margin: 8px 0;">${formatText(data.effect_revenue_value)}</p>
  ${data.effect_revenue_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_revenue_basis)}</p>` : ''}
  </div>
@@ -2503,7 +2502,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  if (data.effect_risk_enabled && data.effect_risk_value) {
  quantitativeEffectsHTML += `
  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Please enter details.</strong>
+ <strong>Risk reduction</strong>
  <p style="margin: 8px 0;">${formatText(data.effect_risk_value)}</p>
  ${data.effect_risk_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_risk_basis)}</p>` : ''}
  </div>
@@ -2512,7 +2511,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  if (data.effect_strategic_enabled && data.effect_strategic_value) {
  quantitativeEffectsHTML += `
  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Please enter details.</strong>
+ <strong>Strategic impact</strong>
  <p style="margin: 8px 0;">${formatText(data.effect_strategic_value)}</p>
  ${data.effect_strategic_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_strategic_basis)}</p>` : ''}
  </div>`;
@@ -2530,7 +2529,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  // system 
  const systemList = [...(data.systems || []), data.customSystems].filter(Boolean).join(', ');
  container.innerHTML = `<div class="preview-header">
- <h1>ExecutionProject Definition</h1>
+ <h1>Execution Plan</h1>
  <h2>${escapeHtml(data.projectName) || '[Project Name]'}</h2>
  </div>
  
@@ -2544,7 +2543,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <tr><th>Project Definition</th><td>${formatText(data.projectDefinition)}</td></tr>
  <tr><th>Problem to solve</th><td>${formatText(data.painPoint)}</td></tr>
  <tr><th>Expected impact</th><td>${formatText(data.expectedEffect)}</td></tr>
- <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'}months</td></tr>
+ <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'} months</td></tr>
  </table>
  </div>
  
@@ -2562,12 +2561,12 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  ${data.asisOtherProblem ? `<li>Other: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
  </ul>
  <br>
- <p><strong> Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
+ <p><strong>Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
  </div>
  </div>
  
  <div class="preview-section">
- <h3>3. To-Be Scenario (AI Adoption )</h3>
+ <h3>3. To-Be Scenario (AI Adoption)</h3>
  <div class="preview-content">
  <p><strong>Workflow after AI adoption:</strong></p>
  <p>${formatText(data.tobeDescription)}</p>
@@ -2609,7 +2608,7 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
  <p><strong>Reference benchmark:</strong></p>
  <p>${formatText(data.feedbackReference)}</p>
  <br>
- <p><strong> Error judgment criteria:</strong></p>
+ <p><strong>Error judgment criteria:</strong></p>
  <p>${formatText(data.feedbackErrorRule)}</p>
  <br>
  <p><strong>Relevant AI technologies:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
