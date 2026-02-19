@@ -1630,8 +1630,7 @@ Execution draft: Recipient list/ticket content/system input draft"></textarea>
  <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="Example:
 [Application approach] Users ask in natural language, AI finds evidence from internal documents and summarizes it, automatically checks blanks/anomalies in data, and upon approval generates emails/requests automatically.
 [Decision rationale] Case evidence shows LLM+RAG reduced quality-document review time by 60% in a peer organization (2024 industry conference). Pilot tests with spreadsheet-based summaries confirmed draft-level output feasibility."></textarea>
- <p class="form-help">Tip:<br>① Describe where each technology is applied in the workflow.<br>② Provide rationale with task-level evidence (at least one concrete use case per technology).<br>- Explain why AI is suitable for the task.<br>- Distinguish planned implementation from generic tool usage.</p>
- </div>
+  <p class="form-help">Tip: Please include both of the following.<br>① Application approach: In which workflow step, how each technology will be used.<br>② Decision rationale: Why this technology is applicable to our work (at least one item).<br>- Similar cases where AI was applied to comparable work (articles, blogs, videos, conference materials, etc.)<br>- Simple hands-on trials using tools like ChatGPT<br>- Key takeaways from the reference materials(example or article)</p> </div>
  </div>
 
  <div class="validation-box">
