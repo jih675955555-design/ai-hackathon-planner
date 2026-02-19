@@ -1,0 +1,2895 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise AI Planning Hackathon - Proposal Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary: #0f172a;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-input: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 20px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      font-size: 12px;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px;
+    }
+
+    .progress-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      right: 40px;
+      height: 3px;
+      background: var(--border);
+      z-index: 1;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+      z-index: 2;
+      transition: width 0.5s ease;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 3px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.2);
+    }
+
+    .step.completed .step-number {
+      border-color: var(--success);
+      background: var(--success);
+      color: white;
+    }
+
+    .step.completed .step-number::after {
+      content: '✓';
+    }
+
+    .step.completed .step-number span {
+      display: none;
+    }
+
+    .step-label {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      text-align: center;
+      max-width: 100px;
+    }
+
+    .step.active .step-label {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .step.completed .step-label {
+      color: var(--success);
+    }
+
+    /* Main Content */
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 40px;
+    }
+
+    .form-section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-header {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title .emoji {
+      font-size: 28px;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .badge-required {
+      background: #fef2f2;
+      color: var(--danger);
+    }
+
+    .badge-optional {
+      background: #f0fdf4;
+      color: var(--success);
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .form-label .required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      background: var(--bg-input);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-help {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Hint Button */
+    .hint-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #fef3c7;
+      color: #92400e;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-left: 10px;
+    }
+
+    .hint-btn:hover {
+      background: #fde68a;
+    }
+
+    .hint-content {
+      display: none;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 14px;
+      color: #92400e;
+      line-height: 1.7;
+    }
+
+    .hint-content.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .hint-content strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #78350f;
+    }
+
+    .hint-content ul {
+      margin-left: 20px;
+    }
+
+    .hint-content li {
+      margin-bottom: 4px;
+    }
+
+    /* Validation Status */
+    .validation-box {
+      background: var(--bg-input);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 24px;
+    }
+
+    .validation-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--secondary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .validation-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 10px;
+      background: white;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .validation-item.pass {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    .validation-item.fail {
+      border-color: var(--warning);
+      background: #fffbeb;
+    }
+
+    .validation-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      background: var(--border);
+      color: var(--text-muted);
+    }
+
+    .validation-item.pass .validation-icon {
+      background: var(--success);
+      color: white;
+    }
+
+    .validation-item.fail .validation-icon {
+      background: var(--warning);
+      color: white;
+    }
+
+    .validation-text {
+      flex: 1;
+    }
+
+    .validation-text strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .validation-text span {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* ROI Calculator */
+    .roi-calculator {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      border-radius: var(--radius);
+      padding: 28px;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .roi-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .roi-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .roi-item label {
+      display: block;
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+
+    .roi-item .value {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .roi-item .unit {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    /* Flow Diagram */
+    .flow-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 20px;
+      background: var(--bg-input);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+    }
+
+    .flow-item {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 120px;
+    }
+
+    .flow-item .system {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .flow-arrow {
+      color: var(--text-muted);
+      font-size: 20px;
+    }
+
+    .flow-ai {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      border: none;
+    }
+
+    .flow-ai .system {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Task Table */
+    .task-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .task-table th,
+    .task-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .task-table th {
+      background: var(--bg-input);
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .task-table tbody tr:hover {
+      background: var(--bg-input);
+    }
+
+    .task-table input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    .task-table input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .add-task-btn {
+      margin-top: 12px;
+      padding: 10px 20px;
+      background: var(--bg-input);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .add-task-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: white;
+    }
+
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-buttons .btn {
+      padding: 14px 32px;
+      font-size: 15px;
+    }
+
+    /* Preview Section */
+    .preview-container {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      margin-top: 20px;
+    }
+
+    .preview-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--secondary);
+    }
+
+    .preview-header h1 {
+      font-size: 24px;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .preview-header h2 {
+      font-size: 18px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .preview-section {
+      margin-bottom: 28px;
+    }
+
+    .preview-section h3 {
+      font-size: 16px;
+      color: var(--secondary);
+      padding: 10px 16px;
+      background: var(--bg-input);
+      border-left: 4px solid var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .preview-content {
+      padding: 0 16px;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    .preview-table th,
+    .preview-table td {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .preview-table th {
+      background: var(--bg-input);
+      font-weight: 600;
+      width: 150px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal h3 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: var(--secondary);
+    }
+
+    .modal p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--secondary);
+      color: white;
+      padding: 16px 24px;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1001;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .roi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+      }
+
+      .main-container {
+        padding: 20px;
+      }
+
+      .progress-container {
+        padding: 16px 20px;
+      }
+
+      .step-label {
+        display: none;
+      }
+
+      .roi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Data Tech Tags */
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tech-tag {
+      padding: 8px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tech-tag:hover {
+      border-color: var(--primary);
+    }
+
+    .tech-tag.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Effect Items */
+    .effect-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .effect-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--bg-input);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .effect-icon {
+      font-size: 20px;
+    }
+
+    .effect-type {
+      font-weight: 600;
+      color: var(--secondary);
+      flex: 1;
+    }
+
+    .effect-content {
+      padding: 20px;
+    }
+
+    .effect-content.hidden {
+      display: none;
+    }
+
+    /* Toggle Switch */
+    .effect-toggle {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+
+    .effect-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border);
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .effect-toggle input:checked+.toggle-slider {
+      background-color: var(--primary);
+    }
+
+    .effect-toggle input:checked+.toggle-slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Print Styles */
+    @media print {
+
+      .header,
+      .progress-container,
+      .nav-buttons,
+      .validation-box,
+      .card-title .hint-btn {
+        display: none !important;
+      }
+
+      .main-container {
+        padding: 0;
+        max-width: 100%;
+      }
+
+      .form-section {
+        display: none !important;
+      }
+
+      #step6 {
+        display: block !important;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+
+      .preview-container {
+        border: none;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <div class="logo-icon">🚀</div>
+        <div class="logo-text">
+          <h1>Enterprise AI Planning Hackathon</h1>
+          <span>AX 실행과제 Proposal Builder</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-ghost" onclick="loadData()">
+          <span>📂</span> Load
+        </button>
+        <button class="btn btn-ghost" onclick="saveData()">
+          <span>💾</span> Save
+        </button>
+        <button class="btn btn-primary" onclick="goToPreview()">
+          <span>📄</span> Preview
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-container">
+    <div class="progress-wrapper">
+      <div class="progress-steps">
+        <div class="progress-line" id="progressLine"></div>
+        <div class="step active" onclick="goToStep(1)">
+          <div class="step-number"><span>1</span></div>
+          <div class="step-label">Basics & Pain Point</div>
+        </div>
+        <div class="step" onclick="goToStep(2)">
+          <div class="step-number"><span>2</span></div>
+          <div class="step-label">As-Is Status</div>
+        </div>
+        <div class="step" onclick="goToStep(3)">
+          <div class="step-number"><span>3</span></div>
+          <div class="step-label">To-Be Scenario</div>
+        </div>
+        <div class="step" onclick="goToStep(4)">
+          <div class="step-number"><span>4</span></div>
+          <div class="step-label">Data & Technology</div>
+        </div>
+        <div class="step" onclick="goToStep(5)">
+          <div class="step-number"><span>5</span></div>
+          <div class="step-label">ROI</div>
+        </div>
+        <div class="step" onclick="goToStep(6)">
+          <div class="step-number"><span>6</span></div>
+          <div class="step-label">Final Review</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-container">
+    <section class="form-section active" id="step1">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">💡</span>
+          Basic Info & Pain Point Discovery
+        </h2>
+        <p class="section-desc">AI Adoption으로 해결하고자 하는 업무 문제를 구체적으로 정의합니다. 단순히 불편한 일이 아니라, 비즈니스 성과로 직결될 문제를 찾습니다.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Project Basics
+          <span class="badge badge-required">Required</span>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Project Name <span class="required">*</span></label>
+            <input type="text" class="form-input" id="projectName" placeholder="예: 교육 이수 현황 자동 관리 AI 비서">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Core Objective <span class="required">*</span></label>
+            <input type="text" class="form-input" id="coreProject" placeholder="예: 교육 이수율 100% 달성 및 관리 업무 자동화">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Department<span class="required">*</span> </label>
+            <input type="text" class="form-input" id="department" placeholder="예: HRD팀">
+          </div>
+          <div class="form-group">
+            <label class="form-label">AI Champion<span class="required">*</span></label>
+            <input type="text" class="form-input" id="champion" placeholder="예: 홍길동">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Project Definition
+          <button class="hint-btn" onclick="toggleHint('hint1')">💡 Writing Guide</button>
+        </div>
+        <div class="hint-content" id="hint1">
+          <strong>✅ Project Definition Writing Guide (One-sentence template)</strong>
+
+          <p style="background:#eff6ff; padding:12px; border-radius:8px; margin:10px 0; border-left:4px solid #1a56db;">
+            <strong style="color:#1e40af;">One-sentence template</strong>
+            “[문제 상황]을 해결하기 위해, AI가 [구체적인 방법]을 통해 [특정 단계]를 수행함으로써, [목표]를 달성한다.”
+          </p>
+
+          <div style="margin-top:12px; padding:12px; background:#f8fafc; border-radius:8px;">
+            <strong style="color:#0f172a;">📌 Checkpoints (3개만)</strong>
+            <ul style="margin:8px 0 0 18px; font-size:13px; color:#334155; line-height:1.7;">
+              <li><strong>업무 범위</strong>: 어떤 업무/상황의 과제인가?</li>
+              <li><strong>AI 역할(최소)</strong>: AI가 어떤 방식으로 돕는가? (예: 취합/정리/요약/추출/알림)</li>
+              <li><strong>성과 목표</strong>: 시간·비용·품질·리스크 중 무엇이 좋아지는가?</li>
+            </ul>
+          </div>
+
+          <br>
+          <strong>❌ Avoid these expressions</strong>
+          <div style="background:#fef2f2; padding:12px; border-radius:8px; margin:8px 0; border-left:4px solid #ef4444;">
+            <ul style="margin-left:16px; font-size:13px; color:#991b1b; line-height:1.7;">
+              <li>“AI로 자동화/효율화하고 싶다” (업무·방법·목표가 빠짐)</li>
+              <li>“AI가 알아서 해주면 좋겠다” (“알아서”는 방식이 아님)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Project Definition <span class="required">*</span></label>
+          <textarea class="form-textarea" id="projectDefinition" placeholder="예: 법정Required교육 이수 현황을 수작업으로 관리하여 발생하는 누락 문제를 해결하기 위해, AI가 교육 플랫폼과 인사 시스템 데이터를 자동 연계하여 미이수자를 실시간 파악하고 독려 메일을 자동 발송함으로써, 교육 이수율 100% 달성을 실현한다."></textarea>
+
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          Pain Point to Solve
+          <button class="hint-btn" onclick="toggleHint('hint2')">💡 Writing Guide</button>
+        </div>
+        <div class="hint-content" id="hint2">
+          <strong>✅ 구체화 체크리스트</strong>
+          <ul>
+            <li>어떤 단계가 프로세스를 느리게 만드나? </li>
+            <li>어디서 오류가 자주 발생하나? </li>
+            <li>어떤 작업이 반복적으로 수행되나? </li>
+            <li>어떤 단계에서 대기 시간이 발생하나?</li>
+          </ul>
+          <strong>❌ Avoid these expressions</strong>
+          <ul>
+            <li>“힘들다/비효율적이다/자동화하고 싶다”처럼 현상·원인·영향·증거가 없는 문장</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current pain points and inefficiencies <span class="required">*</span></label>
+          <textarea class="form-textarea" id="painPoint"></textarea>
+          <p class="form-help">Tip: "예: 월별 취합에 2시간 소요, 수작업 입력으로 인한 오류 발생 빈번 등 구체적인 고통 요소를 작성하세요."</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Expected Impact (Connection)</div>
+        <div class="form-group">
+          <label class="form-label">Expected impact and usage after AI adoption <span class="required">*</span></label>
+          <textarea class="form-textarea" id="expectedEffect" placeholder="예: 
+업무 흐름을 생성→검증→실행→학습 루프로 재설계하여, 반복 업무는 자동화하고 핵심 판단은 고도화한다.
+                                                                           
+역할 기반 멀티 에이전트 협업(Planner/Executor/Verifier 등)으로 병목 구간을 줄이고 산출물 품질 편차를 낮춘다.
+                                                                           
+업무 이력과 지식을 공통 메모리(지식베이스)로 축적해, 같은 유형의 문제는 더 빠르고 더 정확하게 해결되도록 지속 개선한다.
+                                                                           
+표준화된 체크/검증 단계를 포함해 오류·누락을 사전에 차단하고, 재작업 시간을 감소시킨다.
+                                                                           
+시스템/도구 연계를 통해 실행까지 이어지는 처음부터 끝까지 이어지는 흐름을 만들고, 사람 간 업무 전달을 최소화한다."></textarea>
+        </div>
+      </div>
+
+      <div class="validation-box">
+        <div class="validation-title">📋 Self-check checklist</div>
+
+        <div class="validation-item" id="v1-how">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Project Definition의 Clarity</strong>
+            <span>“AI를 Adoption한다”가 아니라, 해결할 대상(업무 범위)과 목표(무엇을 개선할지)가 한 문장으로 명확히 정의되어 있나요?</span>
+          </div>
+        </div>
+
+        <div class="validation-item" id="v1-painpoint">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Pain Point </strong>
+            <span>누가/언제/어떤 업무에서 어떤 불편·오류·지연이 발생하는지, 사례(1~2줄)와 함께 구체적으로 적혀 있나요?</span>
+          </div>
+        </div>
+
+        <div class="validation-item" id="v1-connection">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Impact linkage</strong>
+            <span>위 Pain Point가 해결되면 달라지는 결과가 시간·비용·품질·리스크 중 1개 이상으로 간단히 연결되어 있나요?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <div></div>
+        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+      </div>
+    </section>
+    <section class="form-section" id="step2">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">📊</span>
+          As-Is Status 분석
+        </h2>
+        <p class="section-desc">AI Adoption 전 Current workflow를 상세히 분석합니다. Step 1에서 도출한 Pain Point 의 근본 원인을 파악합니다. </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Current workflow (As-Is)
+          <button class="hint-btn" onclick="toggleHint('hint3')">💡 Writing Guide</button>
+        </div>
+        <div class="hint-content" id="hint3">
+          <strong>🧭 As-Is는 “지금 어떻게 업무가 진행되는 지”를 재현하는 단계입니다</strong>
+          <ul>
+            <li> 정량화 (Quantify) : <br>
+              - 해당 업무에 얼마나 시간이 걸리나? (시간/건)<br>
+
+              - 얼마나 자주 발생하나? (빈도/월, 년) <br>
+
+              - 몇 명이 투입되나? (인원)<br>
+
+              - 오류율은 얼마나 되나? (%)<br>
+            </li>
+            <li>프로세스 상세화 (Detail) : <br>
+              - 각 단계별 소요 시간 분해 <br>
+              - 수작업 vs 시스템 비율 <br>
+              - 현재 사용하는 툴/시스템은? <br>
+            </li>
+            <li>문제의 영향 파악 (Impact) : <br>
+              - 이 문제로 인한 비용은? (인건비, 지연 비용) <br>
+              - 놓치고 있는 기회 비용은? <br>
+              - 품질에 미치는 영향은? <br>
+            </li>
+          </ul>
+          <strong>❌ 피해야 할 예시</strong>: 주관적 추정에 의존/뭉뚱그려 말하기/ AI 만능주의
+
+          <p style="margin-top: 12px; font-size: 13px;">※ 각 단계별로 소요 시간과 사용 시스템을 함께 기재해주세요.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">현재 업무 흐름 설명 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="예시:
+[요청] 현업에서 “X 현황/보고” 요청이 월 2회 발생한다.
+
+[수집] 담당자가 시스템 A/B, 공유폴더, 이메일 첨부에서 데이터를 내려받아 취합한다(총 30~60분).
+
+[정형화] 형식이 달라 엑셀에서 컬럼 재정의/정렬/중복제거를 수작업으로 수행한다(60~120분).
+
+[검토] 팀 내 검증 체크(누락/오류/기준 위반)를 사람 기준으로 반복한다(1~2회 왕복).
+
+[승인/전달] 요약본을 메일로 공유하고 승인 코멘트를 반영해 최종본을 확정한다.
+
+[실행] 확정본을 바탕으로 시스템 입력/조치/공지/요청을 수행한다.
+
+[기록] 산출물은 폴더에 저장되지만, 다음번 유사 건에서 재활용이 어려워 처음부터 반복한다."" ></textarea>
+        </div>
+      </div>
+      </div>
+      <div class=" card">
+        <div class="card-title">현재 프로세스의 Issues (실제 있는 세션만 작성해도 됩니다.)</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Time inefficiency</label>
+            <textarea class="form-textarea" id="asisTimeProblem" placeholder="예:
+- 월 2회 요청 건마다 취합/정형화/검토에 총 3~5시간 소요 (월 총 6~10시간)
+- 데이터 수집(다운로드/첨부 확인) 30~60분, 정형화(엑셀 정리) 60~120분, 검토/왕복 60~120분
+- 승인 코멘트 반영으로 재작업이 평균 1~2회 발생"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quality/accuracy issue</label>
+          <textarea class="form-textarea" id="asisQualityProblem" placeholder="예:
+- 수작업 취합/복붙 과정에서 누락·중복·오기입 발생 (버전별 숫자 불일치)
+- 기준(집계 규칙/필터 조건)이 문서·사람마다 달라 결과 편차 발생
+- 최신 데이터 반영 지연으로 ‘보고 시점’ 기준 정확도가 떨어짐"></textarea>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">System/data issue</label>
+          <textarea class="form-textarea" id="asisSystemProblem" placeholder="예:
+- 데이터가 (시스템/문서/메일)로 흩어져 있어 단일 뷰가 없다.
+- 형식/키(사번/ID/코드)가 달라 매핑이 필요하다.
+-권한/접근 제한으로 필요한 데이터 확보가 지연된다"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Other Issues</label>
+          <textarea class="form-textarea" id="asisOtherProblem" placeholder="예:
+- 담당자 부재 시 진행 중단(업무 인수인계/맥락 부족)
+- 검토/승인 커뮤니케이션이 메일 중심이라 히스토리 추적이 어려움
+- 산출물은 저장되지만 ‘재사용 가능한 형태’가 아니라 다음번에도 처음부터 반복"></textarea>
+        </div>
+      </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">현재 사용 시스템 및 도구</div>
+        <div class="form-group">
+          <label class="form-label">관련 시스템 목록</label>
+          <div class="tech-tags" id="systemTags">
+            <span class="tech-tag" onclick="toggleTag(this)">SAP</span>
+            <span class="tech-tag" onclick="toggleTag(this)">PLM</span>
+            <span class="tech-tag" onclick="toggleTag(this)">Word</span>
+            <span class="tech-tag" onclick="toggleTag(this)">Veeva</span>
+            <span class="tech-tag" onclick="toggleTag(this)">Excel</span>
+            <span class="tech-tag" onclick="toggleTag(this)">SharePoint</span>
+            <span class="tech-tag" onclick="toggleTag(this)">Email</span>
+            <span class="tech-tag" onclick="toggleTag(this)">수작업</span>
+          </div>
+          <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="Other 시스템이 있다면 입력해주세요 (쉼표로 구분)">
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+      </div>
+    </section>
+
+    <section class="form-section" id="step3">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">🎯</span>
+          To-Be Scenario 설계
+        </h2>
+        <p class="section-desc">AI Adoption 후 변화될 업무 프로세스를 설계합니다. “AI-Native Workflow: AI가 있는 세상에서, 이 업무는 어떻게 존재해야 하는가?"</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          AI Adoption 후 업무 프로세스 (To-Be)
+          <button class="hint-btn" onclick="toggleHint('hint4')">💡 설계 가이드</button>
+        </div>
+        <div class="hint-content" id="hint4">
+          <strong>✅ Pass 기준: Process 재설계</strong>
+          <ul>
+            <li>업무의 As-Is(현재)와 AI Adoption 후 To-Be(미래) 프로세스 변화가 단계별로 명확</li>
+            <li>AI가 단독 처리하는 영역과 사람의 영역이 명확히 분리</li>
+            <li>Human-in-the-loop: AI 결과물을 인간이 어떻게 검증하고 보완할지 설계</li>
+          </ul>
+          <br>
+          <strong>❌ 재검토 사유</strong>
+          <ul>
+            <li>기능 나열: 전후 맥락 없이 AI가 한 번에 모든 문제를 해결해줄 것이라는 막연한 기대</li>
+            <li>검증 부재: AI 결과물의 신뢰성을 확인하는 단계가 고려되지 않음</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="form-label">AI Adoption 후 업무 흐름 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="AI Adoption 후 변화될 업무 흐름을 단계별로 설명해주세요.
+
+예시:
+[요청] 사용자가 자연어로 ‘X 현황/보고’를 요청한다(조건: Duration/대상/기준).
+[수집] AI가 시스템 A/B·폴더·메일에서 필요한 데이터/근거를 수집한다.
+[정리] AI가 형식을 통일하고 중복·빈 값·항목 연결을 수행한다. 
+[검토] AI가 자동 체크(누락/기준위반/이상치)를 돌리고, 사람이 핵심 포인트만 승인한다.
+[승인/전달] 승인 코멘트를 반영해 최종본을 확정하고 공유한다.
+[실행] 확정본을 기반으로 후속 조치(메일/티켓/시스템 입력)를 생성하고 사람이 실행 승인한다.
+[학습/기록] 산출물·판단 근거·예외 케이스를 지식베이스에 축적하여 다음 요청 정확도를 개선한다."></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">AI 역할 정의</div>
+        <div class="form-group">
+          <label class="form-label">AI가 수행할 작업 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="aiRole" placeholder="예:
+- 데이터 수집/정형화/초안 생성
+- 검증 규칙 실행(누락/기준/이상치) + 근거 링크/출처 표시
+- 실행 후보(메일/티켓/입력안) 생성"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">사람이 수행할 작업 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="humanRole" placeholder="예:
+- 검증 결과 승인/반려 + 예외 판단
+- 기준 변경(룰/정의/집계방식) 입력
+- 실행 승인(발송/등록/공지)"></textarea>
+        </div>
+        <p class="form-help">Tip: “누가 뭘 한다”보다 AI의 책임(자동 처리 범위)과 사람의 책임(검증·예외·승인) 경계가 보여야 합니다. </p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">AI 상호작용 설계</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Input: 요청 템플릿/조건/제약/기준</label>
+            <textarea class="form-textarea" id="aiInput" placeholder="예: 요청 목적: ‘X 현황/보고 생성’
+Duration/대상: 2025Q4, 조직=전사, 제품군=전체
+집계 기준: 정의서 v1.2 기준(분모/분자 포함)
+제약: 개인정보 마스킹, 외부 공유 금지
+출력 형식: 1페이지 요약 + 상세표(첨부)"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Output: 산출물 + 근거 + 검증결과 + 실행안</label>
+            <textarea class="form-textarea" id="aiOutput" placeholder="예: 산출물: 요약 보고서(핵심 KPI/이슈 3개) + 상세 테이블
+근거: 사용 데이터 소스/쿼리 조건/참조 문서 링크
+검증결과: 누락/이상치/기준위반 체크 리포트(통과/주의)
+승인요청: ‘승인 시 메일 발송/티켓 생성’ 버튼 제공
+실행안: 수신자 목록/티켓 내용/시스템 입력안 초안"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Exception handling 방안<span class="required">*</span></label>
+          <textarea class="form-textarea" id="exceptionHandling" placeholder="예: 
+ - AI가 필요한 정보를 찾지 못하면, 추정해서 작성하지 않고 “확인 필요”로 표시한 뒤 중단한다.
+- 중단 시에는 (1) 누락된 정보가 무엇인지, (2) 필요한 데이터/문서/시스템이 무엇인지, (3) 사용자가 추가로 입력해야 할 질문 1개를 함께 제시한다.
+- 서로 다른 시스템/파일에서 값이 다르면, 두 값을 모두 보여주고 “어느 값을 기준으로 할지” 사용자에게 선택을 요청한다.
+- 기준(정의/집계 규칙)이 불명확하면, 가능한 선택지 2개(A/B)를 제시하고 사용자 승인 후 진행한다.
+- 개인정보/권한 제한으로 접근 불가한 경우, 접근 요청이 필요하다는 안내와 함께 담당자에게 보낼 요청 문구(메일/티켓 초안)를 생성한다.
+"></textarea>
+          <p class="form-help">AI가 정보를 찾지 못했을 때 "모른다"고 답하게 하는 등 오작동 방지 문구를 포함해주세요.</p>
+        </div>
+      </div>
+
+      <div class="validation-box">
+        <div class="validation-title">📋 Self-check checklist</div>
+        <div class="validation-item" id="v3-process">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Process 재설계</strong>
+            <span>As-Is → To-Be 프로세스 변화가 단계별로 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
+          </div>
+        </div>
+        <div class="validation-item" id="v3-humanloop">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Human-in-the-loop</strong>
+            <span>AI 산출물에 대해 사람이 확인할 검증 포인트와, 결과에 따른 다음 행동(재생성/수정/보류/확정) 이 정의되어 있나요?</span>
+          </div>
+        </div>
+        <div class="validation-item" id="v3-exception">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>Exception handling</strong>
+            <span>데이터 부재/불일치/기준 모호 등 예외 상황에서 AI가 “확인 필요/모름” 처리를 하고, 사용자 확인 또는 보류 등 안전한 분기가 포함되어 있나요?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+      </div>
+    </section>
+
+    <section class="form-section" id="step4">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">🗄️</span>
+          Data & Technology 검토
+        </h2>
+        <p class="section-desc">AI 구현에 필요한 데이터와 기술 요소를 검토합니다. 데이터 확보 가능성이 프로젝트 성공의 핵심입니다.</p>
+        <button class="hint-btn" onclick="toggleHint('hint5')">💡 Writing Guide </button>
+        <div class="hint-content" id="hint5">
+          <strong>✅ Pass 기준: Agentic AI 를 위해 고려해야할 3가지 데이터 유형 과 Tool </strong>
+          <ul>
+            <li> Input 데이터: Agent의 작업을 위한 원천 데이터 <br>
+              - 사용자 요청 <br>
+              - 계약서, 임상 데이터, 고객 문의 등 <br>
+            </li>
+            <li>Knowledge 데이터: Agent 가 참조할 지식/맥락 <br>
+              - 내부 지식 (사내 규정, SOP, 사례집) <br>
+              - 외부 DB, 웹서치 <br>
+            </li>
+            <li> Feedback 데이터: AI 결과물이 맞는지 판단할 평가 기준 <br>
+              - "이게 정답이다"라고 비교할 수 있는 기준 자료 (예: 올바른 보고서 예시, 과거 승인된 결과물) <br>
+              - 어떤 조건을 충족해야 '통과'인지 판단하는 규칙 (예: 적용해야 할 규정/스펙, 승인 이력) <br>
+            </li>
+            <li> Other Tool/Action: Agent 가 사용할 도구/시스템 <br>
+              - 웹서치, 메일발송 <br>
+              - DB 조회 및 분석 등 <br>
+            </li>
+          </ul>
+          <br>
+          <strong>❌ 재검토 사유</strong>
+          <ul>
+            <li>데이터 부재: 아이디어는 있으나, 이를 뒷받침할 문서나 데이터가 디지털화되어 있지 않음</li>
+            <li>막연한 기대: "인터넷에 있는 정보" 등 참조 대상이 너무 광범위</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          Required data
+        </div>
+        <div class="form-group">
+          <label class="form-label">필요한 데이터 목록 <span class="required">*</span></label>
+          <textarea class="form-textarea" id="requiredData" placeholder="예:
+- 대상 식별자/Basic Info: (예: employee_id, 조직, 역할) 
+- 상태/지표 데이터: (예: 진행상태, 완료여부, KPI 값, 기준일/Duration)
+- 판정 기준/룰: (예: 정의서/규정/집계 기준, Exception handling 기준)"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Data source/location</label>
+            <textarea class="form-textarea" id="dataSource" placeholder="예:
+- 업무 시스템: 어떤 화면/메뉴에서 조회하는지 (담당: ○○팀, 업데이트: 매일) 
+- 기준 시스템: 기준이 되는 문서/데이터가 어디에 있는지 (원본 위치) 
+- 공유폴더/SharePoint: 파일이 저장된 폴더 경로 
+- 이메일/첨부: 메일 어디에서 받는지, 저장 위치"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">데이터 형태/포맷</label>
+            <textarea class="form-textarea" id="dataFormat" placeholder="예:
+- 엑셀/표 형태: 행과 열이 정리된 데이터 (엑셀, 시스템 조회 결과 등) 
+- 문서/메일 형태: PDF, 한글/워드 문서, 메일 본문 등 글 형태의 데이터 
+- 연결 기준: 여러 자료를 연결할 때 사용하는 공통 항목 (예: 사번, 문서번호)"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">데이터 품질 및 전처리</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Expected data quality issues</label>
+            <textarea class="form-textarea" id="dataQualityIssue" placeholder="예:
+- 빈 칸: 꼭 있어야 할 정보(이름/상태 등)가 비어 있는 경우가 있음 
+- 중복: 같은 사람/건이 여러 줄로 중복 존재 (버전이 섞여 있음) 
+- 숫자 불일치: A시스템과 B시스템의 값이 다름 (어느 쪽이 맞는지 불분명) 
+- 이름/표기 불통일: 같은 것을 부서마다 다르게 적음 (약어, 오타 등) 
+- 최신 반영 지연: 데이터가 오늘 기준이 아니라 며칠 전 기준인 경우"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Preprocessing/cleanup plan<span class="required">*</span></label>
+            <textarea class="form-textarea" id="dataPreprocessing" placeholder="예:
+- 용어 통일: 부서마다 다르게 쓰는 이름/단위를 하나로 맞춤 
+- 자료 연결: 서로 다른 시스템의 데이터를 사번/문서번호 등으로 연결 
+- 중복 제거: 같은 건이 여러 개일 때 어떤 것을 남길지 규칙 정함 (최신 우선 등) 
+- 오류 검사: 빈 칸, 비정상적인 수치, 기준에 맞지 않는 값을 자동으로 찾아냄 
+- Exception handling: 값이 다를 때 '확인 필요'로 표시하고 담당자에게 확인 요청 
+- 변경 기록: 수정 전/후 내용을 남겨서 나중에 확인할 수 있게 함"></textarea>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Data refresh cycle</label>
+            <select class="form-select" id="dataUpdateCycle">
+              <option value="">선택해주세요</option>
+              <option value="realtime">실시간</option>
+              <option value="daily">일 1회</option>
+              <option value="weekly">주 1회</option>
+              <option value="monthly">월 1회</option>
+              <option value="quarterly">분기 1회</option>
+              <option value="onetime">1회성 (갱신 불필요)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Security/compliance considerations<span class="required">*</span></label>
+            <textarea class="form-textarea" id="dataSecurity" placeholder="예:
+- 민감정보 포함 여부: 개인정보(이름, 연락처 등)/사내기밀이 포함되는지 
+- 열람 권한: 누가 이 데이터를 볼 수 있는지, 승인이 필요한지 
+- 개인정보 가리기: 이름/사번 등을 꼭 필요한 만큼만 사용하고, 나머지는 가림 처리 
+- 외부 반출 금지: 사내 저장소만 사용, 보관 Duration과 삭제 규칙 
+- 조회 기록: 누가 언제 데이터를 열어봤는지 기록을 남길 필요가 있는지"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"> AI 결과물 평가 기준 </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">비교 기준 자료(정답과 비교할 수 있는 자료 ) </label>
+            <textarea class="form-textarea" id="feedbackReference" placeholder="예:
+- 과거에 사람이 작성하고 승인된 보고서/결과물 (올바른 예시)
+- 적용해야 할 규정/스펙/기준서 (예: US 제품에는 US Spec 적용)
+- 검토자가 확인하는 체크리스트 항목
+- 이전 승인 이력 (누가, 언제, 어떤 기준으로 승인했는지)"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label"> 오류 판단 기준 자료(이런 경우는 오류로 판단한다) </label>
+            <textarea class="form-textarea" id="feedbackErrorRule" placeholder="예:
+- 대상과 다른 기준을 적용한 경우 (예: US 제품에 EU 기준 매칭)
+- Required 항목이 빠져 있거나 수치가 허용 범위를 벗어난 경우
+- 이전 승인 이력과 결과가 크게 달라진 경우 (사유 없이)
+- 적용한 규정/기준서의 버전이 최신이 아닌 경우"></textarea>
+          </div>
+        </div>
+        <p class="form-help">Tip: "AI가 틀렸을 때 어떻게 알 수 있는가?"를 기준으로 적어보세요.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">관련 AI 기술</div>
+        <div class="form-group">
+          <label class="form-label">적용 예정 AI 기술</label>
+          <div class="tech-tags" id="techTags">
+            <span class="tech-tag" onclick="toggleTag(this)">LLM (대규모 언어모델)</span>
+            <span class="tech-tag" onclick="toggleTag(this)">RAG (검색증강생성)</span>
+            <span class="tech-tag" onclick="toggleTag(this)">텍스트 요약</span>
+            <span class="tech-tag" onclick="toggleTag(this)">텍스트 분류</span>
+            <span class="tech-tag" onclick="toggleTag(this)">이미지 인식</span>
+            <span class="tech-tag" onclick="toggleTag(this)">OCR</span>
+            <span class="tech-tag" onclick="toggleTag(this)">추천 시스템</span>
+            <span class="tech-tag" onclick="toggleTag(this)">예측 분석</span>
+            <span class="tech-tag" onclick="toggleTag(this)">자연어 처리</span>
+            <span class="tech-tag" onclick="toggleTag(this)">음성 인식</span>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top: 16px;">
+          <label class="form-label">Application plan and rationale <span class="required">*</span></label>
+          <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="예시:
+[적용 방안] AI에게 자연어로 질문하면 사내 문서에서 근거를 찾아 요약해주고, 데이터의 빈 칸/비정상 값을 자동 검사한 뒤, 승인하면 메일/요청을 자동 생성한다.
+[판단 근거] ○○제약에서 품질 문서 검토에 LLM+RAG를 적용해 검토 시간 60% 단축한 사례 확인 (2024 ○○컨퍼런스 발표). ChatGPT에 엑셀 데이터를 넣어 현황 요약을 시도해보니 초안 수준 결과물 생성 가능 확인."></textarea>
+          <p class="form-help">Tip: 아래 두 가지를 함께 적어주세요
+
+            <br>① 적용 방안: 어떤 업무 단계에서 어떤 기술을 어떻게 쓸 것인지
+            <br>② 판단 근거: 왜 이 기술이 우리 업무에 적용 가능하다고 생각하는지 (1개 이상)
+            <br>- 유사한 업무에 AI를 적용한 사례 (기사, 블로그, 영상, 컨퍼런스 자료 등)
+            <br>- ChatGPT 등으로 간단히 시도해본 경험
+            <br>- 참고한 자료의 핵심 내용 </br>
+          </p>
+        </div>
+      </div>
+
+      <div class="validation-box">
+        <div class="validation-title">📋 Self-check checklist</div>
+        <div class="validation-item" id="v4-datasample">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>샘플 데이터 분석</strong>
+            <span>실제 활용할 데이터 샘플에 대한 구조를 파악했나요?</span>
+          </div>
+        </div>
+        <div class="validation-item" id="v4-preprocessing">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>전처리 방안</strong>
+            <span>데이터의 노이즈(불필요한 정보) 제거 등 가공 방안이 수립되어 있나요?</span>
+          </div>
+        </div>
+        <div class="validation-item" id="v4-security">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>보안/Compliance</strong>
+            <span>개인정보/민감정보 포함 여부와 접근 권한, 저장/반출 정책, 마스킹/비식별 처리 필요 여부가 확인되어 있나요?</span>
+          </div>
+        </div>
+        <div class="validation-item" id="v4-caseevidence">
+          <div class="validation-icon">?</div>
+          <div class="validation-text">
+            <strong>기술 판단 근거</strong>
+            <span>선택한 AI 기술이 우리 업무에 적용 가능하다고 판단한 근거(유사 사례, 직접 테스트, 자료 참고 등)가 포함되어 있나요?</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+      </div>
+    </section>
+
+    <section class="form-section" id="step5">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">📈</span>
+          Expected Impact & ROI
+        </h2>
+        <p class="section-desc">AI Adoption으로 인한 정량적/Qualitative effects를 구체적으로 작성합니다. 수치와 산출 근거를 함께 제시해주세요.</p>
+      </div>
+
+      <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border: none;">
+        <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">
+          🎯 핵심 기대효과 (한 줄 요약)
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="예: 교육 이수 현황 관리 시간 85% 단축 (월 2시간 45분 → 20분) 및 법정교육 미이수 리스크 제로화">
+        </div>
+        <div class="grid-2" style="margin-top: 16px;">
+          <div class="form-group">
+            <label class="form-label" style="color: rgba(255,255,255,0.8); font-size: 13px;">예상 수행 Duration</label>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="number" class="form-input" id="projectDuration" style="width: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center;" placeholder="10">
+              <span style="color: rgba(255,255,255,0.8);">months</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          📊 Quantitative effects
+          <button class="hint-btn" onclick="toggleHint('hint6')">💡 Writing Guide</button>
+        </div>
+        <div class="hint-content" id="hint6">
+          <strong>✅ Pass 기준</strong>
+          <p>단순 편의를 넘어, 구체적인 수치로 효과가 추산되어야 합니다.</p>
+          <br>
+          <strong>📝 효과 유형별 예시</strong>
+          <ul>
+            <li><strong>비용 절감:</strong> 효율화를 통한 직접 비용 감소. 예시:인건비, 외주비, 운영비 절감 </li>
+            <li><strong>매출/수익 증대:</strong> 새로운 기회 창출. 예시: 처리량 증가, 재구매율 상승 </li>
+            <li><strong>리스크 완화:</strong> 규정 준수, 오류 방지. 예시: 과태료 방지, 컴플라이언스. </li>
+            <li><strong>전략적 가치:</strong> 역량 강화, 경쟁력 확모. 예시: 의사결정 속도, 고객 경험. </li>
+          </ul>
+        </div>
+
+        <div class="effect-item">
+          <div class="effect-header">
+            <span class="effect-icon">💰</span>
+            <span class="effect-type">비용 절감</span>
+            <label class="effect-toggle">
+              <input type="checkbox" id="effect_cost_enabled" checked onchange="toggleEffectSection('cost')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="effect-content" id="effect_cost_content">
+            <div class="form-group">
+              <label class="form-label">효과 내용</label>
+              <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="예:
+- 외주/용역 비용 절감: 월 [ ]만원 → [ ]만원
+- 과태료/패널티/재작업 비용 절감: 연 [ ]만원 절감
+- 라이선스/운영비 최적화: 불필요 구독/중복 사용 제거로 연 [ ]만원 절감"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">산출 근거</label>
+              <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="예
+(As-Is - To-Be) X 인건비 
+예시: 180시간 → 80시간 = 100시간 × 5만원 = 500만원""></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class=" effect-item">
+          <div class="effect-header">
+            <span class="effect-icon">📈</span>
+            <span class="effect-type">매출/수익 증대</span>
+            <label class="effect-toggle">
+              <input type="checkbox" id="effect_revenue_enabled" onchange="toggleEffectSection('revenue')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="effect-content hidden" id="effect_revenue_content">
+            <div class="form-group">
+              <label class="form-label">효과 내용</label>
+              <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="예:
+- 처리 속도/리드타임 단축으로 월 [ ]건 추가 처리 → 월 매출 [ ]원 증가
+- 전환율 개선: [지표] [ ]% → [ ]%로 개선 → 월 추가 매출 [ ]원
+- 이탈 감소: [이탈률] [ ]%p 감소 → 유지 고객 [ ]명 → 월 수익 [ ]원 증가"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">산출 근거</label>
+              <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="예: 
+- 기준: 월 트래픽/리드/문의 [A]건, 전환율 [B]%, 건당 평균 수익(또는 마진) [C]원
+- Adoption 전: A×B×C = 월 [ ]원
+- Adoption 후: A×B'×C = 월 [ ]원 (B' = 개선된 전환율)
+- 증가: 월 [ ]원 / 연 [ ]원(×12)
+(대안) 추가 처리량: 월 처리건수 [N]건 증가 × 건당 수익 [C]원 = 월 [ ]원"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class=" effect-item">
+          <div class="effect-header">
+            <span class="effect-icon">🛡️</span>
+            <span class="effect-type">리스크 완화</span>
+            <label class="effect-toggle">
+              <input type="checkbox" id="effect_risk_enabled" onchange="toggleEffectSection('risk')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="effect-content hidden" id="effect_risk_content">
+            <div class="form-group">
+              <label class="form-label">효과 내용</label>
+              <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="예:
+- 컴플라이언스 위반 발생률 [ ]% → [ ]%로 감소
+- 핵심 프로세스 오류 건수 월 [ ]건 → [ ]건으로 감소
+- 보안/개인정보 사고 발생 가능성 [ ]% → [ ]%로 완화"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">산출 근거</label>
+              <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="예:
+- 기준: 월 [N]건 × 건당 리스크 비용 [X]원
+- Adoption 전 기대손실: 월 [N]×[X]=월 [ ]원
+- Adoption 후 기대손실: 월 [N]×[Y]=월 [ ]원
+- 감소: 월 [ ]원 (x12) = 연 [ ]원"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="effect-item">
+          <div class="effect-header">
+            <span class="effect-icon">🎯</span>
+            <span class="effect-type">전략적 가치</span>
+            <label class="effect-toggle">
+              <input type="checkbox" id="effect_strategic_enabled" onchange="toggleEffectSection('strategic')">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="effect-content hidden" id="effect_strategic_content">
+            <div class="form-group">
+              <label class="form-label">효과 내용</label>
+              <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="예:
+- 신규 사업/시장 진입 리드타임 [ ]months → [ ]months 단축
+- 핵심 의사결정 리드타임 [ ]일 → [ ]일로 개선
+- 조직 내 AI 활용 역량 내재화로 전략 과제 추진 속도 향상"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">산출 근거</label>
+              <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="예:
+- 기준: 전략 과제 [N]건, 평균 리드타임 [X]주
+- Adoption 후: 평균 리드타임 [Y]주
+- 개선: [X-Y]주 단축 × [N]건
+- 기회비용: 단축 Duration [ ]주 × 예상 매출/성과 [ ]원"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          ✨ Qualitative effects
+          <button class="hint-btn" onclick="toggleHint('hint7')">💡 예시 보기</button>
+        </div>
+        <div class="hint-content" id="hint7">
+          <strong>Qualitative effects 작성 </strong>
+          <ul>
+            <li> 누가 (사용자/담당자/검토자/리더)가 체감하는 변화인지 먼저 적습니다.</li>
+            <li> 무엇이 달라지는지: 왕복 커뮤니케이션, 업무 연속성, 지식 재사용, 승인/검토 부담, 의사결정 속도, 리스크 예방 등으로 표현합니다.</li>
+            <li> 어떻게 좋아지는지: “감소/단축/일관화/명확화/가시화/추적 가능” 같은 변화 단어로 마무리합니다.</li>
+            <li>가능하면 재작업·대기·문의·인수인계처럼 실제 현장에서 자주 발생하는 부담 요소와 연결합니다.</li>
+          </ul>
+          <strong>예시 키워드</strong>
+          <ul>
+            <li>업무 연속성 확보(담당자 부재 시에도 진행 가능)</li>
+            <li>산출물 품질 편차 감소(기준/형식 표준화)</li>
+            <li>히스토리 추적 용이(근거·판단 로그 남김)</li>
+            <li>지식 자산화/재사용성 향상(유사 요청 반복 감소)</li>
+            <li>협업 효율 향상(메일 왕복/확인 요청 감소)</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <label class="form-label">기대되는 Qualitative effects</label>
+          <textarea class="form-textarea" id="qualitativeValue" style="min-height: 120px;" placeholder="예:
+- 반복 취합/정리 업무 부담 경감 → 핵심 판단·개선 업무에 집중
+- 기준·근거가 정리되어 산출물 품질 편차 감소 및 커뮤니케이션 왕복 감소
+- 리스크 사전 예방(누락/기한 임박/기준 위반 조기 감지)으로 운영 안정성 향상
+- 업무 이력/근거/결정 로그가 남아 히스토리 추적 및 감사 대응 용이
+- 담당자 부재 시에도 업무 연속성 확보(인수인계 부담 감소)"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🚀 Scalability</div>
+        <div class="form-group">
+          <label class="form-label">타 부서/전사 확대 적용 가능성</label>
+          <textarea class="form-textarea" id="scalability" placeholder="예:
+[확장 가능한 업무 패턴]
+- 동일한 ‘요청→수집→정리→검토→공유/실행’ 흐름이 반복되는 업무
+- 데이터가 여러 시스템/파일에 흩어져 있고, 정형화/매핑/검증이 필요한 업무
+- 결과물(보고서/현황표/알림/조치요청)이 템플릿화 가능한 업무
+
+[확장 조건(Prereq요건)]
+- 공통 기준/정의(집계 규칙, 코드 체계, 용어) 정리
+- 데이터 접근 권한 및 연계 방식(API/DB/파일) 확정
+- 운영 R&R 확정(자동 처리 범위 vs 승인/Exception handling 범위)
+
+[확장 방식]
+- 1단계: 동일 업무의 범위 확대(Duration/대상/지표 추가)
+- 2단계: 유사 업무로 템플릿 재사용(현황/보고/알림 유형)
+- 3단계: 표준 템플릿·운영 룰로 패키징하여 재배포"></textarea>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+        <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+      </div>
+    </section>
+
+    <section class="form-section" id="step6">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="emoji">✅</span>
+          Final Review & 기획서 생성
+        </h2>
+        <p class="section-desc">작성한 내용을 Final Review하고 기획서를 생성합니다.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">실행을 위한 필요 Task</div>
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th style="width: 5%;">No.</th>
+              <th style="width: 55%;">실행을 위한 필요 Task</th>
+              <th style="width: 20%;">Prereq Task</th>
+              <th style="width: 20%;">수행 Duration</th>
+            </tr>
+          </thead>
+          <tbody id="taskTableBody">
+            <tr>
+              <td>1</td>
+              <td><input type="text" id="task1_desc" placeholder="[연계] 필요한 시스템/데이터 접근 권한 확보 및 연계 방식(API/DB/파일) 확정"></td>
+              <td><input type="text" id="task1_prereq" placeholder="없음"></td>
+              <td><input type="text" id="task1_duration" placeholder="1M"></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><input type="text" id="task2_desc" placeholder="[데이터] 샘플 데이터 수집 후 컬럼/정의/코드 표준화 및 매핑 규칙 정리"></td>
+              <td><input type="text" id="task2_prereq" placeholder="없음"></td>
+              <td><input type="text" id="task2_duration" placeholder="2주"></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><input type="text" id="task3_desc" placeholder="[기능] To-Be 기준으로 AI 처리 범위(자동)와 사람 검증 범위(승인/예외) 설계 및 화면/입출력 정의"></td>
+              <td><input type="text" id="task3_prereq" placeholder="1,2"></td>
+              <td><input type="text" id="task3_duration" placeholder="1M"></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><input type="text" id="task4_desc" placeholder="예: [검증] 품질·오작동 방지 규칙(근거 제시/모름 처리/불일치 분기) 적용 및 테스트 케이스 검증"></td>
+              <td><input type="text" id="task4_prereq" placeholder="3"></td>
+              <td><input type="text" id="task4_duration" placeholder="2주"></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><input type="text" id="task5_desc" placeholder="[운영] 파일럿 운영(사용자 피드백 수집) 후 개선사항 반영 및 운영 가이드/교육 자료 정리"></td>
+              <td><input type="text" id="task5_prereq" placeholder="4"></td>
+              <td><input type="text" id="task5_duration" placeholder="1M"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Final evaluation checklist</div>
+        <div class="validation-box" style="margin-top: 0; background: white;">
+
+          <!-- Step1 자가진단과 동일 -->
+          <h4 style="margin-bottom: 16px; color: var(--secondary);">① Basics & Pain Point</h4>
+          <div class="validation-item" id="vf-v1-how">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Project Definition의 Clarity</strong>
+              <span>“AI를 Adoption한다”가 아니라, 해결할 대상(업무 범위)과 목표(무엇을 개선할지)가 한 문장으로 명확히 정의되어 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v1-painpoint">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Pain Point </strong>
+              <span>누가/언제/어떤 업무에서 어떤 불편·오류·지연이 발생하는지, 사례(1~2줄)와 함께 구체적으로 적혀 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v1-connection">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Impact linkage</strong>
+              <span>위 Pain Point가 해결되면 달라지는 결과가 시간·비용·품질·리스크 중 1개 이상으로 간단히 연결되어 있나요?</span>
+            </div>
+          </div>
+
+          <!-- Step3 자가진단과 동일 -->
+          <h4 style="margin: 24px 0 16px; color: var(--secondary);">② To-Be Scenario</h4>
+          <div class="validation-item" id="vf-v3-process">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Process 재설계</strong>
+              <span>As-Is → To-Be 프로세스 변화가 단계별로 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v3-humanloop">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Human-in-the-loop</strong>
+              <span>AI 산출물에 대해 사람이 확인할 검증 포인트와, 결과에 따른 다음 행동(재생성/수정/보류/확정) 이 정의되어 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v3-exception">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>Exception handling</strong>
+              <span>데이터 부재/불일치/기준 모호 등 예외 상황에서 AI가 “확인 필요/모름” 처리를 하고, 사용자 확인 또는 보류 등 안전한 분기가 포함되어 있나요?</span>
+            </div>
+          </div>
+
+          <!-- Step4 자가진단과 동일 -->
+          <h4 style="margin: 24px 0 16px; color: var(--secondary);">③ Data & Technology</h4>
+          <div class="validation-item" id="vf-v4-datasample">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>샘플 데이터 분석</strong>
+              <span>실제 활용할 데이터 샘플에 대한 구조를 파악했나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v4-preprocessing">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>전처리 방안</strong>
+              <span>데이터의 노이즈(불필요한 정보) 제거 등 가공 방안이 수립되어 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v4-security">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>보안/Compliance</strong>
+              <span>개인정보/민감정보 포함 여부와 접근 권한, 저장/반출 정책, 마스킹/비식별 처리 필요 여부가 확인되어 있나요?</span>
+            </div>
+          </div>
+          <div class="validation-item" id="vf-v4-caseevidence">
+            <div class="validation-icon">?</div>
+            <div class="validation-text">
+              <strong>기술 판단 근거</strong>
+              <span>선택한 AI 기술이 우리 업무에 적용 가능하다고 판단한 근거(유사 사례, 직접 테스트, 자료 참고 등)가 포함되어 있나요?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📄 기획서 Preview</div>
+        <div class="preview-container" id="previewContainer">
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+        <button class="btn btn-primary" onclick="exportToWord()">📝 Save as Word</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">Saved successfully.</span>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3 id="modalTitle">Saved data Load</h3>
+      <p id="modalMessage">A previously saved proposal exists. Would you like to load it?</p>
+      <div class="modal-buttons">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmLoad()">Load</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Management
+    let currentStep = 1;
+    const totalSteps = 6;
+
+    function storageAvailable() {
+      try {
+        const testKey = '__ai_hackathon_storage_test__';
+        localStorage.setItem(testKey, '1');
+        localStorage.removeItem(testKey);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function safeSetItem(key, value) {
+      if (!storageAvailable()) return false;
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function safeGetItem(key) {
+      if (!storageAvailable()) return null;
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      checkSavedData();
+      updateProgress();
+      setupAutoSave();
+      setupValidation();
+      validateStep1();
+      validateStep3();
+      validateStep4();
+    });
+    window.addEventListener('resize', updateProgress);
+    // --- [Utility] Security: XSS 방지를 위한 HTML Escape 함수 ---
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    // --- [Utility] Text Formatting: 줄바꿈 처리 ---
+    function formatText(text) {
+      if (!text) return '-';
+      // 먼저 HTML 태그를 무력화(escape)한 뒤, 줄바꿈 문자를 <br>로 변환
+      return escapeHtml(text).replace(/\n/g, '<br>');
+    }
+    // Go directly to preview section
+    function goToPreview() {
+      goToStep(6);
+      setTimeout(() => {
+        document.getElementById('previewContainer').scrollIntoView({
+          behavior: 'smooth'
+        });
+      }, 100);
+    }
+    // Step Navigation
+    function goToStep(step) {
+      if (step < 1 || step > totalSteps) return;
+      document.querySelectorAll('.form-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      updateProgress();
+      if (step === 3) {
+        validateStep3();
+      }
+      if (step === 4) {
+        validateStep4();
+      }
+      if (step === 6) {
+        generatePreview();
+        runFinalValidation();
+      }
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    function nextStep() {
+      if (currentStep < totalSteps) {
+        goToStep(currentStep + 1);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        goToStep(currentStep - 1);
+      }
+    }
+    // Progress Bar Update
+    function updateProgress() {
+      const steps = document.querySelectorAll('.step');
+      const progressLine = document.getElementById('progressLine');
+      steps.forEach((step, index) => {
+        step.classList.remove('active', 'completed');
+        if (index + 1 === currentStep) {
+          step.classList.add('active');
+        } else if (index + 1 < currentStep) {
+          step.classList.add('completed');
+        }
+      });
+      const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+      // 부모 컨테이너 너비 계산 시 안전장치 추가
+      const container = document.querySelector('.progress-steps');
+      const maxWidth = container ? container.offsetWidth - 80 : 0;
+      progressLine.style.width = `${(progress / 100) * maxWidth}px`;
+    }
+    // Hint Toggle
+    function toggleHint(hintId) {
+      const hint = document.getElementById(hintId);
+      if (hint) hint.classList.toggle('show');
+    }
+    // Tag Toggle
+    function toggleTag(element) {
+      element.classList.toggle('selected');
+    }
+    // Get Selected Tags
+    function getSelectedTags(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return [];
+      const selected = container.querySelectorAll('.tech-tag.selected');
+      return Array.from(selected).map(tag => tag.textContent);
+    }
+    // Save Data
+    function saveData() {
+      const data = collectFormData();
+      const saved = safeSetItem('aiHackathonPlan', JSON.stringify(data));
+      const dated = safeSetItem('aiHackathonPlanDate', new Date().toISOString());
+      if (saved && dated) {
+        showToast('Saved successfully.', 'success');
+      } else {
+        showToast('Unable to save because browser storage is unavailable.');
+      }
+    }
+    // Load Data
+    function loadData() {
+      const saved = safeGetItem('aiHackathonPlan');
+      if (saved) {
+        showModal('Saved data Load', '이전에 저장된 기획서 데이터를 Would you like to load it?');
+      } else {
+        showToast('No saved data found.');
+      }
+    }
+
+    function confirmLoad() {
+      const saved = safeGetItem('aiHackathonPlan');
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          populateFormData(data);
+          showToast('데이터를 불러왔습니다.', 'success');
+        } catch (e) {
+          console.error('Data Load Error:', e);
+          showToast('데이터가 손상되어 불러올 수 not found.', 'default');
+        }
+      }
+      closeModal();
+    }
+    // Check for saved data on load
+    function checkSavedData() {
+      const saved = safeGetItem('aiHackathonPlan');
+      const savedDate = safeGetItem('aiHackathonPlanDate');
+      if (saved && savedDate) {
+        const date = new Date(savedDate);
+        const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR');
+        showModal('Saved data 발견', `${dateStr}에 저장된 기획서가 있습니다. Would you like to load it?`);
+      }
+    }
+    // Auto-save setup
+    function setupAutoSave() {
+      let timeout;
+      document.querySelectorAll('input, textarea, select').forEach(element => {
+        const saveHandler = () => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            const data = collectFormData();
+            safeSetItem('aiHackathonPlan', JSON.stringify(data));
+            safeSetItem('aiHackathonPlanDate', new Date().toISOString());
+          }, 3000);
+        };
+        element.addEventListener('input', saveHandler);
+        element.addEventListener('change', saveHandler);
+      });
+    }
+    // Effect Section Toggle
+    function toggleEffectSection(type) {
+      const checkbox = document.getElementById(`effect_${type}_enabled`);
+      const content = document.getElementById(`effect_${type}_content`);
+      if (checkbox && content) {
+        if (checkbox.checked) {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      }
+    }
+    // Collect form data
+    function collectFormData() {
+      // Helper to safely get value
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      };
+      return {
+        // Step 1
+        projectName: getVal('projectName'),
+        coreProject: getVal('coreProject'),
+        department: getVal('department'),
+        champion: getVal('champion'),
+        projectDefinition: getVal('projectDefinition'),
+        painPoint: getVal('painPoint'),
+        expectedEffect: getVal('expectedEffect'),
+        // Step 2
+        asisDescription: getVal('asisDescription'),
+        asisTimeProblem: getVal('asisTimeProblem'),
+        asisQualityProblem: getVal('asisQualityProblem'),
+        asisSystemProblem: getVal('asisSystemProblem'),
+        asisOtherProblem: getVal('asisOtherProblem'),
+        systems: getSelectedTags('systemTags'),
+        customSystems: getVal('customSystems'),
+        // Step 3
+        tobeDescription: getVal('tobeDescription'),
+        aiRole: getVal('aiRole'),
+        humanRole: getVal('humanRole'),
+        aiInput: getVal('aiInput'),
+        aiOutput: getVal('aiOutput'),
+        exceptionHandling: getVal('exceptionHandling'),
+        // Step 4
+        requiredData: getVal('requiredData'),
+        dataSource: getVal('dataSource'),
+        dataFormat: getVal('dataFormat'),
+        dataQualityIssue: getVal('dataQualityIssue'),
+        dataPreprocessing: getVal('dataPreprocessing'),
+        dataUpdateCycle: getVal('dataUpdateCycle'),
+        dataSecurity: getVal('dataSecurity'),
+        feedbackReference: getVal('feedbackReference'),
+        feedbackErrorRule: getVal('feedbackErrorRule'),
+        techTags: getSelectedTags('techTags'),
+        techDescription: getVal('techDescription'),
+        // Step 5
+        keyBenefit: getVal('keyBenefit'),
+        projectDuration: getVal('projectDuration'),
+        // Quantitative effects
+        effect_cost_enabled: document.getElementById('effect_cost_enabled')?.checked || false,
+        effect_cost_value: getVal('effect_cost_value'),
+        effect_cost_basis: getVal('effect_cost_basis'),
+        effect_revenue_enabled: document.getElementById('effect_revenue_enabled')?.checked || false,
+        effect_revenue_value: getVal('effect_revenue_value'),
+        effect_revenue_basis: getVal('effect_revenue_basis'),
+        effect_risk_enabled: document.getElementById('effect_risk_enabled')?.checked || false,
+        effect_risk_value: getVal('effect_risk_value'),
+        effect_risk_basis: getVal('effect_risk_basis'),
+        effect_strategic_enabled: document.getElementById('effect_strategic_enabled')?.checked || false,
+        effect_strategic_value: getVal('effect_strategic_value'),
+        effect_strategic_basis: getVal('effect_strategic_basis'),
+        // Qualitative effects
+        qualitativeValue: getVal('qualitativeValue'),
+        scalability: getVal('scalability'),
+        // Step 6 Tasks
+        task1: {
+          desc: getVal('task1_desc'),
+          prereq: getVal('task1_prereq'),
+          duration: getVal('task1_duration')
+        },
+        task2: {
+          desc: getVal('task2_desc'),
+          prereq: getVal('task2_prereq'),
+          duration: getVal('task2_duration')
+        },
+        task3: {
+          desc: getVal('task3_desc'),
+          prereq: getVal('task3_prereq'),
+          duration: getVal('task3_duration')
+        },
+        task4: {
+          desc: getVal('task4_desc'),
+          prereq: getVal('task4_prereq'),
+          duration: getVal('task4_duration')
+        },
+        task5: {
+          desc: getVal('task5_desc'),
+          prereq: getVal('task5_prereq'),
+          duration: getVal('task5_duration')
+        }
+      };
+    }
+    // Populate form with saved data
+    function populateFormData(data) {
+      if (!data) return;
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.value = val;
+      };
+      // Step 1
+      setVal('projectName', data.projectName);
+      setVal('coreProject', data.coreProject);
+      setVal('department', data.department);
+      setVal('champion', data.champion);
+      setVal('projectDefinition', data.projectDefinition);
+      setVal('painPoint', data.painPoint);
+      setVal('expectedEffect', data.expectedEffect);
+      // Step 2
+      setVal('asisDescription', data.asisDescription);
+      setVal('asisTimeProblem', data.asisTimeProblem);
+      setVal('asisQualityProblem', data.asisQualityProblem);
+      setVal('asisSystemProblem', data.asisSystemProblem);
+      setVal('asisOtherProblem', data.asisOtherProblem);
+      setVal('customSystems', data.customSystems);
+      // Restore system tags
+      if (data.systems && Array.isArray(data.systems)) {
+        document.querySelectorAll('#systemTags .tech-tag').forEach(tag => {
+          // Reset first
+          tag.classList.remove('selected');
+          if (data.systems.includes(tag.textContent)) {
+            tag.classList.add('selected');
+          }
+        });
+      }
+      // Step 3
+      setVal('tobeDescription', data.tobeDescription);
+      setVal('aiRole', data.aiRole);
+      setVal('humanRole', data.humanRole);
+      setVal('aiInput', data.aiInput);
+      setVal('aiOutput', data.aiOutput);
+      setVal('exceptionHandling', data.exceptionHandling);
+      // Step 4
+      setVal('requiredData', data.requiredData);
+      setVal('dataSource', data.dataSource);
+      setVal('dataFormat', data.dataFormat);
+      setVal('dataQualityIssue', data.dataQualityIssue);
+      setVal('dataPreprocessing', data.dataPreprocessing);
+      setVal('dataUpdateCycle', data.dataUpdateCycle);
+      setVal('dataSecurity', data.dataSecurity);
+      setVal('feedbackReference', data.feedbackReference);
+      setVal('feedbackErrorRule', data.feedbackErrorRule);
+      setVal('techDescription', data.techDescription);
+      // Restore tech tags
+      if (data.techTags && Array.isArray(data.techTags)) {
+        document.querySelectorAll('#techTags .tech-tag').forEach(tag => {
+          tag.classList.remove('selected');
+          if (data.techTags.includes(tag.textContent)) {
+            tag.classList.add('selected');
+          }
+        });
+      }
+      // Step 5
+      setVal('keyBenefit', data.keyBenefit);
+      setVal('projectDuration', data.projectDuration);
+      // Helper for effects
+      const setEffect = (type, enabled, val, basis) => {
+        const chk = document.getElementById(`effect_${type}_enabled`);
+        if (chk) {
+          chk.checked = !!enabled;
+          toggleEffectSection(type);
+        }
+        setVal(`effect_${type}_value`, val);
+        setVal(`effect_${type}_basis`, basis);
+      };
+      setEffect('cost', data.effect_cost_enabled, data.effect_cost_value, data.effect_cost_basis);
+      setEffect('revenue', data.effect_revenue_enabled, data.effect_revenue_value, data.effect_revenue_basis);
+      setEffect('risk', data.effect_risk_enabled, data.effect_risk_value, data.effect_risk_basis);
+      setEffect('strategic', data.effect_strategic_enabled, data.effect_strategic_value, data.effect_strategic_basis);
+      // Qualitative effects
+      setVal('qualitativeValue', data.qualitativeValue);
+      setVal('scalability', data.scalability);
+      // Tasks (안전한 접근을 위해 Optional Chaining 사용)
+      setVal('task1_desc', data.task1?.desc);
+      setVal('task1_prereq', data.task1?.prereq);
+      setVal('task1_duration', data.task1?.duration);
+      setVal('task2_desc', data.task2?.desc);
+      setVal('task2_prereq', data.task2?.prereq);
+      setVal('task2_duration', data.task2?.duration);
+      setVal('task3_desc', data.task3?.desc);
+      setVal('task3_prereq', data.task3?.prereq);
+      setVal('task3_duration', data.task3?.duration);
+      setVal('task4_desc', data.task4?.desc);
+      setVal('task4_prereq', data.task4?.prereq);
+      setVal('task4_duration', data.task4?.duration);
+      setVal('task5_desc', data.task5?.desc);
+      setVal('task5_prereq', data.task5?.prereq);
+      setVal('task5_duration', data.task5?.duration);
+    }
+    // Validation
+    // Validation
+    function setupValidation() {
+      const step1Fields = ['painPoint', 'projectDefinition', 'expectedEffect'];
+      step1Fields.forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el) {
+          el.addEventListener('input', validateStep1);
+          el.addEventListener('blur', validateStep1);
+        }
+      });
+      const step3Fields = ['tobeDescription', 'humanRole', 'exceptionHandling'];
+      step3Fields.forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el) {
+          el.addEventListener('input', validateStep3);
+          el.addEventListener('blur', validateStep3);
+        }
+      });
+      const step4Fields = ['requiredData', 'dataPreprocessing', 'dataSecurity', 'techDescription'];
+      step4Fields.forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el) {
+          el.addEventListener('input', validateStep4);
+          el.addEventListener('blur', validateStep4);
+        }
+      });
+    }
+
+    function validateStep1() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+      const painPointVal = getVal('painPoint');
+      const definitionVal = getVal('projectDefinition');
+      const effectVal = getVal('expectedEffect');
+      const isPainPointValid = painPointVal.length >= 20 &&
+        /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복|time|cost|error|manual|inefficien|delay|repeat/i.test(painPointVal);
+      updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
+      const isDefinitionValid = definitionVal.length >= 20 &&
+        /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성|autom|predict|analysis|recommend|model|algorithm|generate/i.test(definitionVal);
+      updateValidationUI('v1-how', isDefinitionValid, definitionVal.length > 0);
+      const isConnectionValid = effectVal.length >= 20 &&
+        /연계|연동|통해|기반|활용|통합|프로세스|시스템|integrat|through|based|process|system/i.test(effectVal);
+      updateValidationUI('v1-connection', isConnectionValid, effectVal.length > 0);
+    }
+
+    function validateStep3() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+      const tobeDescription = getVal('tobeDescription');
+      const humanRole = getVal('humanRole');
+      const exceptionHandling = getVal('exceptionHandling');
+      const processValid = tobeDescription.length >= 80 && /AI|자동|단계|프로세스|흐름|step|process|flow|autom/i.test(tobeDescription);
+      const humanLoopValid = humanRole.length >= 30 && /검토|검증|승인|확인|피드백|review|validat|approv|confirm|feedback/i.test(humanRole);
+      const exceptionValid = exceptionHandling.length >= 20 && /모른다|예외|오류|불일치|검토 요청|알림|unknown|exception|error|mismatch|review request|alert/i.test(exceptionHandling);
+      updateValidationUI('v3-process', processValid, tobeDescription.length > 0);
+      updateValidationUI('v3-humanloop', humanLoopValid, humanRole.length > 0);
+      updateValidationUI('v3-exception', exceptionValid, exceptionHandling.length > 0);
+    }
+
+    function validateStep4() {
+      const getVal = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim() : '';
+      };
+      const requiredData = getVal('requiredData');
+      const dataPreprocessing = getVal('dataPreprocessing');
+      const dataSecurity = getVal('dataSecurity');
+      const dataSampleValid = requiredData.length >= 30 && /데이터|테이블|컬럼|샘플|정보|목록|data|table|column|sample|info|list/i.test(requiredData);
+      const preprocessingValid = dataPreprocessing.length >= 20 && /정제|전처리|표준화|제거|매핑|중복|clean|preprocess|standard|remove|mapping|duplicate/i.test(dataPreprocessing);
+      const securityValid = dataSecurity.length >= 15 && /보안|개인정보|권한|컴플라이언스|비식별|접근|security|privacy|permission|compliance|de-ident|access/i.test(dataSecurity);
+      const techDescription = getVal('techDescription');
+      const techDescValid = techDescription.length >= 50 && /사례|적용|테스트|확인|근거|판단|데모|경험|참고|발표|기사|블로그|벤더|case|apply|test|check|evidence|rationale|demo|experience|reference|article|blog|vendor/i.test(techDescription);
+      updateValidationUI('v4-datasample', dataSampleValid, requiredData.length > 0);
+      updateValidationUI('v4-preprocessing', preprocessingValid, dataPreprocessing.length > 0);
+      updateValidationUI('v4-security', securityValid, dataSecurity.length > 0);
+      updateValidationUI('v4-caseevidence', techDescValid, techDescription.length > 0);
+    }
+
+    function updateValidationUI(elementId, isValid, hasInput) {
+      const item = document.getElementById(elementId);
+      if (!item) return;
+      const icon = item.querySelector('.validation-icon');
+      item.classList.remove('pass', 'fail');
+      if (isValid) {
+        item.classList.add('pass');
+        icon.textContent = '✓';
+        icon.style.backgroundColor = 'var(--success)';
+        icon.style.color = 'white';
+      } else if (hasInput) {
+        item.classList.add('fail');
+        icon.textContent = '!';
+        icon.style.backgroundColor = 'var(--warning)';
+        icon.style.color = 'white';
+      } else {
+        icon.textContent = '?';
+        icon.style.backgroundColor = 'var(--border)';
+        icon.style.color = 'var(--text-muted)';
+      }
+    }
+
+    function runFinalValidation() {
+      const data = collectFormData();
+      const check = (id, condition) => updateValidation(id, condition);
+      // --- Step1과 "동일 규칙" ---
+      const painPointVal = (data.painPoint || '').trim();
+      const definitionVal = (data.projectDefinition || '').trim();
+      const effectVal = (data.expectedEffect || '').trim();
+      const isPainPointValid = painPointVal.length >= 20 &&
+        /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복|time|cost|error|manual|inefficien|delay|repeat/i.test(painPointVal);
+      const isDefinitionValid = definitionVal.length >= 20 &&
+        /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성|autom|predict|analysis|recommend|model|algorithm|generate/i.test(definitionVal);
+      const isConnectionValid = effectVal.length >= 20 &&
+        /연계|연동|통해|기반|활용|통합|프로세스|시스템|integrat|through|based|process|system/i.test(effectVal);
+      check('vf-v1-painpoint', isPainPointValid);
+      check('vf-v1-how', isDefinitionValid);
+      check('vf-v1-connection', isConnectionValid);
+      // --- Step3과 "동일 규칙" ---
+      const tobeDescription = (data.tobeDescription || '').trim();
+      const humanRole = (data.humanRole || '').trim();
+      const exceptionHandling = (data.exceptionHandling || '').trim();
+      const processValid = tobeDescription.length >= 80 && /AI|자동|단계|프로세스|흐름|step|process|flow|autom/i.test(tobeDescription);
+      const humanLoopValid = humanRole.length >= 30 && /검토|검증|승인|확인|피드백|review|validat|approv|confirm|feedback/i.test(humanRole);
+      const exceptionValid = exceptionHandling.length >= 20 && /모른다|예외|오류|불일치|검토 요청|알림|unknown|exception|error|mismatch|review request|alert/i.test(exceptionHandling);
+      check('vf-v3-process', processValid);
+      check('vf-v3-humanloop', humanLoopValid);
+      check('vf-v3-exception', exceptionValid);
+      // --- Step4와 "동일 규칙" ---
+      const requiredData = (data.requiredData || '').trim();
+      const dataPreprocessing = (data.dataPreprocessing || '').trim();
+      const dataSecurity = (data.dataSecurity || '').trim();
+      const dataSampleValid = requiredData.length >= 30 && /데이터|테이블|컬럼|샘플|정보|목록|data|table|column|sample|info|list/i.test(requiredData);
+      const preprocessingValid = dataPreprocessing.length >= 20 && /정제|전처리|표준화|제거|매핑|중복|clean|preprocess|standard|remove|mapping|duplicate/i.test(dataPreprocessing);
+      const securityValid = dataSecurity.length >= 15 && /보안|개인정보|권한|컴플라이언스|비식별|접근|security|privacy|permission|compliance|de-ident|access/i.test(dataSecurity);
+      check('vf-v4-datasample', dataSampleValid);
+      check('vf-v4-preprocessing', preprocessingValid);
+      check('vf-v4-security', securityValid);
+      const techDescription = (data.techDescription || '').trim();
+      const techDescValid = techDescription.length >= 50 && /사례|적용|테스트|확인|근거|판단|데모|경험|참고|발표|기사|블로그|벤더|case|apply|test|check|evidence|rationale|demo|experience|reference|article|blog|vendor/i.test(techDescription);
+      check('vf-v4-caseevidence', techDescValid);
+    }
+
+    function updateValidation(id, pass) {
+      const item = document.getElementById(id);
+      if (!item) return;
+      if (pass) {
+        item.classList.add('pass');
+        item.classList.remove('fail');
+        item.querySelector('.validation-icon').textContent = '✓';
+      } else {
+        item.classList.add('fail');
+        item.classList.remove('pass');
+        item.querySelector('.validation-icon').textContent = '!';
+      }
+    }
+    // Generate Preview - 실시간 데이터 반영 (XSS 방지 적용)
+    function generatePreview() {
+      const data = collectFormData();
+      const container = document.getElementById('previewContainer');
+      // Quantitative effects HTML 생성
+      let quantitativeEffectsHTML = '';
+      if (data.effect_cost_enabled && data.effect_cost_value) {
+        quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>💰 비용 절감</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_cost_value)}</p>
+                        ${data.effect_cost_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_cost_basis)}</p>` : ''}
+                    </div>
+                `;
+      }
+      if (data.effect_revenue_enabled && data.effect_revenue_value) {
+        quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>📈 매출/수익 증대</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_revenue_value)}</p>
+                        ${data.effect_revenue_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_revenue_basis)}</p>` : ''}
+                    </div>
+                `;
+      }
+      if (data.effect_risk_enabled && data.effect_risk_value) {
+        quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>🛡️ 리스크 완화</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_risk_value)}</p>
+                        ${data.effect_risk_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_risk_basis)}</p>` : ''}
+                    </div>
+                `;
+      }
+      if (data.effect_strategic_enabled && data.effect_strategic_value) {
+        quantitativeEffectsHTML += `
+                    <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <strong>🎯 전략적 가치</strong>
+                        <p style="margin: 8px 0;">${formatText(data.effect_strategic_value)}</p>
+                        ${data.effect_strategic_basis ? `<p style="font-size: 13px; color: #64748b;"><em>산출 근거:</em> ${formatText(data.effect_strategic_basis)}</p>` : ''}
+                    </div>
+                `;
+      }
+      // Task 테이블 HTML 생성
+      let taskTableHTML = '';
+      const tasks = [{ no: 1, ...data.task1 }, { no: 2, ...data.task2 }, { no: 3, ...data.task3 }, { no: 4, ...data.task4 }, { no: 5, ...data.task5 }];
+      const validTasks = tasks.filter(t => t && t.desc);
+      if (validTasks.length > 0) {
+        taskTableHTML = `
+                    <table class="preview-table">
+                        <tr><th style="width: 10%;">No.</th><th>Task</th><th style="width: 15%;">Prereq</th><th style="width: 15%;">Duration</th></tr>
+                        ${validTasks.map((t) => `<tr><td>${t.no}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
+                    </table>
+                `;
+      }
+      // 시스템 태그 조합
+      const systemList = [...(data.systems || []), data.customSystems].filter(Boolean).join(', ');
+      container.innerHTML = `
+                <div class="preview-header">
+                    <h1>실행Project Definition서</h1>
+                    <h2>${escapeHtml(data.projectName) || '[Project Name]'}</h2>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>1. Overview</h3>
+                    <table class="preview-table">
+                        <tr><th>Project Name</th><td>${escapeHtml(data.projectName) || '-'}</td></tr>
+                        <tr><th>Core Objective</th><td>${escapeHtml(data.coreProject) || '-'}</td></tr>
+                        <tr><th>Department</th><td>${escapeHtml(data.department) || '-'}</td></tr>
+                        <tr><th>AI Champion</th><td>${escapeHtml(data.champion) || '-'}</td></tr>
+                        <tr><th>Project Definition</th><td>${formatText(data.projectDefinition)}</td></tr>
+                        <tr><th>Problem to solve</th><td>${formatText(data.painPoint)}</td></tr>
+                        <tr><th>Expected impact</th><td>${formatText(data.expectedEffect)}</td></tr>
+                        <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'}months</td></tr>
+                    </table>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>2. As-Is Status</h3>
+                    <div class="preview-content">
+                        <p><strong>Current workflow:</strong></p>
+                        <p>${formatText(data.asisDescription)}</p>
+                        <br>
+                        <p><strong>Issues:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            ${data.asisTimeProblem ? `<li>Time inefficiency: ${escapeHtml(data.asisTimeProblem)}</li>` : ''}
+                            ${data.asisQualityProblem ? `<li>Quality/accuracy issue: ${escapeHtml(data.asisQualityProblem)}</li>` : ''}
+                            ${data.asisSystemProblem ? `<li>System/data issue: ${escapeHtml(data.asisSystemProblem)}</li>` : ''}
+                            ${data.asisOtherProblem ? `<li>Other: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
+                        </ul>
+                        <br>
+                        <p><strong> Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>3. To-Be Scenario (AI Adoption 후)</h3>
+                    <div class="preview-content">
+                        <p><strong>Workflow after AI adoption:</strong></p>
+                        <p>${formatText(data.tobeDescription)}</p>
+                        <br>
+                        <p><strong>Tasks performed by AI:</strong></p>
+                        <p>${formatText(data.aiRole)}</p>
+                        <br>
+                        <p><strong>Tasks performed by humans:</strong></p>
+                        <p>${formatText(data.humanRole)}</p>
+                        <br>
+                        <p><strong>AI interaction design:</strong></p>
+                        <p>• Input: ${escapeHtml(data.aiInput) || '-'}</p>
+                        <p>• Output: ${escapeHtml(data.aiOutput) || '-'}</p>
+                        <br>
+                        <p><strong>Exception handling:</strong></p>
+                        <p>${formatText(data.exceptionHandling)}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>4. Data & Technology Review</h3>
+                    <div class="preview-content">
+                        <p><strong>Required data:</strong></p>
+                        <p>${formatText(data.requiredData)}</p>
+                       
+                        <p><strong>Data source/location:</strong> ${formatText(data.dataSource)}</p>
+                        <p><strong>Data format:</strong> ${formatText(data.dataFormat)}</p>
+                        <p><strong>Data refresh cycle:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
+                        <br>
+                        <p><strong>Expected data quality issues:</strong></p>
+                        <p>${formatText(data.dataQualityIssue)}</p>
+                        <br>
+                        <p><strong>Preprocessing/cleanup plan:</strong></p>
+                        <p>${formatText(data.dataPreprocessing)}</p>
+                        <br>
+                        <p><strong>Security/compliance considerations:</strong></p>
+                        <p>${formatText(data.dataSecurity)}</p>
+                        <br>
+                        <p><strong>Reference benchmark:</strong></p>
+                        <p>${formatText(data.feedbackReference)}</p>
+                        <br>
+                        <p><strong> Error judgment criteria:</strong></p>
+                        <p>${formatText(data.feedbackErrorRule)}</p>
+                        <br>
+                        <p><strong>Relevant AI technologies:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
+                        <br>
+                        <p><strong>Application plan and rationale:</strong></p>
+                        <p>${formatText(data.techDescription)}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>5. Expected Impact & ROI</h3>
+                    <div class="preview-content">
+                        ${data.keyBenefit ? `
+                            <div style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <strong>🎯 Key expected impact:</strong> ${escapeHtml(data.keyBenefit)}
+                            </div>
+                        ` : ''}
+                        
+                        <p><strong>📊 Quantitative effects</strong></p>
+                        ${quantitativeEffectsHTML || '<p style="color: #94a3b8;">등록된 Quantitative effects가 not found.</p>'}
+                        
+                        <br>
+                        <p><strong>✨ Qualitative effects</strong></p>
+                        <p>${formatText(data.qualitativeValue)}</p>
+                        
+                        <br>
+                        <p><strong>🚀 Scalability</strong></p>
+                        <p>${formatText(data.scalability)}</p>
+                    </div>
+                </div>
+                
+                <div class="preview-section">
+                    <h3>6. Execution Tasks</h3>
+                    <div class="preview-content">
+                        ${taskTableHTML || '<p>No tasks registered.</p>'}
+                    </div>
+                </div>
+            `;
+    }
+    // Export to Word (HTML 기반)
+    function exportToWord() {
+      const data = collectFormData();
+      // 먼저 Preview 업데이트
+      generatePreview();
+      const previewContent = document.getElementById('previewContainer').innerHTML;
+      const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; line-height: 1.6; padding: 20px; }
+                        h1 { text-align: center; color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; }
+                        h2 { text-align: center; color: #1e40af; }
+                        h3 { background: #f1f5f9; padding: 10px 16px; border-left: 4px solid #1a56db; margin-top: 24px; }
+                        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+                        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+                        th { background: #f1f5f9; font-weight: bold; width: 150px; }
+                        p { margin: 8px 0; }
+                        ul { margin-left: 20px; }
+                        strong { color: #0f172a; }
+                    </style>
+                </head>
+                <body>
+                    ${previewContent}
+                </body>
+                </html>
+            `;
+      const blob = new Blob(['\ufeff' + htmlContent], {
+        type: 'application/msword;charset=utf-8'
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const safeName = (data.projectName || '제목없음').trim().replace(/[\/:*?"<>|]/g, '_') || '제목없음';
+      link.href = url;
+      link.download = `AI기획서_${safeName}_${new Date().toISOString().split('T')[0]}.doc`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('Word 문서가 Saved successfully.', 'success');
+    }
+    // Modal
+    function showModal(title, message) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalMessage').textContent = message;
+      document.getElementById('modalOverlay').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('show');
+    }
+    // Toast
+    function showToast(message, type = 'default') {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+      toastMessage.textContent = message;
+      toastIcon.textContent = type === 'success' ? '✓' : 'ℹ';
+      toast.classList.remove('success');
+      if (type === 'success') {
+        toast.classList.add('success');
+      }
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+    // Close modal on overlay click
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+
+</html>
