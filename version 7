@@ -2727,14 +2727,14 @@
                             ${data.asisOtherProblem ? `<li>기타: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
                         </ul>
                         <br>
-                        <p><strong>사용 시스템:</strong> ${escapeHtml(systemList) || '-'}</p>
+                        <p><strong> 현재 사용 시스템:</strong> ${escapeHtml(systemList) || '-'}</p>
                     </div>
                 </div>
                 
                 <div class="preview-section">
                     <h3>3. To-Be 시나리오 (AI 도입 후)</h3>
                     <div class="preview-content">
-                        <p><strong>변화될 업무 프로세스:</strong></p>
+                        <p><strong>AI 도입 후 업무 흐름:</strong></p>
                         <p>${formatText(data.tobeDescription)}</p>
                         <br>
                         <p><strong>AI가 수행할 작업:</strong></p>
@@ -2743,24 +2743,24 @@
                         <p><strong>사람이 수행할 작업:</strong></p>
                         <p>${formatText(data.humanRole)}</p>
                         <br>
-                        <p><strong>AI Input/Output:</strong></p>
+                        <p><strong>AI 상호 설계:</strong></p>
                         <p>• 입력(Input): ${escapeHtml(data.aiInput) || '-'}</p>
                         <p>• 출력(Output): ${escapeHtml(data.aiOutput) || '-'}</p>
                         <br>
-                        <p><strong>예외 처리:</strong></p>
+                        <p><strong>예외 처리 방안:</strong></p>
                         <p>${formatText(data.exceptionHandling)}</p>
                     </div>
                 </div>
                 
                 <div class="preview-section">
-                    <h3>4. 데이터 및 기술 적용 방안</h3>
+                    <h3>4. 데이터 및 기술 검토 </h3>
                     <div class="preview-content">
                         <p><strong>필요 데이터:</strong></p>
                         <p>${formatText(data.requiredData)}</p>
-                        <br>
-                        <p><strong>데이터 소스:</strong> ${formatText(data.dataSource)}</p>
-                        <p><strong>데이터 형태:</strong> ${formatText(data.dataFormat)}</p>
-                        <p><strong>갱신 주기:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
+                       
+                        <p><strong>데이터 소스/위치:</strong> ${formatText(data.dataSource)}</p>
+                        <p><strong>데이터 형태/포멧:</strong> ${formatText(data.dataFormat)}</p>
+                        <p><strong>데이터 갱신 주기:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
                         <br>
                         <p><strong>예상 데이터 품질 이슈:</strong></p>
                         <p>${formatText(data.dataQualityIssue)}</p>
@@ -2771,15 +2771,15 @@
                         <p><strong>보안/컴플라이언스 고려사항:</strong></p>
                         <p>${formatText(data.dataSecurity)}</p>
                         <br>
-                        <p><strong>피드백/보정 기준:</strong></p>
+                        <p><strong>비교 기준 자료 :</strong></p>
                         <p>${formatText(data.feedbackReference)}</p>
                         <br>
-                        <p><strong>오류 처리/예외 규칙:</strong></p>
+                        <p><strong> 오류판단 기준 자료:</strong></p>
                         <p>${formatText(data.feedbackErrorRule)}</p>
                         <br>
-                        <p><strong>관련 기술:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
+                        <p><strong>관련 AI 기술:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
                         <br>
-                        <p><strong>기술 적용 방안 설명:</strong></p>
+                        <p><strong>기술 적용 방안 및 판단 근거:</strong></p>
                         <p>${formatText(data.techDescription)}</p>
                     </div>
                 </div>
