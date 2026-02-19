@@ -1,2723 +1,1317 @@
-<!DOCTYPE html>
-<html lang="ko">
-
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Enterprise AI Planning Hackathon - Proposal Builder</title>
- <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
- <style>
- :root {
- --primary: #1a56db;
- --primary-dark: #1e40af;
- --primary-light: #3b82f6;
- --secondary: #0f172a;
- --accent: #06b6d4;
- --success: #10b981;
- --warning: #f59e0b;
- --danger: #ef4444;
- --bg-main: #f8fafc;
- --bg-card: #ffffff;
- --bg-input: #f1f5f9;
- --text-primary: #0f172a;
- --text-secondary: #475569;
- --text-muted: #94a3b8;
- --border: #e2e8f0;
- --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
- --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
- --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
- --radius: 12px;
- --radius-sm: 8px;
- }
-
- * {
- margin: 0;
- padding: 0;
- box-sizing: border-box;
- }
-
- body {
- font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
- background: var(--bg-main);
- color: var(--text-primary);
- line-height: 1.6;
- min-height: 100vh;
- }
-
- /* Header */
- .header {
- background: linear-gradient(135deg, var(--secondary) 0%, var(--primary-dark) 100%);
- color: white;
- padding: 20px 40px;
- position: sticky;
- top: 0;
- z-index: 100;
- box-shadow: var(--shadow-lg);
- }
-
- .header-content {
- max-width: 1400px;
- margin: 0 auto;
- display: flex;
- justify-content: space-between;
- align-items: center;
- }
-
- .logo {
- display: flex;
- align-items: center;
- gap: 12px;
- }
-
- .logo-icon {
- width: 44px;
- height: 44px;
- background: linear-gradient(135deg, var(--accent) 0%, var(--primary-light) 100%);
- border-radius: 10px;
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 22px;
- }
-
- .logo-text h1 {
- font-size: 18px;
- font-weight: 700;
- letter-spacing: -0.5px;
- }
-
- .logo-text span {
- font-size: 12px;
- opacity: 0.8;
- font-weight: 400;
- }
-
- .header-actions {
- display: flex;
- gap: 10px;
- }
-
- .btn {
- padding: 10px 20px;
- border-radius: var(--radius-sm);
- font-size: 14px;
- font-weight: 500;
- cursor: pointer;
- transition: all 0.2s ease;
- border: none;
- display: inline-flex;
- align-items: center;
- gap: 8px;
- }
-
- .btn-ghost {
- background: rgba(255, 255, 255, 0.1);
- color: white;
- border: 1px solid rgba(255, 255, 255, 0.2);
- }
-
- .btn-ghost:hover {
- background: rgba(255, 255, 255, 0.2);
- }
-
- .btn-primary {
- background: var(--primary);
- color: white;
- }
-
- .btn-primary:hover {
- background: var(--primary-dark);
- }
-
- .btn-success {
- background: var(--success);
- color: white;
- }
-
- .btn-success:hover {
- background: #059669;
- }
-
- .btn-outline {
- background: transparent;
- color: var(--primary);
- border: 2px solid var(--primary);
- }
-
- .btn-outline:hover {
- background: var(--primary);
- color: white;
- }
-
- /* Progress Bar */
- .progress-container {
- background: var(--bg-card);
- border-bottom: 1px solid var(--border);
- padding: 24px 40px;
- }
-
- .progress-wrapper {
- max-width: 1200px;
- margin: 0 auto;
- }
-
- .progress-steps {
- display: flex;
- justify-content: space-between;
- position: relative;
- }
-
- .progress-steps::before {
- content: '';
- position: absolute;
- top: 20px;
- left: 40px;
- right: 40px;
- height: 3px;
- background: var(--border);
- z-index: 1;
- }
-
- .progress-line {
- position: absolute;
- top: 20px;
- left: 40px;
- height: 3px;
- background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
- z-index: 2;
- transition: width 0.5s ease;
- }
-
- .step {
- display: flex;
- flex-direction: column;
- align-items: center;
- position: relative;
- z-index: 3;
- cursor: pointer;
- transition: all 0.3s ease;
- }
-
- .step-number {
- width: 42px;
- height: 42px;
- border-radius: 50%;
- background: var(--bg-card);
- border: 3px solid var(--border);
- display: flex;
- align-items: center;
- justify-content: center;
- font-weight: 600;
- font-size: 16px;
- color: var(--text-muted);
- transition: all 0.3s ease;
- }
-
- .step.active .step-number {
- border-color: var(--primary);
- background: var(--primary);
- color: white;
- box-shadow: 0 0 0 4px rgba(26, 86, 219, 0.2);
- }
-
- .step.completed .step-number {
- border-color: var(--success);
- background: var(--success);
- color: white;
- }
-
- .step.completed .step-number::after {
- content: '✓';
- }
-
- .step.completed .step-number span {
- display: none;
- }
-
- .step-label {
- margin-top: 10px;
- font-size: 13px;
- color: var(--text-muted);
- font-weight: 500;
- text-align: center;
- max-width: 100px;
- }
-
- .step.active .step-label {
- color: var(--primary);
- font-weight: 600;
- }
-
- .step.completed .step-label {
- color: var(--success);
- }
-
- /* Main Content */
- .main-container {
- max-width: 1200px;
- margin: 0 auto;
- padding: 32px 40px;
- }
-
- .form-section {
- display: none;
- animation: fadeIn 0.4s ease;
- }
-
- .form-section.active {
- display: block;
- }
-
- @keyframes fadeIn {
- from {
- opacity: 0;
- transform: translateY(10px);
- }
-
- to {
- opacity: 1;
- transform: translateY(0);
- }
- }
-
- .section-header {
- margin-bottom: 28px;
- }
-
- .section-title {
- font-size: 26px;
- font-weight: 700;
- color: var(--secondary);
- margin-bottom: 8px;
- display: flex;
- align-items: center;
- gap: 12px;
- }
-
- .section-title .emoji {
- font-size: 28px;
- }
-
- .section-desc {
- color: var(--text-secondary);
- font-size: 15px;
- }
-
- /* Cards */
- .card {
- background: var(--bg-card);
- border-radius: var(--radius);
- padding: 28px;
- margin-bottom: 20px;
- box-shadow: var(--shadow-sm);
- border: 1px solid var(--border);
- }
-
- .card-title {
- font-size: 17px;
- font-weight: 600;
- color: var(--secondary);
- margin-bottom: 20px;
- display: flex;
- align-items: center;
- justify-content: space-between;
- }
-
- .card-title .badge {
- font-size: 11px;
- padding: 4px 10px;
- border-radius: 20px;
- font-weight: 500;
- }
-
- .badge-required {
- background: #fef2f2;
- color: var(--danger);
- }
-
- .badge-optional {
- background: #f0fdf4;
- color: var(--success);
- }
-
- /* Form Elements */
- .form-group {
- margin-bottom: 20px;
- }
-
- .form-label {
- display: block;
- font-size: 14px;
- font-weight: 500;
- color: var(--text-primary);
- margin-bottom: 8px;
- }
-
- .form-label .required {
- color: var(--danger);
- margin-left: 2px;
- }
-
- .form-input,
- .form-textarea,
- .form-select {
- width: 100%;
- padding: 14px 16px;
- border: 2px solid var(--border);
- border-radius: var(--radius-sm);
- font-size: 15px;
- font-family: inherit;
- transition: all 0.2s ease;
- background: var(--bg-input);
- }
-
- .form-input:focus,
- .form-textarea:focus,
- .form-select:focus {
- outline: none;
- border-color: var(--primary);
- background: white;
- box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
- }
-
- .form-textarea {
- min-height: 120px;
- resize: vertical;
- }
-
- .form-help {
- font-size: 13px;
- color: var(--text-muted);
- margin-top: 6px;
- }
-
- /* Hint Button */
- .hint-btn {
- display: inline-flex;
- align-items: center;
- gap: 6px;
- padding: 6px 12px;
- background: #fef3c7;
- color: #92400e;
- border: none;
- border-radius: 6px;
- font-size: 12px;
- font-weight: 500;
- cursor: pointer;
- transition: all 0.2s ease;
- margin-left: 10px;
- }
-
- .hint-btn:hover {
- background: #fde68a;
- }
-
- .hint-content {
- display: none;
- background: #fffbeb;
- border: 1px solid #fde68a;
- border-radius: var(--radius-sm);
- padding: 16px;
- margin-top: 12px;
- font-size: 14px;
- color: #92400e;
- line-height: 1.7;
- }
-
- .hint-content.show {
- display: block;
- animation: fadeIn 0.3s ease;
- }
-
- .hint-content strong {
- display: block;
- margin-bottom: 8px;
- color: #78350f;
- }
-
- .hint-content ul {
- margin-left: 20px;
- }
-
- .hint-content li {
- margin-bottom: 4px;
- }
-
- /* Validation Status */
- .validation-box {
- background: var(--bg-input);
- border-radius: var(--radius);
- padding: 20px;
- margin-top: 24px;
- }
-
- .validation-title {
- font-size: 15px;
- font-weight: 600;
- color: var(--secondary);
- margin-bottom: 16px;
- display: flex;
- align-items: center;
- gap: 8px;
- }
-
- .validation-item {
- display: flex;
- align-items: flex-start;
- gap: 12px;
- padding: 12px;
- border-radius: var(--radius-sm);
- margin-bottom: 10px;
- background: white;
- border: 1px solid var(--border);
- transition: all 0.3s ease;
- }
-
- .validation-item.pass {
- border-color: var(--success);
- background: #f0fdf4;
- }
-
- .validation-item.fail {
- border-color: var(--warning);
- background: #fffbeb;
- }
-
- .validation-icon {
- width: 24px;
- height: 24px;
- border-radius: 50%;
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 12px;
- flex-shrink: 0;
- background: var(--border);
- color: var(--text-muted);
- }
-
- .validation-item.pass .validation-icon {
- background: var(--success);
- color: white;
- }
-
- .validation-item.fail .validation-icon {
- background: var(--warning);
- color: white;
- }
-
- .validation-text {
- flex: 1;
- }
-
- .validation-text strong {
- display: block;
- font-size: 14px;
- margin-bottom: 4px;
- }
-
- .validation-text span {
- font-size: 13px;
- color: var(--text-secondary);
- }
-
- /* Grid Layouts */
- .grid-2 {
- display: grid;
- grid-template-columns: repeat(2, 1fr);
- gap: 20px;
- }
-
- .grid-3 {
- display: grid;
- grid-template-columns: repeat(3, 1fr);
- gap: 16px;
- }
-
- /* ROI Calculator */
- .roi-calculator {
- background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
- border-radius: var(--radius);
- padding: 28px;
- color: white;
- margin-top: 20px;
- }
-
- .roi-title {
- font-size: 18px;
- font-weight: 600;
- margin-bottom: 20px;
- display: flex;
- align-items: center;
- gap: 10px;
- }
-
- .roi-grid {
- display: grid;
- grid-template-columns: repeat(4, 1fr);
- gap: 16px;
- }
-
- .roi-item {
- background: rgba(255, 255, 255, 0.1);
- border-radius: var(--radius-sm);
- padding: 16px;
- text-align: center;
- }
-
- .roi-item label {
- display: block;
- font-size: 12px;
- opacity: 0.8;
- margin-bottom: 8px;
- }
-
- .roi-item .value {
- font-size: 28px;
- font-weight: 700;
- font-family: 'JetBrains Mono', monospace;
- }
-
- .roi-item .unit {
- font-size: 14px;
- opacity: 0.8;
- }
-
- /* Flow Diagram */
- .flow-container {
- display: flex;
- align-items: center;
- gap: 8px;
- flex-wrap: wrap;
- padding: 20px;
- background: var(--bg-input);
- border-radius: var(--radius);
- margin-bottom: 16px;
- }
-
- .flow-item {
- background: white;
- border: 2px solid var(--border);
- border-radius: var(--radius-sm);
- padding: 12px 16px;
- font-size: 13px;
- display: flex;
- flex-direction: column;
- gap: 4px;
- min-width: 120px;
- }
-
- .flow-item .system {
- font-size: 11px;
- color: var(--primary);
- font-weight: 600;
- }
-
- .flow-arrow {
- color: var(--text-muted);
- font-size: 20px;
- }
-
- .flow-ai {
- background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
- color: white;
- border: none;
- }
-
- .flow-ai .system {
- color: rgba(255, 255, 255, 0.8);
- }
-
- /* Task Table */
- .task-table {
- width: 100%;
- border-collapse: collapse;
- margin-top: 16px;
- }
-
- .task-table th,
- .task-table td {
- padding: 14px 16px;
- text-align: left;
- border-bottom: 1px solid var(--border);
- font-size: 14px;
- }
-
- .task-table th {
- background: var(--bg-input);
- font-weight: 600;
- color: var(--secondary);
- }
-
- .task-table tbody tr:hover {
- background: var(--bg-input);
- }
-
- .task-table input {
- width: 100%;
- padding: 8px 12px;
- border: 1px solid var(--border);
- border-radius: 6px;
- font-size: 14px;
- font-family: inherit;
- }
-
- .task-table input:focus {
- outline: none;
- border-color: var(--primary);
- }
-
- .add-task-btn {
- margin-top: 12px;
- padding: 10px 20px;
- background: var(--bg-input);
- border: 2px dashed var(--border);
- border-radius: var(--radius-sm);
- color: var(--text-secondary);
- font-size: 14px;
- cursor: pointer;
- transition: all 0.2s ease;
- width: 100%;
- }
-
- .add-task-btn:hover {
- border-color: var(--primary);
- color: var(--primary);
- background: white;
- }
-
- /* Navigation */
- .nav-buttons {
- display: flex;
- justify-content: space-between;
- margin-top: 32px;
- padding-top: 24px;
- border-top: 1px solid var(--border);
- }
-
- .nav-buttons .btn {
- padding: 14px 32px;
- font-size: 15px;
- }
-
- /* Preview Section */
- .preview-container {
- background: white;
- border: 2px solid var(--border);
- border-radius: var(--radius);
- padding: 40px;
- margin-top: 20px;
- }
-
- .preview-header {
- text-align: center;
- margin-bottom: 40px;
- padding-bottom: 24px;
- border-bottom: 2px solid var(--secondary);
- }
-
- .preview-header h1 {
- font-size: 24px;
- color: var(--secondary);
- margin-bottom: 8px;
- }
-
- .preview-header h2 {
- font-size: 18px;
- color: var(--primary);
- font-weight: 500;
- }
-
- .preview-section {
- margin-bottom: 28px;
- }
-
- .preview-section h3 {
- font-size: 16px;
- color: var(--secondary);
- padding: 10px 16px;
- background: var(--bg-input);
- border-left: 4px solid var(--primary);
- margin-bottom: 16px;
- }
-
- .preview-content {
- padding: 0 16px;
- font-size: 15px;
- line-height: 1.8;
- }
-
- .preview-table {
- width: 100%;
- border-collapse: collapse;
- margin-top: 12px;
- }
-
- .preview-table th,
- .preview-table td {
- padding: 12px 16px;
- border: 1px solid var(--border);
- font-size: 14px;
- }
-
- .preview-table th {
- background: var(--bg-input);
- font-weight: 600;
- width: 150px;
- }
-
- /* Modal */
- .modal-overlay {
- display: none;
- position: fixed;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- background: rgba(0, 0, 0, 0.5);
- z-index: 1000;
- align-items: center;
- justify-content: center;
- }
-
- .modal-overlay.show {
- display: flex;
- }
-
- .modal {
- background: white;
- border-radius: var(--radius);
- padding: 32px;
- max-width: 500px;
- width: 90%;
- animation: modalIn 0.3s ease;
- }
-
- @keyframes modalIn {
- from {
- opacity: 0;
- transform: scale(0.95);
- }
-
- to {
- opacity: 1;
- transform: scale(1);
- }
- }
-
- .modal h3 {
- font-size: 20px;
- margin-bottom: 16px;
- color: var(--secondary);
- }
-
- .modal p {
- color: var(--text-secondary);
- margin-bottom: 24px;
- }
-
- .modal-buttons {
- display: flex;
- gap: 12px;
- justify-content: flex-end;
- }
-
- /* Toast */
- .toast {
- position: fixed;
- bottom: 24px;
- right: 24px;
- background: var(--secondary);
- color: white;
- padding: 16px 24px;
- border-radius: var(--radius-sm);
- box-shadow: var(--shadow-lg);
- display: flex;
- align-items: center;
- gap: 12px;
- transform: translateY(100px);
- opacity: 0;
- transition: all 0.3s ease;
- z-index: 1001;
- }
-
- .toast.show {
- transform: translateY(0);
- opacity: 1;
- }
-
- .toast.success {
- background: var(--success);
- }
-
- /* Responsive */
- @media (max-width: 1024px) {
- .grid-2 {
- grid-template-columns: 1fr;
- }
-
- .roi-grid {
- grid-template-columns: repeat(2, 1fr);
- }
- }
-
- @media (max-width: 768px) {
- .header {
- padding: 16px 20px;
- }
-
- .main-container {
- padding: 20px;
- }
-
- .progress-container {
- padding: 16px 20px;
- }
-
- .step-label {
- display: none;
- }
-
- .roi-grid {
- grid-template-columns: 1fr;
- }
- }
-
- /* Data Tech Tags */
- .tech-tags {
- display: flex;
- flex-wrap: wrap;
- gap: 8px;
- margin-top: 12px;
- }
-
- .tech-tag {
- padding: 8px 14px;
- background: var(--bg-input);
- border: 1px solid var(--border);
- border-radius: 20px;
- font-size: 13px;
- cursor: pointer;
- transition: all 0.2s ease;
- }
-
- .tech-tag:hover {
- border-color: var(--primary);
- }
-
- .tech-tag.selected {
- background: var(--primary);
- color: white;
- border-color: var(--primary);
- }
-
- /* Effect Items */
- .effect-item {
- border: 1px solid var(--border);
- border-radius: var(--radius-sm);
- margin-bottom: 16px;
- overflow: hidden;
- }
-
- .effect-header {
- display: flex;
- align-items: center;
- gap: 12px;
- padding: 16px 20px;
- background: var(--bg-input);
- border-bottom: 1px solid var(--border);
- }
-
- .effect-icon {
- font-size: 20px;
- }
-
- .effect-type {
- font-weight: 600;
- color: var(--secondary);
- flex: 1;
- }
-
- .effect-content {
- padding: 20px;
- }
-
- .effect-content.hidden {
- display: none;
- }
-
- /* Toggle Switch */
- .effect-toggle {
- position: relative;
- display: inline-block;
- width: 48px;
- height: 26px;
- }
-
- .effect-toggle input {
- opacity: 0;
- width: 0;
- height: 0;
- }
-
- .toggle-slider {
- position: absolute;
- cursor: pointer;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- background-color: var(--border);
- transition: 0.3s;
- border-radius: 26px;
- }
-
- .toggle-slider:before {
- position: absolute;
- content: "";
- height: 20px;
- width: 20px;
- left: 3px;
- bottom: 3px;
- background-color: white;
- transition: 0.3s;
- border-radius: 50%;
- box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
- }
-
- .effect-toggle input:checked+.toggle-slider {
- background-color: var(--primary);
- }
-
- .effect-toggle input:checked+.toggle-slider:before {
- transform: translateX(22px);
- }
-
- /* Print Styles */
- @media print {
-
- .header,
- .progress-container,
- .nav-buttons,
- .validation-box,
- .card-title .hint-btn {
- display: none !important;
- }
-
- .main-container {
- padding: 0;
- max-width: 100%;
- }
-
- .form-section {
- display: none !important;
- }
-
- #step6 {
- display: block !important;
- }
-
- .card {
- box-shadow: none;
- border: 1px solid #ddd;
- break-inside: avoid;
- }
-
- .preview-container {
- border: none;
- padding: 20px;
- }
- }
- </style>
-</head>
-
-<body>
- <header class="header">
- <div class="header-content">
- <div class="logo">
- <div class="logo-icon">🚀</div>
- <div class="logo-text">
- <h1>Enterprise AI Planning Hackathon</h1>
- <span>AX Project Proposal Builder</span>
- </div>
- </div>
- <div class="header-actions">
- <button class="btn btn-ghost" onclick="loadData()">
- <span>📂</span> Load
- </button>
- <button class="btn btn-ghost" onclick="saveData()">
- <span>💾</span> Save
- </button>
- <button class="btn btn-primary" onclick="goToPreview()">
- <span>📄</span> Preview
- </button>
- </div>
- </div>
- </header>
-
- <div class="progress-container">
- <div class="progress-wrapper">
- <div class="progress-steps">
- <div class="progress-line" id="progressLine"></div>
- <div class="step active" onclick="goToStep(1)">
- <div class="step-number"><span>1</span></div>
- <div class="step-label">Basics & Pain Point</div>
- </div>
- <div class="step" onclick="goToStep(2)">
- <div class="step-number"><span>2</span></div>
- <div class="step-label">As-Is Status</div>
- </div>
- <div class="step" onclick="goToStep(3)">
- <div class="step-number"><span>3</span></div>
- <div class="step-label">To-Be Scenario</div>
- </div>
- <div class="step" onclick="goToStep(4)">
- <div class="step-number"><span>4</span></div>
- <div class="step-label">Data & Technology</div>
- </div>
- <div class="step" onclick="goToStep(5)">
- <div class="step-number"><span>5</span></div>
- <div class="step-label">ROI</div>
- </div>
- <div class="step" onclick="goToStep(6)">
- <div class="step-number"><span>6</span></div>
- <div class="step-label">Final Review</div>
- </div>
- </div>
- </div>
- </div>
-
- <main class="main-container">
- <section class="form-section active" id="step1">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">💡</span>
- Basic Info & Pain Point Discovery
- </h2>
- <p class="section-desc">Define the business problem AI should solve in concrete terms. Focus on issues directly tied to measurable business outcomes.</p>
- </div>
-
- <div class="card">
- <div class="card-title">
- Project Basics
- <span class="badge badge-required">Required</span>
- </div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Project Name <span class="required">*</span></label>
- <input type="text" class="form-input" id="projectName" placeholder="Please provide details in English.">
- </div>
- <div class="form-group">
- <label class="form-label">Core Objective <span class="required">*</span></label>
- <input type="text" class="form-input" id="coreProject" placeholder="Please provide details in English.">
- </div>
- </div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Department<span class="required">*</span> </label>
- <input type="text" class="form-input" id="department" placeholder="Please provide details in English.">
- </div>
- <div class="form-group">
- <label class="form-label">AI Champion<span class="required">*</span></label>
- <input type="text" class="form-input" id="champion" placeholder="Please provide details in English.">
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">
- Project Definition
- <button class="hint-btn" onclick="toggleHint('hint1')">💡 Writing Guide</button>
- </div>
- <div class="hint-content" id="hint1">
- <strong>✅ Project Definition Writing Guide (One-sentence template)</strong>
-
- <p style="background:#eff6ff; padding:12px; border-radius:8px; margin:10px 0; border-left:4px solid #1a56db;">
- <strong style="color:#1e40af;">One-sentence template:</strong> "In [work scope], AI will [action] using [data/input] to improve [time/cost/quality/risk]."</p>
-
- <div style="margin-top:12px; padding:12px; background:#f8fafc; border-radius:8px;">
- <strong style="color:#0f172a;">📌 Checkpoints (3 only)</strong>
- <ul style="margin:8px 0 0 18px; font-size:13px; color:#334155; line-height:1.7;">
- <li><strong>Work scope</strong>: Which process or context does this project address?</li>
- <li><strong>Minimum AI role</strong>: How will AI help concretely? (e.g., sample data and process details)</li>
- <li><strong>Outcome target</strong>: Which improves: time, cost, quality, or risk?</li>
- </ul>
- </div>
-
- <br>
- <strong>❌ Avoid these expressions</strong>
- <div style="background:#fef2f2; padding:12px; border-radius:8px; margin:8px 0; border-left:4px solid #ef4444;">
- <ul style="margin-left:16px; font-size:13px; color:#991b1b; line-height:1.7;">
- <li>"We want AI automation/efficiency" (without specifying the work scope)</li>
- <li>"AI should handle it automatically" (without defining what "it" means)</li>
- </ul>
- </div>
- </div>
-
- <div class="form-group">
- <label class="form-label">Project Definition <span class="required">*</span></label>
- <textarea class="form-textarea" id="projectDefinition" placeholder="e.g., To prevent omissions caused by manual tracking of mandatory training completion, AI automatically links LMS and HR data, identifies non-completed employees in real time, and sends reminder emails to reach 100% completion."></textarea>
-
- </div>
- </div>
- <div class="card">
- <div class="card-title">
- Pain Point to Solve
- <button class="hint-btn" onclick="toggleHint('hint2')">💡 Writing Guide</button>
- </div>
- <div class="hint-content" id="hint2">
- <strong>✅ Specificity checklist</strong>
- <ul>
- <li>Which step slows down the process? </li>
- <li>Where do errors occur frequently? </li>
- <li>Which tasks are repeated? </li>
- <li>Where does waiting time occur?</li>
- </ul>
- <strong>❌ Avoid these expressions</strong>
- <ul>
- <li>"It is hard / inefficient / we need automation" without symptoms, root causes, impact, or evidence</li>
- </ul>
- </div>
- <div class="form-group">
- <label class="form-label">Current pain points and inefficiencies <span class="required">*</span></label>
- <textarea class="form-textarea" id="painPoint"></textarea>
- <p class="form-help">Tip: "e.g., Describe concrete pain points such as monthly consolidation taking 2 hours and frequent errors due to manual entry."</p>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">Expected Impact (Connection)</div>
- <div class="form-group">
- <label class="form-label">Expected impact and usage after AI adoption <span class="required">*</span></label>
- <textarea class="form-textarea" id="expectedEffect" placeholder="e.g., 
-Redesign workflow into a create→verify→execute→learn loop, automate repetitive work, and enhance critical decision-making.
+diff --git a/version 7_en b/version 7_en
+index ca9d89fa2c96123a9742cc58b5e7bf0ab10563e0..65f257526d453c85035fa845ad859bf30c5c0c7e 100644
+--- a/version 7_en	
++++ b/version 7_en	
+@@ -1083,155 +1083,155 @@
+  <div class="step-number"><span>6</span></div>
+  <div class="step-label">Final Review</div>
+  </div>
+  </div>
+  </div>
+  </div>
  
-Use role-based multi-agent collaboration (Planner/Executor/Verifier) to reduce bottlenecks and output quality variance.
+  <main class="main-container">
+  <section class="form-section active" id="step1">
+  <div class="section-header">
+  <h2 class="section-title">
+  <span class="emoji">💡</span>
+  Basic Info & Pain Point Discovery
+  </h2>
+  <p class="section-desc">Define the business problem AI should solve in concrete terms. Focus on issues directly tied to measurable business outcomes.</p>
+  </div>
  
-Accumulate work history and knowledge in shared memory (knowledge base) for faster and more accurate repeated problem-solving.
+  <div class="card">
+  <div class="card-title">
+  Project Basics
+  <span class="badge badge-required">Required</span>
+  </div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Project Name <span class="required">*</span></label>
+- <input type="text" class="form-input" id="projectName" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="projectName" placeholder="e.g., AI Assistant for Automated Mandatory Training Compliance Tracking">
+  </div>
+  <div class="form-group">
+  <label class="form-label">Core Objective <span class="required">*</span></label>
+- <input type="text" class="form-input" id="coreProject" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="coreProject" placeholder="e.g., Achieve 100% mandatory training completion and automate monitoring operations">
+  </div>
+  </div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Department<span class="required">*</span> </label>
+- <input type="text" class="form-input" id="department" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="department" placeholder="e.g., HRD Team">
+  </div>
+  <div class="form-group">
+  <label class="form-label">AI Champion<span class="required">*</span></label>
+- <input type="text" class="form-input" id="champion" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="champion" placeholder="e.g., Alex Kim">
+  </div>
+  </div>
+  </div>
  
-Include standardized checks/verification to prevent errors and omissions and reduce rework time.
+  <div class="card">
+  <div class="card-title">
+  Project Definition
+  <button class="hint-btn" onclick="toggleHint('hint1')">💡 Writing Guide</button>
+  </div>
+  <div class="hint-content" id="hint1">
+  <strong>✅ Project Definition Writing Guide (One-sentence template)</strong>
  
-Connect systems/tools to create an end-to-end execution flow and minimize handoffs."></textarea>
- </div>
- </div>
-
- <div class="validation-box">
- <div class="validation-title">📋 Self-check checklist</div>
-
- <div class="validation-item" id="v1-how">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Project Definition Clarity</strong>
- <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
- </div>
- </div>
-
- <div class="validation-item" id="v1-painpoint">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Pain Point </strong>
- <span>Is it specific about who/when/where pain, errors, or delays happen, with 1–2 lines of example?</span>
- </div>
- </div>
-
- <div class="validation-item" id="v1-connection">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Impact linkage</strong>
- <span>Is the solved pain point linked to at least one measurable result (time/cost/quality/risk)?</span>
- </div>
- </div>
- </div>
-
- <div class="nav-buttons">
- <div></div>
- <button class="btn btn-primary" onclick="nextStep()">Next →</button>
- </div>
- </section>
- <section class="form-section" id="step2">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">📊</span>
- As-Is Status Analysis
- </h2>
- <p class="section-desc">Analyze the current workflow in detail before AI adoption and identify root causes of Step 1 pain points.</p>
- </div>
-
- <div class="card">
- <div class="card-title">
- Current workflow (As-Is)
- <button class="hint-btn" onclick="toggleHint('hint3')">💡 Writing Guide</button>
- </div>
- <div class="hint-content" id="hint3">
- <strong>🧭 As-Is reproduces “how work is currently performed.”</strong>
- <ul>
- <li> Quantify : <br>
- - How long does this task take? (time/item)<br>
-
- - How often does it occur? (frequency/month, year) <br>
-
- - How many people are involved?<br>
-
- - What is the error rate? (%)<br>
- </li>
- <li>Detail the process : <br>
- - Break down time per step <br>
- - Manual vs system ratio <br>
- - What tools/systems are currently used? <br>
- </li>
- <li>Assess impact : <br>
- - What costs are caused? (labor, delay) <br>
- - What is the opportunity cost? <br>
- - How does it affect quality? <br>
- </li>
- </ul>
- <strong>❌ Examples to avoid</strong>: Subjective assumptions / vague statements / AI-solutionism
-
- <p style="margin-top: 12px; font-size: 13px;">※ Please include time and systems used for each step.</p>
- </div>
-
- <div class="form-group">
- <label class="form-label">Describe current workflow <span class="required">*</span></label>
- <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
- <div class="card">
- <div class="card-title">Current Issues</div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Time inefficiency</label>
- <textarea class="form-textarea" id="asisTimeProblem" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Quality/accuracy issue</label>
- <textarea class="form-textarea" id="asisQualityProblem" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">System/data issue</label>
- <textarea class="form-textarea" id="asisSystemProblem" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Other Issues</label>
- <textarea class="form-textarea" id="asisOtherProblem" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">Current system</div>
- <div class="form-group">
- <label class="form-label">Related system list</label>
- <div class="tech-tags" id="systemTags">
- <span class="tech-tag" onclick="toggleTag(this)">SAP</span>
- <span class="tech-tag" onclick="toggleTag(this)">PLM</span>
- <span class="tech-tag" onclick="toggleTag(this)">Word</span>
- <span class="tech-tag" onclick="toggleTag(this)">Veeva</span>
- <span class="tech-tag" onclick="toggleTag(this)">Excel</span>
- <span class="tech-tag" onclick="toggleTag(this)">SharePoint</span>
- <span class="tech-tag" onclick="toggleTag(this)">Email</span>
- <span class="tech-tag" onclick="toggleTag(this)">Manual work</span>
- </div>
- <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="Please provide details in English.">
- </div>
- </div>
-
- <div class="nav-buttons">
- <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
- <button class="btn btn-primary" onclick="nextStep()">Next →</button>
- </div>
- </section>
-
- <section class="form-section" id="step3">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">🎯</span>
- To-Be Scenario Design
- </h2>
- <p class="section-desc">Design the future workflow after AI adoption. Focus on an AI-native process where AI and humans each have clear roles.</p>
- </div>
-
- <div class="card">
- <div class="card-title">AI Adoption Workflow (To-Be)<button class="hint-btn" onclick="toggleHint('hint4')">💡 Design Guide</button>
- </div>
- <div class="hint-content" id="hint4">
- <strong>✅ Pass criteria: Process design</strong>
- <ul>
- <li>Describe how the current As-Is process changes into the AI-enabled To-Be process.</li>
- <li>Specify what AI does at each key step.</li>
- <li>Define human-in-the-loop controls (review, approval, override).</li>
- </ul>
- <br>
- <strong>❌ Common reasons for rework</strong>
- <ul>
- <li>Only listing AI features without process context</li>
- <li>No validation checkpoints for AI outputs</li>
- </ul>
- </div>
- <div class="form-group">
- <label class="form-label">AI adoption workflow<span class="required">*</span></label>
- <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">AI role definition</div>
- <div class="form-group">
- <label class="form-label">AI tasks to perform<span class="required">*</span></label>
- <textarea class="form-textarea" id="aiRole" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Human tasks to perform <span class="required">*</span></label>
- <textarea class="form-textarea" id="humanRole" placeholder="Please provide details in English."></textarea>
- </div>
- <p class="form-help">Tip: Clearly separate AI responsibilities from human responsibilities, especially for review and approval steps.</p>
- </div>
-
- <div class="card">
- <div class="card-title">AI interaction design</div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Input: request, context, and criteria</label>
- <textarea class="form-textarea" id="aiInput" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Output: result, evidence, validation outcome, and execution action</label>
- <textarea class="form-textarea" id="aiOutput" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- <div class="form-group">
- <label class="form-label">Exception handling plan<span class="required">*</span></label>
- <textarea class="form-textarea" id="exceptionHandling" placeholder="Please provide details in English."></textarea>
- <p class="form-help">Include fallback actions for missing data, low-confidence output, or policy violations.</p>
- </div>
- </div>
-
- <div class="validation-box">
- <div class="validation-title">📋 Self-check checklist</div>
- <div class="validation-item" id="v3-process">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Process design</strong>
- <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
- </div>
- </div>
- <div class="validation-item" id="v3-humanloop">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Human-in-the-loop</strong>
- <span>Are human review and intervention points clearly defined for AI outputs?</span>
- </div>
- </div>
- <div class="validation-item" id="v3-exception">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Exception handling</strong>
- <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
- </div>
- </div>
- </div>
-
- <div class="nav-buttons">
- <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
- <button class="btn btn-primary" onclick="nextStep()">Next →</button>
- </div>
- </section>
-
- <section class="form-section" id="step4">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">🗄️</span>
- Data & Technology Review
- </h2>
- <p class="section-desc">Review the data, tools, and governance required to operate the AI workflow reliably.</p>
- <button class="hint-btn" onclick="toggleHint('hint5')">💡 Writing Guide </button>
- <div class="hint-content" id="hint5">
- <strong>✅ Pass criteria: Define all four elements for agentic AI</strong>
- <ul>
- <li>Input data: Information the agent needs at runtime<br>- User requests<br>- Contextual business data<br>
- </li>
- <li>Knowledge data: Reference materials for reasoning<br>- Policies, SOPs, and guidelines<br>- Knowledge bases / internal DBs<br>
- </li>
- <li>Feedback data: Evaluation criteria for AI outputs<br>- Ground-truth references for comparison<br>- Rules that define pass/fail decisions<br>
- </li>
- <li>Tools/Actions: External systems the agent can use<br>- APIs or workflow actions<br>- DB queries and automation steps<br>
- </li>
- </ul>
- <br>
- <strong>❌ Common reasons for rework</strong>
- <ul>
- <li>Required data is missing, unclear, or inaccessible</li>
- <li>No clear criteria for evaluating AI output quality</li>
- </ul>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">
- Required data
- </div>
- <div class="form-group">
- <label class="form-label">Required data list <span class="required">*</span></label>
- <textarea class="form-textarea" id="requiredData" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Data source/location</label>
- <textarea class="form-textarea" id="dataSource" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Data format</label>
- <textarea class="form-textarea" id="dataFormat" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">Data quality & preprocessing</div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Expected data quality issues</label>
- <textarea class="form-textarea" id="dataQualityIssue" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Preprocessing/cleanup plan<span class="required">*</span></label>
- <textarea class="form-textarea" id="dataPreprocessing" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Data refresh cycle</label>
- <select class="form-select" id="dataUpdateCycle">
- <option value="">Please select</option>
- <option value="realtime">Real-time</option>
- <option value="daily">Daily</option>
- <option value="weekly">Weekly</option>
- <option value="monthly">Monthly</option>
- <option value="quarterly">Quarterly</option>
- <option value="onetime">One-time (no refresh)</option>
- </select>
- </div>
- <div class="form-group">
- <label class="form-label">Security/compliance considerations<span class="required">*</span></label>
- <textarea class="form-textarea" id="dataSecurity" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">AI evaluation criteria</div>
- <div class="grid-2">
- <div class="form-group">
- <label class="form-label">Reference benchmark data (ground-truth comparable) </label>
- <textarea class="form-textarea" id="feedbackReference" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Error criteria data (conditions treated as errors)</label>
- <textarea class="form-textarea" id="feedbackErrorRule" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- <p class="form-help">Tip: Define clear criteria for detecting when AI output is incorrect.</p>
- </div>
-
- <div class="card">
- <div class="card-title">Relevant AI Technologies</div>
- <div class="form-group">
- <label class="form-label">Planned AI technologies</label>
- <div class="tech-tags" id="techTags">
- <span class="tech-tag" onclick="toggleTag(this)">LLM (Large Language Model)</span>
- <span class="tech-tag" onclick="toggleTag(this)">RAG (Retrieval-Augmented Generation)</span>
- <span class="tech-tag" onclick="toggleTag(this)">Text Summarization</span>
- <span class="tech-tag" onclick="toggleTag(this)">Text Classification</span>
- <span class="tech-tag" onclick="toggleTag(this)">Image Recognition</span>
- <span class="tech-tag" onclick="toggleTag(this)">OCR</span>
- <span class="tech-tag" onclick="toggleTag(this)">Recommendation System</span>
- <span class="tech-tag" onclick="toggleTag(this)">Predictive Analytics</span>
- <span class="tech-tag" onclick="toggleTag(this)">NLP</span>
- <span class="tech-tag" onclick="toggleTag(this)">Anomaly Detection</span>
- </div>
- </div>
- <div class="form-group" style="margin-top: 16px;">
- <label class="form-label">Application plan and rationale <span class="required">*</span></label>
- <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="Please provide details in English."></textarea>
- <p class="form-help">Tip:<br>① Describe where each technology is applied in the workflow.<br>② Provide rationale with task-level evidence (at least one concrete use case per technology).<br>- Explain why AI is suitable for the task.<br>- Distinguish planned implementation from generic tool usage.</p>
- </div>
- </div>
-
- <div class="validation-box">
- <div class="validation-title">📋 Self-check checklist</div>
- <div class="validation-item" id="v4-datasample">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Data completeness</strong>
- <span>Are all required input, knowledge, and feedback data sources defined?</span>
- </div>
- </div>
- <div class="validation-item" id="v4-preprocessing">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Preprocessing plan</strong>
- <span>Is there a concrete plan to clean, transform, and validate required data?</span>
- </div>
- </div>
- <div class="validation-item" id="v4-security">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Security / Compliance</strong>
- <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
- </div>
- </div>
- <div class="validation-item" id="v4-caseevidence">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Decision evidence</strong>
- <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
- </div>
- </div>
- </div>
-
- <div class="nav-buttons">
- <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
- <button class="btn btn-primary" onclick="nextStep()">Next →</button>
- </div>
- </section>
-
- <section class="form-section" id="step5">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">📈</span>
- Expected Impact & ROI
- </h2>
- <p class="section-desc">Summarize expected quantitative and qualitative impact, with measurable evidence where possible.</p>
- </div>
-
- <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border: none;">
- <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">🎯 Expected impact summary</div>
- <div class="form-group">
- <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="Please provide details in English.">
- </div>
- <div class="grid-2" style="margin-top: 16px;">
- <div class="form-group">
- <label class="form-label" style="color: rgba(255,255,255,0.8); font-size: 13px;">Duration</label>
- <div style="display: flex; align-items: center; gap: 8px;">
- <input type="number" class="form-input" id="projectDuration" style="width: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center;" placeholder="10">
- <span style="color: rgba(255,255,255,0.8);">months</span>
- </div>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">
- 📊 Quantitative effects
- <button class="hint-btn" onclick="toggleHint('hint6')">💡 Writing Guide</button>
- </div>
- <div class="hint-content" id="hint6">
- <strong>✅ Pass criteria</strong>
- <p>Provide measurable impact items with assumptions and calculation basis.</p>
- <br>
- <strong>📝 Example</strong>
- <ul>
- <li><strong>Cost reduction:</strong> e.g., reduced external spend or labor hours per week/month.</li>
- <li><strong>Throughput increase:</strong> e.g., number of cases handled per day/week.</li>
- <li><strong>Risk reduction:</strong> e.g., fewer policy violations or error incidents.</li>
- <li><strong>Strategic value:</strong> e.g., improved responsiveness or better decision quality.</li>
- </ul>
- </div>
-
- <div class="effect-item">
- <div class="effect-header">
- <span class="effect-icon">💰</span>
- <span class="effect-type">Cost savings</span>
- <label class="effect-toggle">
- <input type="checkbox" id="effect_cost_enabled" checked onchange="toggleEffectSection('cost')">
- <span class="toggle-slider"></span>
- </label>
- </div>
- <div class="effect-content" id="effect_cost_content">
- <div class="form-group">
- <label class="form-label">Description</label>
- <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Evidence / basis</label>
- <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class=" effect-item">
- <div class="effect-header">
- <span class="effect-icon">📈</span>
- <span class="effect-type">Revenue uplift</span>
- <label class="effect-toggle">
- <input type="checkbox" id="effect_revenue_enabled" onchange="toggleEffectSection('revenue')">
- <span class="toggle-slider"></span>
- </label>
- </div>
- <div class="effect-content hidden" id="effect_revenue_content">
- <div class="form-group">
- <label class="form-label">Description</label>
- <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Evidence / basis</label>
- <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class=" effect-item">
- <div class="effect-header">
- <span class="effect-icon">🛡️</span>
- <span class="effect-type">Risk reduction</span>
- <label class="effect-toggle">
- <input type="checkbox" id="effect_risk_enabled" onchange="toggleEffectSection('risk')">
- <span class="toggle-slider"></span>
- </label>
- </div>
- <div class="effect-content hidden" id="effect_risk_content">
- <div class="form-group">
- <label class="form-label">Description</label>
- <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Evidence / basis</label>
- <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
-
- <div class="effect-item">
- <div class="effect-header">
- <span class="effect-icon">🎯</span>
- <span class="effect-type">Strategic impact</span>
- <label class="effect-toggle">
- <input type="checkbox" id="effect_strategic_enabled" onchange="toggleEffectSection('strategic')">
- <span class="toggle-slider"></span>
- </label>
- </div>
- <div class="effect-content hidden" id="effect_strategic_content">
- <div class="form-group">
- <label class="form-label">Description</label>
- <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- <div class="form-group">
- <label class="form-label">Evidence / basis</label>
- <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">
- ✨ Qualitative effects
- <button class="hint-btn" onclick="toggleHint('hint7')">💡 Example</button>
- </div>
- <div class="hint-content" id="hint7">
- <strong>Qualitative effects checklist</strong>
- <ul>
- <li>Clarify role accountability (executor/owner/reviewer/approver).</li>
- <li>Describe process improvements such as fewer handoffs, clearer approvals, and better collaboration.</li>
- <li>Show operational impact (e.g., faster cycle time, fewer rework loops).</li>
- <li>Explain expected adoption and change-management benefits.</li>
- </ul>
- <strong>Example</strong>
- <ul>
- <li>Improved ownership clarity for each task</li>
- <li>More consistent output quality (with defined criteria)</li>
- <li>Better auditability through evidence-based decisions</li>
- <li>Reduced communication overhead and repeated requests</li>
- <li>Improved response speed for daily requests</li>
- </ul>
- </div>
- <div class="form-group">
- <label class="form-label">Qualitative effects</label>
- <textarea class="form-textarea" id="qualitativeValue" style="min-height: 120px;" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">🚀 Scalability</div>
- <div class="form-group">
- <label class="form-label">How can this solution scale to other teams or use cases?</label>
- <textarea class="form-textarea" id="scalability" placeholder="Please provide details in English."></textarea>
- </div>
- </div>
-
- <div class="nav-buttons">
- <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
- <button class="btn btn-primary" onclick="nextStep()">Next →</button>
- </div>
- </section>
-
- <section class="form-section" id="step6">
- <div class="section-header">
- <h2 class="section-title">
- <span class="emoji">✅</span>Final Review & Action Plan</h2>
- <p class="section-desc">Review the full proposal and finalize execution tasks.</p>
- </div>
-
- <div class="card">
- <div class="card-title">Execution Task</div>
- <table class="task-table">
- <thead>
- <tr>
- <th style="width: 5%;">No.</th>
- <th style="width: 55%;">Execution Task</th>
- <th style="width: 20%;">Prerequisite Task</th>
- <th style="width: 20%;">Duration</th>
- </tr>
- </thead>
- <tbody id="taskTableBody">
- <tr>
- <td>1</td>
- <td><input type="text" id="task1_desc" placeholder="Please provide details in English."></td>
- <td><input type="text" id="task1_prereq" placeholder="None"></td>
- <td><input type="text" id="task1_duration" placeholder="1M"></td>
- </tr>
- <tr>
- <td>2</td>
- <td><input type="text" id="task2_desc" placeholder="Please provide details in English."></td>
- <td><input type="text" id="task2_prereq" placeholder="None"></td>
- <td><input type="text" id="task2_duration" placeholder="2week"></td>
- </tr>
- <tr>
- <td>3</td>
- <td><input type="text" id="task3_desc" placeholder="Please provide details in English."></td>
- <td><input type="text" id="task3_prereq" placeholder="1,2"></td>
- <td><input type="text" id="task3_duration" placeholder="1M"></td>
- </tr>
- <tr>
- <td>4</td>
- <td><input type="text" id="task4_desc" placeholder="Please provide details in English."></td>
- <td><input type="text" id="task4_prereq" placeholder="3"></td>
- <td><input type="text" id="task4_duration" placeholder="2week"></td>
- </tr>
- <tr>
- <td>5</td>
- <td><input type="text" id="task5_desc" placeholder="Please provide details in English."></td>
- <td><input type="text" id="task5_prereq" placeholder="4"></td>
- <td><input type="text" id="task5_duration" placeholder="1M"></td>
- </tr>
- </tbody>
- </table>
- </div>
- <div class="card">
- <div class="card-title">📋 Final evaluation checklist</div>
- <div class="validation-box" style="margin-top: 0; background: white;">
-
- <!-- Step1 self-check equivalent -->
- <h4 style="margin-bottom: 16px; color: var(--secondary);">① Basics & Pain Point</h4>
- <div class="validation-item" id="vf-v1-how">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Project Definition Clarity</strong>
- <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v1-painpoint">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Pain Point </strong>
- <span>Is it specific about who/when/where pain, errors, or delays happen, with 1–2 lines of example?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v1-connection">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Impact linkage</strong>
- <span>Is the solved pain point linked to at least one measurable result (time/cost/quality/risk)?</span>
- </div>
- </div>
-
- <!-- Step3 self-check equivalent -->
- <h4 style="margin: 24px 0 16px; color: var(--secondary);">② To-Be Scenario</h4>
- <div class="validation-item" id="vf-v3-process">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Process design</strong>
- <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v3-humanloop">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Human-in-the-loop</strong>
- <span>Are human review and intervention points clearly defined for AI outputs?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v3-exception">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Exception handling</strong>
- <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
- </div>
- </div>
-
- <!-- Step4 self-check equivalent -->
- <h4 style="margin: 24px 0 16px; color: var(--secondary);">③ Data & Technology</h4>
- <div class="validation-item" id="vf-v4-datasample">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Data completeness</strong>
- <span>Are all required input, knowledge, and feedback data sources defined?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v4-preprocessing">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Preprocessing plan</strong>
- <span>Is there a concrete plan to clean, transform, and validate required data?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v4-security">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Security / Compliance</strong>
- <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
- </div>
- </div>
- <div class="validation-item" id="vf-v4-caseevidence">
- <div class="validation-icon">?</div>
- <div class="validation-text">
- <strong>Decision evidence</strong>
- <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
- </div>
- </div>
- </div>
- </div>
-
- <div class="card">
- <div class="card-title">📄 Preview</div>
- <div class="preview-container" id="previewContainer">
- </div>
- </div>
-
- <div class="nav-buttons">
- <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
- <button class="btn btn-primary" onclick="exportToWord()">📝 Save as Word</button>
- </div>
- </section>
- </main>
-
- <div class="toast" id="toast">
- <span id="toastIcon">✓</span>
- <span id="toastMessage">Saved successfully.</span>
- </div>
-
- <div class="modal-overlay" id="modalOverlay">
- <div class="modal">
- <h3 id="modalTitle">Load saved data</h3>
- <p id="modalMessage">A previously saved proposal exists. Would you like to load it?</p>
- <div class="modal-buttons">
- <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
- <button class="btn btn-primary" onclick="confirmLoad()">Load</button>
- </div>
- </div>
- </div>
-
- <script>// State Management
- let currentStep = 1;
- const totalSteps = 6;
-
- function storageAvailable() {
- try {
- const testKey = '__ai_hackathon_storage_test__';
- localStorage.setItem(testKey, '1');
- localStorage.removeItem(testKey);
- return true;
- } catch (e) {
- return false;
- }
- }
-
- function safeSetItem(key, value) {
- if (!storageAvailable()) return false;
- try {
- localStorage.setItem(key, value);
- return true;
- } catch (e) {
- return false;
- }
- }
-
- function safeGetItem(key) {
- if (!storageAvailable()) return null;
- try {
- return localStorage.getItem(key);
- } catch (e) {
- return null;
- }
- }
- // Initialize
- document.addEventListener('DOMContentLoaded', function() {
- checkSavedData();
- updateProgress();
- setupAutoSave();
- setupValidation();
- validateStep1();
- validateStep3();
- validateStep4();
- });
- window.addEventListener('resize', updateProgress);
- // --- [Utility] Security: XSS HTML Escape ---
- function escapeHtml(text) {
- if (!text) return '';
- return text
- .replace(/&/g, "&amp;")
- .replace(/</g, "&lt;")
- .replace(/>/g, "&gt;")
- .replace(/"/g, "&quot;")
- .replace(/'/g, "&#039;");
- }
- // --- [Utility] Text Formatting: ---
- function formatText(text) {
- if (!text) return '-';
- // HTML (escape) ,<br>return escapeHtml(text).replace(/\n/g, '<br>');
- }
- // Go directly to preview section
- function goToPreview() {
- goToStep(6);
- setTimeout(() => {
- document.getElementById('previewContainer').scrollIntoView({
- behavior: 'smooth'
- });
- }, 100);
- }
- // Step Navigation
- function goToStep(step) {
- if (step < 1 || step > totalSteps) return;
- document.querySelectorAll('.form-section').forEach(section => {
- section.classList.remove('active');
- });
- document.getElementById(`step${step}`).classList.add('active');
- currentStep = step;
- updateProgress();
- if (step === 3) {
- validateStep3();
- }
- if (step === 4) {
- validateStep4();
- }
- if (step === 6) {
- generatePreview();
- runFinalValidation();
- }
- window.scrollTo({
- top: 0,
- behavior: 'smooth'
- });
- }
-
- function nextStep() {
- if (currentStep < totalSteps) {
- goToStep(currentStep + 1);
- }
- }
-
- function prevStep() {
- if (currentStep > 1) {
- goToStep(currentStep - 1);
- }
- }
- // Progress Bar Update
- function updateProgress() {
- const steps = document.querySelectorAll('.step');
- const progressLine = document.getElementById('progressLine');
- steps.forEach((step, index) => {
- step.classList.remove('active', 'completed');
- if (index + 1 === currentStep) {
- step.classList.add('active');
- } else if (index + 1 < currentStep) {
- step.classList.add('completed');
- }
- });
- const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
- // Guard for parent container width calculation
- const container = document.querySelector('.progress-steps');
- const maxWidth = container ? container.offsetWidth - 80 : 0;
- progressLine.style.width = `${(progress / 100) * maxWidth}px`;
- }
- // Hint Toggle
- function toggleHint(hintId) {
- const hint = document.getElementById(hintId);
- if (hint) hint.classList.toggle('show');
- }
- // Tag Toggle
- function toggleTag(element) {
- element.classList.toggle('selected');
- }
- // Get Selected Tags
- function getSelectedTags(containerId) {
- const container = document.getElementById(containerId);
- if (!container) return [];
- const selected = container.querySelectorAll('.tech-tag.selected');
- return Array.from(selected).map(tag =>tag.textContent);
- }
- // Save Data
- function saveData() {
- const data = collectFormData();
- const saved = safeSetItem('aiHackathonPlan', JSON.stringify(data));
- const dated = safeSetItem('aiHackathonPlanDate', new Date().toISOString());
- if (saved && dated) {
- showToast('Saved successfully.', 'success');
- } else {
- showToast('Unable to save because browser storage is unavailable.');
- }
- }
- // Load Data
- function loadData() {
- const saved = safeGetItem('aiHackathonPlan');
- if (saved) {
- showModal('Saved data Load', ' data Would you like to load it?');
- } else {
- showToast('No saved data found.');
- }
- }
-
- function confirmLoad() {
- const saved = safeGetItem('aiHackathonPlan');
- if (saved) {
- try {
- const data = JSON.parse(saved);
- populateFormData(data);
- showToast('data .', 'success');
- } catch (e) {
- console.error('Data Load Error:', e);
- showToast('data not found.', 'default');
- }
- }
- closeModal();
- }
- // Check for saved data on load
- function checkSavedData() {
- const saved = safeGetItem('aiHackathonPlan');
- const savedDate = safeGetItem('aiHackathonPlanDate');
- if (saved && savedDate) {
- const date = new Date(savedDate);
- const dateStr = date.toLocaleDateString('ko-KR') + ' ' + date.toLocaleTimeString('ko-KR');
- showModal('Saved data ', `${dateStr} exists. Would you like to load it?`);
- }
- }
- // Auto-save setup
- function setupAutoSave() {
- let timeout;
- document.querySelectorAll('input, textarea, select').forEach(element => {
- const saveHandler = () => {
- clearTimeout(timeout);
- timeout = setTimeout(() => {
- const data = collectFormData();
- safeSetItem('aiHackathonPlan', JSON.stringify(data));
- safeSetItem('aiHackathonPlanDate', new Date().toISOString());
- }, 3000);
- };
- element.addEventListener('input', saveHandler);
- element.addEventListener('change', saveHandler);
- });
- }
- // Effect Section Toggle
- function toggleEffectSection(type) {
- const checkbox = document.getElementById(`effect_${type}_enabled`);
- const content = document.getElementById(`effect_${type}_content`);
- if (checkbox && content) {
- if (checkbox.checked) {
- content.classList.remove('hidden');
- } else {
- content.classList.add('hidden');
- }
- }
- }
- // Collect form data
- function collectFormData() {
- // Helper to safely get value
- const getVal = (id) => {
- const el = document.getElementById(id);
- return el ? el.value : '';
- };
- return {
- // Step 1
- projectName: getVal('projectName'),
- coreProject: getVal('coreProject'),
- department: getVal('department'),
- champion: getVal('champion'),
- projectDefinition: getVal('projectDefinition'),
- painPoint: getVal('painPoint'),
- expectedEffect: getVal('expectedEffect'),
- // Step 2
- asisDescription: getVal('asisDescription'),
- asisTimeProblem: getVal('asisTimeProblem'),
- asisQualityProblem: getVal('asisQualityProblem'),
- asisSystemProblem: getVal('asisSystemProblem'),
- asisOtherProblem: getVal('asisOtherProblem'),
- systems: getSelectedTags('systemTags'),
- customSystems: getVal('customSystems'),
- // Step 3
- tobeDescription: getVal('tobeDescription'),
- aiRole: getVal('aiRole'),
- humanRole: getVal('humanRole'),
- aiInput: getVal('aiInput'),
- aiOutput: getVal('aiOutput'),
- exceptionHandling: getVal('exceptionHandling'),
- // Step 4
- requiredData: getVal('requiredData'),
- dataSource: getVal('dataSource'),
- dataFormat: getVal('dataFormat'),
- dataQualityIssue: getVal('dataQualityIssue'),
- dataPreprocessing: getVal('dataPreprocessing'),
- dataUpdateCycle: getVal('dataUpdateCycle'),
- dataSecurity: getVal('dataSecurity'),
- feedbackReference: getVal('feedbackReference'),
- feedbackErrorRule: getVal('feedbackErrorRule'),
- techTags: getSelectedTags('techTags'),
- techDescription: getVal('techDescription'),
- // Step 5
- keyBenefit: getVal('keyBenefit'),
- projectDuration: getVal('projectDuration'),
- // Quantitative effects
- effect_cost_enabled: document.getElementById('effect_cost_enabled')?.checked || false,
- effect_cost_value: getVal('effect_cost_value'),
- effect_cost_basis: getVal('effect_cost_basis'),
- effect_revenue_enabled: document.getElementById('effect_revenue_enabled')?.checked || false,
- effect_revenue_value: getVal('effect_revenue_value'),
- effect_revenue_basis: getVal('effect_revenue_basis'),
- effect_risk_enabled: document.getElementById('effect_risk_enabled')?.checked || false,
- effect_risk_value: getVal('effect_risk_value'),
- effect_risk_basis: getVal('effect_risk_basis'),
- effect_strategic_enabled: document.getElementById('effect_strategic_enabled')?.checked || false,
- effect_strategic_value: getVal('effect_strategic_value'),
- effect_strategic_basis: getVal('effect_strategic_basis'),
- // Qualitative effects
- qualitativeValue: getVal('qualitativeValue'),
- scalability: getVal('scalability'),
- // Step 6 Tasks
- task1: {
- desc: getVal('task1_desc'),
- prereq: getVal('task1_prereq'),
- duration: getVal('task1_duration')
- },
- task2: {
- desc: getVal('task2_desc'),
- prereq: getVal('task2_prereq'),
- duration: getVal('task2_duration')
- },
- task3: {
- desc: getVal('task3_desc'),
- prereq: getVal('task3_prereq'),
- duration: getVal('task3_duration')
- },
- task4: {
- desc: getVal('task4_desc'),
- prereq: getVal('task4_prereq'),
- duration: getVal('task4_duration')
- },
- task5: {
- desc: getVal('task5_desc'),
- prereq: getVal('task5_prereq'),
- duration: getVal('task5_duration')
- }
- };
- }
- // Populate form with saved data
- function populateFormData(data) {
- if (!data) return;
- const setVal = (id, val) => {
- const el = document.getElementById(id);
- if (el && val !== undefined) el.value = val;
- };
- // Step 1
- setVal('projectName', data.projectName);
- setVal('coreProject', data.coreProject);
- setVal('department', data.department);
- setVal('champion', data.champion);
- setVal('projectDefinition', data.projectDefinition);
- setVal('painPoint', data.painPoint);
- setVal('expectedEffect', data.expectedEffect);
- // Step 2
- setVal('asisDescription', data.asisDescription);
- setVal('asisTimeProblem', data.asisTimeProblem);
- setVal('asisQualityProblem', data.asisQualityProblem);
- setVal('asisSystemProblem', data.asisSystemProblem);
- setVal('asisOtherProblem', data.asisOtherProblem);
- setVal('customSystems', data.customSystems);
- // Restore system tags
- if (data.systems && Array.isArray(data.systems)) {
- document.querySelectorAll('#systemTags .tech-tag').forEach(tag => {
- // Reset first
- tag.classList.remove('selected');
- if (data.systems.includes(tag.textContent)) {
- tag.classList.add('selected');
- }
- });
- }
- // Step 3
- setVal('tobeDescription', data.tobeDescription);
- setVal('aiRole', data.aiRole);
- setVal('humanRole', data.humanRole);
- setVal('aiInput', data.aiInput);
- setVal('aiOutput', data.aiOutput);
- setVal('exceptionHandling', data.exceptionHandling);
- // Step 4
- setVal('requiredData', data.requiredData);
- setVal('dataSource', data.dataSource);
- setVal('dataFormat', data.dataFormat);
- setVal('dataQualityIssue', data.dataQualityIssue);
- setVal('dataPreprocessing', data.dataPreprocessing);
- setVal('dataUpdateCycle', data.dataUpdateCycle);
- setVal('dataSecurity', data.dataSecurity);
- setVal('feedbackReference', data.feedbackReference);
- setVal('feedbackErrorRule', data.feedbackErrorRule);
- setVal('techDescription', data.techDescription);
- // Restore tech tags
- if (data.techTags && Array.isArray(data.techTags)) {
- document.querySelectorAll('#techTags .tech-tag').forEach(tag => {
- tag.classList.remove('selected');
- if (data.techTags.includes(tag.textContent)) {
- tag.classList.add('selected');
- }
- });
- }
- // Step 5
- setVal('keyBenefit', data.keyBenefit);
- setVal('projectDuration', data.projectDuration);
- // Helper for effects
- const setEffect = (type, enabled, val, basis) => {
- const chk = document.getElementById(`effect_${type}_enabled`);
- if (chk) {
- chk.checked = !!enabled;
- toggleEffectSection(type);
- }
- setVal(`effect_${type}_value`, val);
- setVal(`effect_${type}_basis`, basis);
- };
- setEffect('cost', data.effect_cost_enabled, data.effect_cost_value, data.effect_cost_basis);
- setEffect('revenue', data.effect_revenue_enabled, data.effect_revenue_value, data.effect_revenue_basis);
- setEffect('risk', data.effect_risk_enabled, data.effect_risk_value, data.effect_risk_basis);
- setEffect('strategic', data.effect_strategic_enabled, data.effect_strategic_value, data.effect_strategic_basis);
- // Qualitative effects
- setVal('qualitativeValue', data.qualitativeValue);
- setVal('scalability', data.scalability);
- // Tasks ( Optional Chaining )
- setVal('task1_desc', data.task1?.desc);
- setVal('task1_prereq', data.task1?.prereq);
- setVal('task1_duration', data.task1?.duration);
- setVal('task2_desc', data.task2?.desc);
- setVal('task2_prereq', data.task2?.prereq);
- setVal('task2_duration', data.task2?.duration);
- setVal('task3_desc', data.task3?.desc);
- setVal('task3_prereq', data.task3?.prereq);
- setVal('task3_duration', data.task3?.duration);
- setVal('task4_desc', data.task4?.desc);
- setVal('task4_prereq', data.task4?.prereq);
- setVal('task4_duration', data.task4?.duration);
- setVal('task5_desc', data.task5?.desc);
- setVal('task5_prereq', data.task5?.prereq);
- setVal('task5_duration', data.task5?.duration);
- }
- // Validation
- // Validation
- function setupValidation() {
- const step1Fields = ['painPoint', 'projectDefinition', 'expectedEffect'];
- step1Fields.forEach(fieldId => {
- const el = document.getElementById(fieldId);
- if (el) {
- el.addEventListener('input', validateStep1);
- el.addEventListener('blur', validateStep1);
- }
- });
- const step3Fields = ['tobeDescription', 'humanRole', 'exceptionHandling'];
- step3Fields.forEach(fieldId => {
- const el = document.getElementById(fieldId);
- if (el) {
- el.addEventListener('input', validateStep3);
- el.addEventListener('blur', validateStep3);
- }
- });
- const step4Fields = ['requiredData', 'dataPreprocessing', 'dataSecurity', 'techDescription'];
- step4Fields.forEach(fieldId => {
- const el = document.getElementById(fieldId);
- if (el) {
- el.addEventListener('input', validateStep4);
- el.addEventListener('blur', validateStep4);
- }
- });
- }
-
- function validateStep1() {
- const getVal = (id) => {
- const el = document.getElementById(id);
- return el ? el.value.trim() : '';
- };
- const painPointVal = getVal('painPoint');
- const definitionVal = getVal('projectDefinition');
- const effectVal = getVal('expectedEffect');
- const isPainPointValid = painPointVal.length >= 20 &&
- /||error|manual work||||not required|repetition|time|cost|error|manual|inefficien|delay|repeat/i.test(painPointVal);
- updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
- const isDefinitionValid = definitionVal.length >= 20 &&
- /AI||prediction||||LLM|||autom|predict|analysis|recommend|model|algorithm|generate/i.test(definitionVal);
- updateValidationUI('v1-how', isDefinitionValid, definitionVal.length > 0);
- const isConnectionValid = effectVal.length >= 20 &&
- /|||||||system|integrat|through|based|process|system/i.test(effectVal);
- updateValidationUI('v1-connection', isConnectionValid, effectVal.length > 0);
- }
-
- function validateStep3() {
- const getVal = (id) => {
- const el = document.getElementById(id);
- return el ? el.value.trim() : '';
- };
- const tobeDescription = getVal('tobeDescription');
- const humanRole = getVal('humanRole');
- const exceptionHandling = getVal('exceptionHandling');
- const processValid = tobeDescription.length >= 80 && /AI||||flow|step|process|flow|autom/i.test(tobeDescription);
- const humanLoopValid = humanRole.length >= 30 && /Review||Approval|||review|validat|approv|confirm|feedback/i.test(humanRole);
- const exceptionValid = exceptionHandling.length >= 20 && /||error|day|Review Request||unknown|exception|error|mismatch|review request|alert/i.test(exceptionHandling);
- updateValidationUI('v3-process', processValid, tobeDescription.length > 0);
- updateValidationUI('v3-humanloop', humanLoopValid, humanRole.length > 0);
- updateValidationUI('v3-exception', exceptionValid, exceptionHandling.length > 0);
- }
-
- function validateStep4() {
- const getVal = (id) => {
- const el = document.getElementById(id);
- return el ? el.value.trim() : '';
- };
- const requiredData = getVal('requiredData');
- const dataPreprocessing = getVal('dataPreprocessing');
- const dataSecurity = getVal('dataSecurity');
- const dataSampleValid = requiredData.length >= 30 && /data|||||list|data|table|column|sample|info|list/i.test(requiredData);
- const preprocessingValid = dataPreprocessing.length >= 20 && /|preprocessing||||duplication|clean|preprocess|standard|remove|mapping|duplicate/i.test(dataPreprocessing);
- const securityValid = dataSecurity.length >= 15 && /|personal data|||||security|privacy|permission|compliance|de-ident|access/i.test(dataSecurity);
- const techDescription = getVal('techDescription');
- const techDescValid = techDescription.length >= 50 && /||||evidence|judgment||||||||case|apply|test|check|evidence|rationale|demo|experience|reference|article|blog|vendor/i.test(techDescription);
- updateValidationUI('v4-datasample', dataSampleValid, requiredData.length > 0);
- updateValidationUI('v4-preprocessing', preprocessingValid, dataPreprocessing.length > 0);
- updateValidationUI('v4-security', securityValid, dataSecurity.length > 0);
- updateValidationUI('v4-caseevidence', techDescValid, techDescription.length > 0);
- }
-
- function updateValidationUI(elementId, isValid, hasInput) {
- const item = document.getElementById(elementId);
- if (!item) return;
- const icon = item.querySelector('.validation-icon');
- item.classList.remove('pass', 'fail');
- if (isValid) {
- item.classList.add('pass');
- icon.textContent = '✓';
- icon.style.backgroundColor = 'var(--success)';
- icon.style.color = 'white';
- } else if (hasInput) {
- item.classList.add('fail');
- icon.textContent = '!';
- icon.style.backgroundColor = 'var(--warning)';
- icon.style.color = 'white';
- } else {
- icon.textContent = '?';
- icon.style.backgroundColor = 'var(--border)';
- icon.style.color = 'var(--text-muted)';
- }
- }
-
- function runFinalValidation() {
- const data = collectFormData();
- const check = (id, condition) => updateValidation(id, condition);
- // --- Step1 "day " ---
- const painPointVal = (data.painPoint || '').trim();
- const definitionVal = (data.projectDefinition || '').trim();
- const effectVal = (data.expectedEffect || '').trim();
- const isPainPointValid = painPointVal.length >= 20 &&
- /||error|manual work||||not required|repetition|time|cost|error|manual|inefficien|delay|repeat/i.test(painPointVal);
- const isDefinitionValid = definitionVal.length >= 20 &&
- /AI||prediction||||LLM|||autom|predict|analysis|recommend|model|algorithm|generate/i.test(definitionVal);
- const isConnectionValid = effectVal.length >= 20 &&
- /|||||||system|integrat|through|based|process|system/i.test(effectVal);
- check('vf-v1-painpoint', isPainPointValid);
- check('vf-v1-how', isDefinitionValid);
- check('vf-v1-connection', isConnectionValid);
- // --- Step3 "day " ---
- const tobeDescription = (data.tobeDescription || '').trim();
- const humanRole = (data.humanRole || '').trim();
- const exceptionHandling = (data.exceptionHandling || '').trim();
- const processValid = tobeDescription.length >= 80 && /AI||||flow|step|process|flow|autom/i.test(tobeDescription);
- const humanLoopValid = humanRole.length >= 30 && /Review||Approval|||review|validat|approv|confirm|feedback/i.test(humanRole);
- const exceptionValid = exceptionHandling.length >= 20 && /||error|day|Review Request||unknown|exception|error|mismatch|review request|alert/i.test(exceptionHandling);
- check('vf-v3-process', processValid);
- check('vf-v3-humanloop', humanLoopValid);
- check('vf-v3-exception', exceptionValid);
- // --- Step4 "day " ---
- const requiredData = (data.requiredData || '').trim();
- const dataPreprocessing = (data.dataPreprocessing || '').trim();
- const dataSecurity = (data.dataSecurity || '').trim();
- const dataSampleValid = requiredData.length >= 30 && /data|||||list|data|table|column|sample|info|list/i.test(requiredData);
- const preprocessingValid = dataPreprocessing.length >= 20 && /|preprocessing||||duplication|clean|preprocess|standard|remove|mapping|duplicate/i.test(dataPreprocessing);
- const securityValid = dataSecurity.length >= 15 && /|personal data|||||security|privacy|permission|compliance|de-ident|access/i.test(dataSecurity);
- check('vf-v4-datasample', dataSampleValid);
- check('vf-v4-preprocessing', preprocessingValid);
- check('vf-v4-security', securityValid);
- const techDescription = (data.techDescription || '').trim();
- const techDescValid = techDescription.length >= 50 && /||||evidence|judgment||||||||case|apply|test|check|evidence|rationale|demo|experience|reference|article|blog|vendor/i.test(techDescription);
- check('vf-v4-caseevidence', techDescValid);
- }
-
- function updateValidation(id, pass) {
- const item = document.getElementById(id);
- if (!item) return;
- if (pass) {
- item.classList.add('pass');
- item.classList.remove('fail');
- item.querySelector('.validation-icon').textContent = '✓';
- } else {
- item.classList.add('fail');
- item.classList.remove('pass');
- item.querySelector('.validation-icon').textContent = '!';
- }
- }
- // Generate Preview - Real-time data (XSS )
- function generatePreview() {
- const data = collectFormData();
- const container = document.getElementById('previewContainer');
- // Quantitative effects HTML 
- let quantitativeEffectsHTML = '';
- if (data.effect_cost_enabled && data.effect_cost_value) {
- quantitativeEffectsHTML += `<div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Cost savings</strong>
- <p style="margin: 8px 0;">${formatText(data.effect_cost_value)}</p>
- ${data.effect_cost_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_cost_basis)}</p>` : ''}
- </div>
- `;
- }
- if (data.effect_revenue_enabled && data.effect_revenue_value) {
- quantitativeEffectsHTML += `
- <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Revenue uplift</strong>
- <p style="margin: 8px 0;">${formatText(data.effect_revenue_value)}</p>
- ${data.effect_revenue_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_revenue_basis)}</p>` : ''}
- </div>
- `;
- }
- if (data.effect_risk_enabled && data.effect_risk_value) {
- quantitativeEffectsHTML += `
- <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Risk reduction</strong>
- <p style="margin: 8px 0;">${formatText(data.effect_risk_value)}</p>
- ${data.effect_risk_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_risk_basis)}</p>` : ''}
- </div>
- `;
- }
- if (data.effect_strategic_enabled && data.effect_strategic_value) {
- quantitativeEffectsHTML += `
- <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
- <strong>Strategic impact</strong>
- <p style="margin: 8px 0;">${formatText(data.effect_strategic_value)}</p>
- ${data.effect_strategic_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_strategic_basis)}</p>` : ''}
- </div>`;
- }
- // Task HTML 
- let taskTableHTML = '';
- const tasks = [{ no: 1, ...data.task1 }, { no: 2, ...data.task2 }, { no: 3, ...data.task3 }, { no: 4, ...data.task4 }, { no: 5, ...data.task5 }];
- const validTasks = tasks.filter(t => t && t.desc);
- if (validTasks.length > 0) {
- taskTableHTML = `<table class="preview-table">
- <tr><th style="width: 10%;">No.</th><th>Task</th><th style="width: 15%;">Prereq</th><th style="width: 15%;">Duration</th></tr>
- ${validTasks.map((t) => `<tr><td>${t.no}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
- </table>`;
- }
- // system 
- const systemList = [...(data.systems || []), data.customSystems].filter(Boolean).join(', ');
- container.innerHTML = `<div class="preview-header">
- <h1>Execution Plan</h1>
- <h2>${escapeHtml(data.projectName) || '[Project Name]'}</h2>
- </div>
+  <p style="background:#eff6ff; padding:12px; border-radius:8px; margin:10px 0; border-left:4px solid #1a56db;">
+- <strong style="color:#1e40af;">One-sentence template</strong>“[ ] , AI [ ] [ ] , [] .”</p>
++ <strong style="color:#1e40af;">One-sentence template:</strong> "In [work scope], AI will [action] using [data/input] to improve [time/cost/quality/risk]."</p>
  
- <div class="preview-section">
- <h3>1. Overview</h3>
- <table class="preview-table">
- <tr><th>Project Name</th><td>${escapeHtml(data.projectName) || '-'}</td></tr>
- <tr><th>Core Objective</th><td>${escapeHtml(data.coreProject) || '-'}</td></tr>
- <tr><th>Department</th><td>${escapeHtml(data.department) || '-'}</td></tr>
- <tr><th>AI Champion</th><td>${escapeHtml(data.champion) || '-'}</td></tr>
- <tr><th>Project Definition</th><td>${formatText(data.projectDefinition)}</td></tr>
- <tr><th>Problem to solve</th><td>${formatText(data.painPoint)}</td></tr>
- <tr><th>Expected impact</th><td>${formatText(data.expectedEffect)}</td></tr>
- <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'} months</td></tr>
- </table>
- </div>
+  <div style="margin-top:12px; padding:12px; background:#f8fafc; border-radius:8px;">
+  <strong style="color:#0f172a;">📌 Checkpoints (3 only)</strong>
+  <ul style="margin:8px 0 0 18px; font-size:13px; color:#334155; line-height:1.7;">
+  <li><strong>Work scope</strong>: Which process or context does this project address?</li>
+  <li><strong>Minimum AI role</strong>: How will AI help concretely? (e.g., sample data and process details)</li>
+  <li><strong>Outcome target</strong>: Which improves: time, cost, quality, or risk?</li>
+  </ul>
+  </div>
  
- <div class="preview-section">
- <h3>2. As-Is Status</h3>
- <div class="preview-content">
- <p><strong>Current workflow:</strong></p>
- <p>${formatText(data.asisDescription)}</p>
- <br>
- <p><strong>Issues:</strong></p>
- <ul style="margin-left: 20px;">
- ${data.asisTimeProblem ? `<li>Time inefficiency: ${escapeHtml(data.asisTimeProblem)}</li>` : ''}
- ${data.asisQualityProblem ? `<li>Quality/accuracy issue: ${escapeHtml(data.asisQualityProblem)}</li>` : ''}
- ${data.asisSystemProblem ? `<li>System/data issue: ${escapeHtml(data.asisSystemProblem)}</li>` : ''}
- ${data.asisOtherProblem ? `<li>Other: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
- </ul>
- <br>
- <p><strong>Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
- </div>
- </div>
+  <br>
+  <strong>❌ Avoid these expressions</strong>
+  <div style="background:#fef2f2; padding:12px; border-radius:8px; margin:8px 0; border-left:4px solid #ef4444;">
+  <ul style="margin-left:16px; font-size:13px; color:#991b1b; line-height:1.7;">
+- <li>““We want AI automation/efficiency”” (work·· )</li>
+- <li>““AI should do it automatically”” (“unspecified” )</li>
++ <li>"We want AI automation/efficiency" (without specifying the work scope)</li>
++ <li>"AI should handle it automatically" (without defining what "it" means)</li>
+  </ul>
+  </div>
+  </div>
  
- <div class="preview-section">
- <h3>3. To-Be Scenario (AI Adoption)</h3>
- <div class="preview-content">
- <p><strong>Workflow after AI adoption:</strong></p>
- <p>${formatText(data.tobeDescription)}</p>
- <br>
- <p><strong>Tasks performed by AI:</strong></p>
- <p>${formatText(data.aiRole)}</p>
- <br>
- <p><strong>Tasks performed by humans:</strong></p>
- <p>${formatText(data.humanRole)}</p>
- <br>
- <p><strong>AI interaction design:</strong></p>
- <p>• Input: ${escapeHtml(data.aiInput) || '-'}</p>
- <p>• Output: ${escapeHtml(data.aiOutput) || '-'}</p>
- <br>
- <p><strong>Exception handling:</strong></p>
- <p>${formatText(data.exceptionHandling)}</p>
- </div>
- </div>
+  <div class="form-group">
+  <label class="form-label">Project Definition <span class="required">*</span></label>
+- <textarea class="form-textarea" id="projectDefinition" placeholder="e.g., To prevent omissions caused by manual tracking of mandatory training completion, AI automatically links LMS and HR data, identifies non-completed employees in real time, and sends reminder emails to reach 100% completion."></textarea>
++ <textarea class="form-textarea" id="projectDefinition" placeholder="e.g., To eliminate omissions caused by manual tracking of mandatory training completion, AI automatically integrates LMS and HRIS data, identifies non-compliant employees in real time, and sends reminder emails to achieve a 100% completion rate."></textarea>
  
- <div class="preview-section">
- <h3>4. Data & Technology Review</h3>
- <div class="preview-content">
- <p><strong>Required data:</strong></p>
- <p>${formatText(data.requiredData)}</p>
+  </div>
+  </div>
+  <div class="card">
+  <div class="card-title">
+  Pain Point to Solve
+  <button class="hint-btn" onclick="toggleHint('hint2')">💡 Writing Guide</button>
+  </div>
+  <div class="hint-content" id="hint2">
+  <strong>✅ Specificity checklist</strong>
+  <ul>
+  <li>Which step slows down the process? </li>
+  <li>Where do errors occur frequently? </li>
+  <li>Which tasks are repeated? </li>
+  <li>Where does waiting time occur?</li>
+  </ul>
+  <strong>❌ Avoid these expressions</strong>
+  <ul>
+- <li>““It is hard/inefficient/we want automation””without symptoms, causes, impacts, or evidence</li>
++ <li>"It is hard / inefficient / we need automation" without symptoms, root causes, impact, or evidence</li>
+  </ul>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Current pain points and inefficiencies <span class="required">*</span></label>
+  <textarea class="form-textarea" id="painPoint"></textarea>
+  <p class="form-help">Tip: "e.g., Describe concrete pain points such as monthly consolidation taking 2 hours and frequent errors due to manual entry."</p>
+  </div>
+  </div>
  
- <p><strong>Data source/location:</strong> ${formatText(data.dataSource)}</p>
- <p><strong>Data format:</strong> ${formatText(data.dataFormat)}</p>
- <p><strong>Data refresh cycle:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
- <br>
- <p><strong>Expected data quality issues:</strong></p>
- <p>${formatText(data.dataQualityIssue)}</p>
- <br>
- <p><strong>Preprocessing/cleanup plan:</strong></p>
- <p>${formatText(data.dataPreprocessing)}</p>
- <br>
- <p><strong>Security/compliance considerations:</strong></p>
- <p>${formatText(data.dataSecurity)}</p>
- <br>
- <p><strong>Reference benchmark:</strong></p>
- <p>${formatText(data.feedbackReference)}</p>
- <br>
- <p><strong>Error judgment criteria:</strong></p>
- <p>${formatText(data.feedbackErrorRule)}</p>
- <br>
- <p><strong>Relevant AI technologies:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
- <br>
- <p><strong>Application plan and rationale:</strong></p>
- <p>${formatText(data.techDescription)}</p>
- </div>
- </div>
+  <div class="card">
+  <div class="card-title">Expected Impact (Connection)</div>
+  <div class="form-group">
+  <label class="form-label">Expected impact and usage after AI adoption <span class="required">*</span></label>
+- <textarea class="form-textarea" id="expectedEffect" placeholder="e.g., 
+-Redesign workflow into a create→verify→execute→learn loop, automate repetitive work, and enhance critical decision-making.
+- 
+-Use role-based multi-agent collaboration (Planner/Executor/Verifier) to reduce bottlenecks and output quality variance.
+- 
+-Accumulate work history and knowledge in shared memory (knowledge base) for faster and more accurate repeated problem-solving.
+- 
+-Include standardized checks/verification to prevent errors and omissions and reduce rework time.
+- 
+-Connect systems/tools to create an end-to-end execution flow and minimize handoffs."></textarea>
++ <textarea class="form-textarea" id="expectedEffect" placeholder="e.g.,
++Redesign the workflow into a create → validate → execute → learn loop, automating repetitive tasks while elevating critical decision-making.
++
++Use role-based multi-agent collaboration (Planner/Executor/Verifier) to reduce bottlenecks and improve output consistency.
++
++Accumulate work history and institutional knowledge in a shared memory (knowledge base) so recurring problems can be solved faster and more accurately.
++
++Include standardized checks and validation steps to proactively prevent errors and omissions, and reduce rework time.
++
++Connect systems/tools to enable an end-to-end execution flow and minimize handoffs between people."></textarea>
+  </div>
+  </div>
  
- <div class="preview-section">
- <h3>5. Expected Impact & ROI</h3>
- <div class="preview-content">
- ${data.keyBenefit ? `
- <div style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
- <strong>🎯 Key expected impact:</strong> ${escapeHtml(data.keyBenefit)}
- </div>
- ` : ''}
+  <div class="validation-box">
+  <div class="validation-title">📋 Self-check checklist</div>
  
- <p><strong>📊 Quantitative effects</strong></p>
- ${quantitativeEffectsHTML || '<p style="color: #94a3b8;">Quantitative effects not found.</p>'}
+  <div class="validation-item" id="v1-how">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Project Definition Clarity</strong>
+- <span>“adopting AI” , target(Work scope) ( ) ?</span>
++ <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
+  </div>
+  </div>
  
- <br>
- <p><strong>✨ Qualitative effects</strong></p>
- <p>${formatText(data.qualitativeValue)}</p>
+  <div class="validation-item" id="v1-painpoint">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Pain Point </strong>
+  <span>Is it specific about who/when/where pain, errors, or delays happen, with 1–2 lines of example?</span>
+  </div>
+  </div>
  
- <br>
- <p><strong>🚀 Scalability</strong></p>
- <p>${formatText(data.scalability)}</p>
- </div>
- </div>
+  <div class="validation-item" id="v1-connection">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Impact linkage</strong>
+  <span>Is the solved pain point linked to at least one measurable result (time/cost/quality/risk)?</span>
+  </div>
+  </div>
+  </div>
  
- <div class="preview-section">
- <h3>6. Execution Tasks</h3>
- <div class="preview-content">
- ${taskTableHTML || '<p>No tasks registered.</p>'}
- </div>
- </div>`;
- }
- // Export to Word (HTML )
- function exportToWord() {
- const data = collectFormData();
- // Preview 
- generatePreview();
- const previewContent = document.getElementById('previewContainer').innerHTML;
- const htmlContent = `<!DOCTYPE html>
- <html>
- <head>
- <meta charset="UTF-8">
- <style>body { font-family: ' ', 'Malgun Gothic', sans-serif; line-height: 1.6; padding: 20px; }
- h1 { text-align: center; color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; }
- h2 { text-align: center; color: #1e40af; }
- h3 { background: #f1f5f9; padding: 10px 16px; border-left: 4px solid #1a56db; margin-top: 24px; }
- table { width: 100%; border-collapse: collapse; margin: 16px 0; }
- th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; }
- th { background: #f1f5f9; font-weight: bold; width: 150px; }
- p { margin: 8px 0; }
- ul { margin-left: 20px; }
- strong { color: #0f172a; }</style>
- </head>
- <body>
- ${previewContent}
- </body>
- </html>`;
- const blob = new Blob(['\ufeff' + htmlContent], {
- type: 'application/msword;charset=utf-8'
- });
- const url = URL.createObjectURL(blob);
- const link = document.createElement('a');
- const safeName = (data.projectName || 'None').trim().replace(/[\/:*?"<>|]/g, '_') || 'None';
- link.href = url;
- link.download = `AI_${safeName}_${new Date().toISOString().split('T')[0]}.doc`;
- document.body.appendChild(link);
- link.click();
- document.body.removeChild(link);
- URL.revokeObjectURL(url);
- showToast('Word Saved successfully.', 'success');
- }
- // Modal
- function showModal(title, message) {
- document.getElementById('modalTitle').textContent = title;
- document.getElementById('modalMessage').textContent = message;
- document.getElementById('modalOverlay').classList.add('show');
- }
-
- function closeModal() {
- document.getElementById('modalOverlay').classList.remove('show');
- }
- // Toast
- function showToast(message, type = 'default') {
- const toast = document.getElementById('toast');
- const toastMessage = document.getElementById('toastMessage');
- const toastIcon = document.getElementById('toastIcon');
- toastMessage.textContent = message;
- toastIcon.textContent = type === 'success' ? '✓' : 'ℹ';
- toast.classList.remove('success');
- if (type === 'success') {
- toast.classList.add('success');
- }
- toast.classList.add('show');
- setTimeout(() => {
- toast.classList.remove('show');
- }, 3000);
- }
- // Close modal on overlay click
- document.getElementById('modalOverlay').addEventListener('click', function(e) {
- if (e.target === this) {
- closeModal();
- }
- });</script>
-</body>
-
-</html>
+  <div class="nav-buttons">
+  <div></div>
+  <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+  </section>
+@@ -1257,684 +1257,817 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
+ 
+  - How often does it occur? (frequency/month, year) <br>
+ 
+  - How many people are involved?<br>
+ 
+  - What is the error rate? (%)<br>
+  </li>
+  <li>Detail the process : <br>
+  - Break down time per step <br>
+  - Manual vs system ratio <br>
+  - What tools/systems are currently used? <br>
+  </li>
+  <li>Assess impact : <br>
+  - What costs are caused? (labor, delay) <br>
+  - What is the opportunity cost? <br>
+  - How does it affect quality? <br>
+  </li>
+  </ul>
+  <strong>❌ Examples to avoid</strong>: Subjective assumptions / vague statements / AI-solutionism
+ 
+  <p style="margin-top: 12px; font-size: 13px;">※ Please include time and systems used for each step.</p>
+  </div>
+ 
+  <div class="form-group">
+  <label class="form-label">Describe current workflow <span class="required">*</span></label>
+- <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="Please provide details in English."" ></textarea>
++ <textarea class="form-textarea" id="asisDescription" style="min-height: 150px;" placeholder="Example:
++[Request] The business team requests an “X status/report” twice per month.
++
++[Collection] The owner downloads and consolidates data from Systems A/B, shared folders, and email attachments (30–60 minutes total).
++
++[Standardization] Because formats differ, the owner manually redefines columns, sorts, and removes duplicates in Excel (60–120 minutes).
++
++[Review] The team repeatedly checks for omissions, errors, and policy violations (1–2 review cycles).
++
++[Approval/Distribution] A summary is shared by email, comments are incorporated, and the final version is confirmed.
++
++[Execution] Follow-up actions (system input/action/notice/request) are performed based on the final report.
++
++[Record] Outputs are stored in folders, but are hard to reuse for similar future requests, so the process restarts from scratch."></textarea>
+  </div>
+  </div>
+  </div>
+- <div class=" card">
+- <div class="card-title">Current Issues ( .)</div>
++ <div class="card">
++ <div class="card-title">Current Issues</div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Time inefficiency</label>
+- <textarea class="form-textarea" id="asisTimeProblem" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="asisTimeProblem" placeholder="e.g.,
++- For each of the 2 monthly requests, collection/standardization/review takes 3–5 hours (6–10 hours per month total).
++- Data collection (download/attachment checks): 30–60 min; standardization (Excel cleanup): 60–120 min; review iterations: 60–120 min.
++- Rework occurs 1–2 times on average due to approval feedback."></textarea>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Quality/accuracy issue</label>
+- <textarea class="form-textarea" id="asisQualityProblem" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="asisQualityProblem" placeholder="e.g.,
++- Manual copy/paste consolidation causes omissions, duplicates, and input errors (number mismatches across versions).
++- Aggregation rules/filter conditions vary by document and reviewer, creating inconsistent outputs.
++- Delayed reflection of latest data lowers reporting-time accuracy."></textarea>
+  </div>
+  </div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">System/data issue</label>
+- <textarea class="form-textarea" id="asisSystemProblem" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="asisSystemProblem" placeholder="e.g.,
++- Data is scattered across systems/documents/email with no single source of truth.
++- Different formats/keys (employee no./ID/code) require manual mapping.
++- Permission/access constraints delay required data acquisition."></textarea>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Other Issues</label>
+- <textarea class="form-textarea" id="asisOtherProblem" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="asisOtherProblem" placeholder="e.g.,
++- Work pauses when the owner is absent due to weak handover/context continuity.
++- Review/approval communication is email-centric, making history tracking difficult.
++- Outputs are stored but not in reusable formats, so the same work repeats from scratch."></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">Current system</div>
+  <div class="form-group">
+- <label class="form-label">related system list</label>
++ <label class="form-label">Related system list</label>
+  <div class="tech-tags" id="systemTags">
+  <span class="tech-tag" onclick="toggleTag(this)">SAP</span>
+  <span class="tech-tag" onclick="toggleTag(this)">PLM</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Word</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Veeva</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Excel</span>
+  <span class="tech-tag" onclick="toggleTag(this)">SharePoint</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Email</span>
+- <span class="tech-tag" onclick="toggleTag(this)">manual work</span>
++ <span class="tech-tag" onclick="toggleTag(this)">Manual work</span>
+  </div>
+- <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="customSystems" style="margin-top: 12px;" placeholder="If there are additional systems, list them separated by commas.">
+  </div>
+  </div>
+ 
+  <div class="nav-buttons">
+  <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+  <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+  </section>
+ 
+  <section class="form-section" id="step3">
+  <div class="section-header">
+  <h2 class="section-title">
+  <span class="emoji">🎯</span>
+- To-Be Scenario design
++ To-Be Scenario Design
+  </h2>
+- <p class="section-desc">AI Adoption work design. “AI-Native Workflow: AI , work ?"</p>
++ <p class="section-desc">Design the future workflow after AI adoption. Focus on an AI-native process where AI and humans each have clear roles.</p>
+  </div>
+ 
+  <div class="card">
+- <div class="card-title">AI Adoption work (To-Be)<button class="hint-btn" onclick="toggleHint('hint4')">💡 design guide</button>
++ <div class="card-title">AI Adoption Workflow (To-Be)<button class="hint-btn" onclick="toggleHint('hint4')">💡 Design Guide</button>
+  </div>
+  <div class="hint-content" id="hint4">
+  <strong>✅ Pass criteria: Process design</strong>
+  <ul>
+- <li>work As-Is(Current) AI Adoption To-Be()</li>
+- <li>AI</li>
+- <li>Human-in-the-loop: AI design</li>
++ <li>Describe how the current As-Is process changes into the AI-enabled To-Be process.</li>
++ <li>Specify what AI does at each key step.</li>
++ <li>Define human-in-the-loop controls (review, approval, override).</li>
+  </ul>
+  <br>
+- <strong>❌ re-review reasons</strong>
++ <strong>❌ Common reasons for rework</strong>
+  <ul>
+- <li>feature listing: AI</li>
+- <li>lack of validation: AI</li>
++ <li>Only listing AI features without process context</li>
++ <li>No validation checkpoints for AI outputs</li>
+  </ul>
+  </div>
+  <div class="form-group">
+- <label class="form-label">AI Adoption work flow<span class="required">*</span></label>
+- <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">AI adoption workflow<span class="required">*</span></label>
++ <textarea class="form-textarea" id="tobeDescription" style="min-height: 150px;" placeholder="Describe the future workflow after AI adoption step by step.
++
++Example:
++[Request] A user asks for an “X status/report” in natural language (period/target/criteria).
++[Collection] AI gathers required data and evidence from Systems A/B, folders, and email.
++[Preparation] AI standardizes format, resolves duplicates/blanks, and links related fields.
++[Review] AI runs automatic checks (missing values/policy violations/anomalies), and humans approve only key points.
++[Approval/Distribution] Final output is confirmed with approval comments and shared.
++[Execution] Follow-up actions (email/ticket/system input) are generated and executed after human approval.
++[Learning/Record] Outputs, decision rationale, and exception cases are stored in the knowledge base to improve future accuracy."></textarea>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">AI role definition</div>
+  <div class="form-group">
+  <label class="form-label">AI tasks to perform<span class="required">*</span></label>
+- <textarea class="form-textarea" id="aiRole" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="aiRole" placeholder="e.g.,
++- Data collection, standardization, and first-draft generation
++- Validation rule execution (missing values/policy/anomaly checks) with evidence links/sources
++- Generation of action candidates (email/ticket/system input drafts)"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">human tasks to perform <span class="required">*</span></label>
+- <textarea class="form-textarea" id="humanRole" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Human tasks to perform <span class="required">*</span></label>
++ <textarea class="form-textarea" id="humanRole" placeholder="e.g.,
++- Approve/reject validation outcomes and make exception decisions
++- Update standards (rules/definitions/aggregation methods)
++- Approve execution (send/register/announce)"></textarea>
+  </div>
+- <p class="form-help">Tip: “ ” AI ( ) (··Approval) .</p>
++ <p class="form-help">Tip: Clearly separate AI responsibilities from human responsibilities, especially for review and approval steps.</p>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">AI interaction design</div>
+  <div class="grid-2">
+  <div class="form-group">
+- <label class="form-label">Input: Request ///criteria</label>
+- <textarea class="form-textarea" id="aiInput" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Input: request, context, and criteria</label>
++ <textarea class="form-textarea" id="aiInput" placeholder="e.g., Request goal: “Generate X status/report”
++Period/target: 2025 Q4, Organization = Enterprise, Product line = All
++Aggregation rule: Definition spec v1.2 (including numerator/denominator)
++Constraints: Mask personal data; no external sharing
++Output format: 1-page executive summary + detailed table (attachment)"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">Output: output + evidence + validation result + Execution</label>
+- <textarea class="form-textarea" id="aiOutput" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Output: result, evidence, validation outcome, and execution action</label>
++ <textarea class="form-textarea" id="aiOutput" placeholder="e.g., Deliverables: Summary report (key KPIs + top 3 issues) + detailed table
++Evidence: Data sources/query conditions/reference document links
++Validation result: Missing/anomaly/policy-violation check report (pass/caution)
++Approval request: “Send email/Create ticket upon approval” button
++Execution draft: Recipient list/ticket content/system input draft"></textarea>
+  </div>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Exception handling plan<span class="required">*</span></label>
+- <textarea class="form-textarea" id="exceptionHandling" placeholder="Please provide details in English."></textarea>
+- <p class="form-help">AI "" week.</p>
++ <textarea class="form-textarea" id="exceptionHandling" placeholder="e.g.,
++- If AI cannot find required information, it must stop and mark the item as “Needs confirmation” instead of guessing.
++- When stopped, provide: (1) what is missing, (2) which data/document/system is needed, and (3) one follow-up question for the user.
++- If values conflict across systems/files, show both values and ask the user which one should be authoritative.
++- If rules/definitions are unclear, escalate to human review before proceeding."></textarea>
++ <p class="form-help">Include fallback actions for missing data, low-confidence output, or policy violations.</p>
+  </div>
+  </div>
+ 
+  <div class="validation-box">
+  <div class="validation-title">📋 Self-check checklist</div>
+  <div class="validation-item" id="v3-process">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Process design</strong>
+- <span>As-Is → To-Be week(/AI/system) output ?</span>
++ <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="v3-humanloop">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Human-in-the-loop</strong>
+- <span>AI output human , (///) ?</span>
++ <span>Are human review and intervention points clearly defined for AI outputs?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="v3-exception">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Exception handling</strong>
+- <span>data /day/criteria AI “ /” , quarter ?</span>
++ <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="nav-buttons">
+  <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+  <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+  </section>
+ 
+  <section class="form-section" id="step4">
+  <div class="section-header">
+  <h2 class="section-title">
+  <span class="emoji">🗄️</span>
+  Data & Technology Review
+  </h2>
+- <p class="section-desc">AI required data Review. data .</p>
++ <p class="section-desc">Review the data, tools, and governance required to operate the AI workflow reliably.</p>
+  <button class="hint-btn" onclick="toggleHint('hint5')">💡 Writing Guide </button>
+  <div class="hint-content" id="hint5">
+- <strong>✅ Pass criteria: Agentic AI 3 data Tool</strong>
++ <strong>✅ Pass criteria: Define all four elements for agentic AI</strong>
+  <ul>
+- <li>Input data: Agent data<br>- Request<br>- , data,<br>
++ <li>Input data: Information the agent needs at runtime<br>- User requests<br>- Contextual business data<br>
+  </li>
+- <li>Knowledge data: Agent /<br>- ( policy, SOP, )<br>- DB,<br>
++ <li>Knowledge data: Reference materials for reasoning<br>- Policies, SOPs, and guidelines<br>- Knowledge bases / internal DBs<br>
+  </li>
+- <li>Feedback data: AI judgment criteria<br>- " ground truth" comparison criteria (e.g., sample data and process details)<br>- '' judgment (e.g., sample data and process details)<br>
++ <li>Feedback data: Evaluation criteria for AI outputs<br>- Ground-truth references for comparison<br>- Rules that define pass/fail decisions<br>
+  </li>
+- <li>Other Tool/Action: Agent /system<br>- , day<br>- DB time(s)<br>
++ <li>Tools/Actions: External systems the agent can use<br>- APIs or workflow actions<br>- DB queries and automation steps<br>
+  </li>
+  </ul>
+  <br>
+- <strong>❌ re-review reasons</strong>
++ <strong>❌ Common reasons for rework</strong>
+  <ul>
+- <li>data : , data</li>
+- <li>: " " target</li>
++ <li>Required data is missing, unclear, or inaccessible</li>
++ <li>No clear criteria for evaluating AI output quality</li>
+  </ul>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">
+  Required data
+  </div>
+  <div class="form-group">
+- <label class="form-label">required data list <span class="required">*</span></label>
+- <textarea class="form-textarea" id="requiredData" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Required data list <span class="required">*</span></label>
++ <textarea class="form-textarea" id="requiredData" placeholder="e.g.,
++- Request metadata (period/target/criteria/owner)
++- Source transactional data from Systems A/B
++- Master/reference data (employee/product/org/code tables)
++- Policies/SOPs/definition documents
++- Historical approved outputs and review logs"></textarea>
+  </div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Data source/location</label>
+- <textarea class="form-textarea" id="dataSource" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="dataSource" placeholder="e.g.,
++- System A (DB table/API), System B (CSV export), SharePoint folder, email attachments
++- Owner for each source and access path
++- Refresh timing and latency by source"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">data format/format</label>
+- <textarea class="form-textarea" id="dataFormat" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Data format</label>
++ <textarea class="form-textarea" id="dataFormat" placeholder="e.g.,
++- Structured: DB tables/CSV/Excel
++- Semi-structured: PDF/Word reports
++- Key fields: employee_id, product_code, report_date, status
++- Encoding/timezone/unit standards"></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+- <div class="card-title">data quality preprocessing</div>
++ <div class="card-title">Data quality & preprocessing</div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Expected data quality issues</label>
+- <textarea class="form-textarea" id="dataQualityIssue" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="dataQualityIssue" placeholder="e.g.,
++- Missing mandatory fields, duplicate records, inconsistent codes
++- Outliers outside allowed ranges
++- Version mismatches across documents/systems
++- Delayed updates causing stale snapshots"></textarea>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Preprocessing/cleanup plan<span class="required">*</span></label>
+- <textarea class="form-textarea" id="dataPreprocessing" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="dataPreprocessing" placeholder="e.g.,
++- Standardize column names/types/code sets across sources
++- Deduplicate with clear retention rules (e.g., latest record wins)
++- Run quality checks for nulls/outliers/rule violations
++- Route conflicts to “Needs confirmation” and request owner review
++- Keep change logs for before/after traceability"></textarea>
+  </div>
+  </div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Data refresh cycle</label>
+  <select class="form-select" id="dataUpdateCycle">
+  <option value="">Please select</option>
+  <option value="realtime">Real-time</option>
+  <option value="daily">Daily</option>
+  <option value="weekly">Weekly</option>
+  <option value="monthly">Monthly</option>
+  <option value="quarterly">Quarterly</option>
+  <option value="onetime">One-time (no refresh)</option>
+  </select>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Security/compliance considerations<span class="required">*</span></label>
+- <textarea class="form-textarea" id="dataSecurity" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="dataSecurity" placeholder="e.g.,
++- Identify whether personal/sensitive/internal confidential data is included
++- Define access rights, approval flow, and least-privilege controls
++- Apply masking/pseudonymization for names and employee IDs
++- Restrict storage to internal repositories with retention/deletion policy
++- Enable audit logs for who accessed what and when"></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+- <div class="card-title">AI criteria</div>
++ <div class="card-title">AI evaluation criteria</div>
+  <div class="grid-2">
+  <div class="form-group">
+  <label class="form-label">Reference benchmark data (ground-truth comparable) </label>
+- <textarea class="form-textarea" id="feedbackReference" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="feedbackReference" placeholder="e.g.,
++- Historically approved human-created reports/results (gold-standard examples)
++- Applicable regulations/specs/standards (e.g., US products must follow US spec)
++- Reviewer checklist items
++- Prior approval history (who approved what and when, based on which criteria)"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label"> Error criteria data (conditions treated as errors) </label>
+- <textarea class="form-textarea" id="feedbackErrorRule" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Error criteria data (conditions treated as errors)</label>
++ <textarea class="form-textarea" id="feedbackErrorRule" placeholder="e.g.,
++- Wrong standard applied to the target (e.g., EU criteria used for US products)
++- Missing mandatory fields or values outside allowed ranges
++- Significant unexplained deviation from previous approved outcomes
++- Outdated regulation/spec version used"></textarea>
+  </div>
+  </div>
+- <p class="form-help">Tip: "How can you detect when AI is wrong?" criteria .</p>
++ <p class="form-help">Tip: Define clear criteria for detecting when AI output is incorrect.</p>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">Relevant AI Technologies</div>
+  <div class="form-group">
+  <label class="form-label">Planned AI technologies</label>
+  <div class="tech-tags" id="techTags">
+  <span class="tech-tag" onclick="toggleTag(this)">LLM (Large Language Model)</span>
+  <span class="tech-tag" onclick="toggleTag(this)">RAG (Retrieval-Augmented Generation)</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Text Summarization</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Text Classification</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Image Recognition</span>
+  <span class="tech-tag" onclick="toggleTag(this)">OCR</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Recommendation System</span>
+  <span class="tech-tag" onclick="toggleTag(this)">Predictive Analytics</span>
+- <span class="tech-tag" onclick="toggleTag(this)">Please enter details.</span>
+- <span class="tech-tag" onclick="toggleTag(this)">recognition</span>
++ <span class="tech-tag" onclick="toggleTag(this)">NLP</span>
++ <span class="tech-tag" onclick="toggleTag(this)">Anomaly Detection</span>
+  </div>
+  </div>
+  <div class="form-group" style="margin-top: 16px;">
+  <label class="form-label">Application plan and rationale <span class="required">*</span></label>
+- <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="Please provide details in English."></textarea>
+- <p class="form-help">Tip: week<br>① plan: work<br>② judgment evidence: work (1 )<br>- work AI (, , , )<br>- ChatGPT<br>- content</br>
+- </p>
++ <textarea class="form-textarea" id="techDescription" style="min-height: 160px;" placeholder="Example:
++[Application approach] Users ask in natural language, AI finds evidence from internal documents and summarizes it, automatically checks blanks/anomalies in data, and upon approval generates emails/requests automatically.
++[Decision rationale] Case evidence shows LLM+RAG reduced quality-document review time by 60% in a peer organization (2024 industry conference). Pilot tests with spreadsheet-based summaries confirmed draft-level output feasibility."></textarea>
++ <p class="form-help">Tip:<br>① Describe where each technology is applied in the workflow.<br>② Provide rationale with task-level evidence (at least one concrete use case per technology).<br>- Explain why AI is suitable for the task.<br>- Distinguish planned implementation from generic tool usage.</p>
+  </div>
+  </div>
+ 
+  <div class="validation-box">
+  <div class="validation-title">📋 Self-check checklist</div>
+  <div class="validation-item" id="v4-datasample">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>data</strong>
+- <span>data ?</span>
++ <strong>Data completeness</strong>
++ <span>Are all required input, knowledge, and feedback data sources defined?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="v4-preprocessing">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>preprocessing plan</strong>
+- <span>data (required ) plan ?</span>
++ <strong>Preprocessing plan</strong>
++ <span>Is there a concrete plan to clean, transform, and validate required data?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="v4-security">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>/Compliance</strong>
+- <span>personal data/sensitive data , / , / ?</span>
++ <strong>Security / Compliance</strong>
++ <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="v4-caseevidence">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>judgment evidence</strong>
+- <span>AI work judgment evidence( , , ) ?</span>
++ <strong>Decision evidence</strong>
++ <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="nav-buttons">
+  <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+  <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+  </section>
+ 
+  <section class="form-section" id="step5">
+  <div class="section-header">
+  <h2 class="section-title">
+  <span class="emoji">📈</span>
+  Expected Impact & ROI
+  </h2>
+- <p class="section-desc">AI Adoption /Qualitative effects . evidence week.</p>
++ <p class="section-desc">Summarize expected quantitative and qualitative impact, with measurable evidence where possible.</p>
+  </div>
+ 
+  <div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; border: none;">
+- <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">🎯 expected impact ( summary)</div>
++ <div class="card-title" style="color: white; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px;">🎯 Expected impact summary</div>
+  <div class="form-group">
+- <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="Please provide details in English.">
++ <input type="text" class="form-input" id="keyBenefit" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 16px; padding: 16px;" placeholder="e.g., Reduce training compliance management time by 85% (2h 45m/month → 20m/month) while eliminating mandatory-training non-compliance risk.">
+  </div>
+  <div class="grid-2" style="margin-top: 16px;">
+  <div class="form-group">
+  <label class="form-label" style="color: rgba(255,255,255,0.8); font-size: 13px;">Duration</label>
+  <div style="display: flex; align-items: center; gap: 8px;">
+  <input type="number" class="form-input" id="projectDuration" style="width: 100px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; text-align: center;" placeholder="10">
+  <span style="color: rgba(255,255,255,0.8);">months</span>
+  </div>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">
+  📊 Quantitative effects
+  <button class="hint-btn" onclick="toggleHint('hint6')">💡 Writing Guide</button>
+  </div>
+  <div class="hint-content" id="hint6">
+  <strong>✅ Pass criteria</strong>
+- <p>Please enter details.</p>
++ <p>Provide measurable impact items with assumptions and calculation basis.</p>
+  <br>
+  <strong>📝 Example</strong>
+  <ul>
+- <li><strong>Please enter details.</strong>. Example:, week,</li>
+- <li><strong>Please enter details.</strong>time(s) . Example: ,</li>
+- <li><strong>Please enter details.</strong>policy , error . Example: , .</li>
+- <li><strong>Please enter details.</strong>, . Example: , .</li>
++ <li><strong>Cost reduction:</strong> e.g., reduced external spend or labor hours per week/month.</li>
++ <li><strong>Throughput increase:</strong> e.g., number of cases handled per day/week.</li>
++ <li><strong>Risk reduction:</strong> e.g., fewer policy violations or error incidents.</li>
++ <li><strong>Strategic value:</strong> e.g., improved responsiveness or better decision quality.</li>
+  </ul>
+  </div>
+ 
+  <div class="effect-item">
+  <div class="effect-header">
+  <span class="effect-icon">💰</span>
+- <span class="effect-type">Please enter details.</span>
++ <span class="effect-type">Cost savings</span>
+  <label class="effect-toggle">
+  <input type="checkbox" id="effect_cost_enabled" checked onchange="toggleEffectSection('cost')">
+  <span class="toggle-slider"></span>
+  </label>
+  </div>
+  <div class="effect-content" id="effect_cost_content">
+  <div class="form-group">
+- <label class="form-label">content</label>
+- <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Description</label>
++ <textarea class="form-textarea" id="effect_cost_value" style="min-height: 80px;" placeholder="e.g.,
++- Outsourcing/service cost reduction: KRW [ ]M/month → KRW [ ]M/month
++- Penalty/rework cost reduction: KRW [ ]M/year saved
++- License/operations optimization: KRW [ ]M/year saved by removing redundant subscriptions"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">evidence</label>
+- <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="Please provide details in English.""></textarea>
++ <label class="form-label">Evidence / basis</label>
++ <textarea class="form-textarea" id="effect_cost_basis" style="min-height: 80px;" placeholder="e.g.,
++(As-Is - To-Be) × labor cost
++Example: 180 hours → 80 hours = 100 hours × KRW 50,000 = KRW 5,000,000"></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class=" effect-item">
+  <div class="effect-header">
+  <span class="effect-icon">📈</span>
+- <span class="effect-type">Please enter details.</span>
++ <span class="effect-type">Revenue uplift</span>
+  <label class="effect-toggle">
+  <input type="checkbox" id="effect_revenue_enabled" onchange="toggleEffectSection('revenue')">
+  <span class="toggle-slider"></span>
+  </label>
+  </div>
+  <div class="effect-content hidden" id="effect_revenue_content">
+  <div class="form-group">
+- <label class="form-label">content</label>
+- <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Description</label>
++ <textarea class="form-textarea" id="effect_revenue_value" style="min-height: 80px;" placeholder="e.g.,
++- Faster processing/shorter lead time enables [ ] additional cases per month → monthly revenue +KRW [ ]
++- Conversion rate improvement: [metric] [ ]% → [ ]% → monthly revenue +KRW [ ]
++- Churn reduction: [churn rate] -[ ]%p → retained customers [ ] → monthly profit +KRW [ ]"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">evidence</label>
+- <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Evidence / basis</label>
++ <textarea class="form-textarea" id="effect_revenue_basis" style="min-height: 80px;" placeholder="e.g.,
++- Baseline: monthly traffic/leads/inquiries [A], conversion [B]%, average revenue (or margin) per case [C]
++- Before: A×B×C = KRW [ ]/month
++- After: A×B'×C = KRW [ ]/month (B' = improved conversion)
++- Increase: KRW [ ]/month, KRW [ ]/year (×12)
++(Alternative) Additional throughput: [N] extra cases/month × KRW [C]/case = KRW [ ]/month"></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class=" effect-item">
+  <div class="effect-header">
+  <span class="effect-icon">🛡️</span>
+- <span class="effect-type">Please enter details.</span>
++ <span class="effect-type">Risk reduction</span>
+  <label class="effect-toggle">
+  <input type="checkbox" id="effect_risk_enabled" onchange="toggleEffectSection('risk')">
+  <span class="toggle-slider"></span>
+  </label>
+  </div>
+  <div class="effect-content hidden" id="effect_risk_content">
+  <div class="form-group">
+- <label class="form-label">content</label>
+- <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Description</label>
++ <textarea class="form-textarea" id="effect_risk_value" style="min-height: 80px;" placeholder="e.g.,
++- Compliance violation rate reduced from [ ]% to [ ]%
++- Critical process errors reduced from [ ] to [ ] cases per month
++- Security/privacy incident likelihood reduced from [ ]% to [ ]%"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">evidence</label>
+- <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Evidence / basis</label>
++ <textarea class="form-textarea" id="effect_risk_basis" style="min-height: 80px;" placeholder="e.g.,
++- Baseline: [N] cases/month × risk cost per case KRW [X]
++- Expected loss before: [N]×[X] = KRW [ ]/month
++- Expected loss after: [N]×[Y] = KRW [ ]/month
++- Reduction: KRW [ ]/month (×12) = KRW [ ]/year"></textarea>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="effect-item">
+  <div class="effect-header">
+  <span class="effect-icon">🎯</span>
+- <span class="effect-type">Please enter details.</span>
++ <span class="effect-type">Strategic impact</span>
+  <label class="effect-toggle">
+  <input type="checkbox" id="effect_strategic_enabled" onchange="toggleEffectSection('strategic')">
+  <span class="toggle-slider"></span>
+  </label>
+  </div>
+  <div class="effect-content hidden" id="effect_strategic_content">
+  <div class="form-group">
+- <label class="form-label">content</label>
+- <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Description</label>
++ <textarea class="form-textarea" id="effect_strategic_value" style="min-height: 80px;" placeholder="e.g.,
++- New business/market entry lead time shortened from [ ] months to [ ] months
++- Core decision lead time improved from [ ] days to [ ] days
++- Stronger internal AI capability accelerates strategic initiative delivery"></textarea>
+  </div>
+  <div class="form-group">
+- <label class="form-label">evidence</label>
+- <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">Evidence / basis</label>
++ <textarea class="form-textarea" id="effect_strategic_basis" style="min-height: 80px;" placeholder="e.g.,
++- Baseline: [N] strategic initiatives, average lead time [X] weeks
++- After adoption: average lead time [Y] weeks
++- Improvement: ([X]-[Y]) weeks × [N] initiatives
++- Opportunity value: [ ] weeks saved × expected revenue/outcome KRW [ ]"></textarea>
+  </div>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">
+  ✨ Qualitative effects
+  <button class="hint-btn" onclick="toggleHint('hint7')">💡 Example</button>
+  </div>
+  <div class="hint-content" id="hint7">
+- <strong>Qualitative effects</strong>
++ <strong>Qualitative effects checklist</strong>
+  <ul>
+- <li>(/Owner/Review/) .</li>
+- <li>: , work , , Approval/Review , , .</li>
+- <li>: “//day/// ” .</li>
+- <li>··· week .</li>
++ <li>Clarify role accountability (executor/owner/reviewer/approver).</li>
++ <li>Describe process improvements such as fewer handoffs, clearer approvals, and better collaboration.</li>
++ <li>Show operational impact (e.g., faster cycle time, fewer rework loops).</li>
++ <li>Explain expected adoption and change-management benefits.</li>
+  </ul>
+  <strong>Example</strong>
+  <ul>
+- <li>work (Owner )</li>
+- <li>output quality (criteria/ )</li>
+- <li>(evidence·judgment )</li>
+- <li>/ ( Request repetition )</li>
+- <li>(day / Request )</li>
++ <li>Improved ownership clarity for each task</li>
++ <li>More consistent output quality (with defined criteria)</li>
++ <li>Better auditability through evidence-based decisions</li>
++ <li>Reduced communication overhead and repeated requests</li>
++ <li>Improved response speed for daily requests</li>
+  </ul>
+  </div>
+  <div class="form-group">
+  <label class="form-label">Qualitative effects</label>
+- <textarea class="form-textarea" id="qualitativeValue" style="min-height: 120px;" placeholder="Please provide details in English."></textarea>
++ <textarea class="form-textarea" id="qualitativeValue" style="min-height: 120px;" placeholder="e.g.,
++- Reduced burden of repetitive collection/formatting work, allowing teams to focus on high-value judgment and improvement
++- Clearer standards and evidence reduce output variance and communication back-and-forth
++- Earlier risk prevention (missing items/deadline risk/policy violations) improves operational stability
++- Decision logs and evidence improve traceability and audit readiness
++- Business continuity improves even when key personnel are unavailable"></textarea>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">🚀 Scalability</div>
+  <div class="form-group">
+- <label class="form-label">Please enter details.</label>
+- <textarea class="form-textarea" id="scalability" placeholder="Please provide details in English."></textarea>
++ <label class="form-label">How can this solution scale to other teams or use cases?</label>
++ <textarea class="form-textarea" id="scalability" placeholder="e.g.,
++[Scalable work patterns]
++- Workflows that repeatedly follow request → collect → prepare → review → share/execute
++- Work where data is distributed across multiple systems/files and requires mapping/validation
++- Work with template-friendly outputs (reports/status tables/alerts/action requests)
++
++[Prerequisites for scale-up]
++- Standardized definitions/rules/code systems/terminology
++- Confirmed data-access permissions and integration approach (API/DB/file)
++- Defined operating model (auto-processing scope vs approval/exception scope)
++
++[Scale-up approach]
++- Phase 1: Expand scope within the same workflow (period/target/metrics)
++- Phase 2: Reuse templates for similar workflows (status/report/alert types)
++- Phase 3: Package standard templates and operating rules for wider rollout"></textarea>
+  </div>
+  </div>
+ 
+  <div class="nav-buttons">
+  <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+  <button class="btn btn-primary" onclick="nextStep()">Next →</button>
+  </div>
+  </section>
+ 
+  <section class="form-section" id="step6">
+  <div class="section-header">
+  <h2 class="section-title">
+- <span class="emoji">✅</span>Final Review &</h2>
+- <p class="section-desc">content Final Review .</p>
++ <span class="emoji">✅</span>Final Review & Action Plan</h2>
++ <p class="section-desc">Review the full proposal and finalize execution tasks.</p>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">Execution Task</div>
+  <table class="task-table">
+  <thead>
+  <tr>
+  <th style="width: 5%;">No.</th>
+  <th style="width: 55%;">Execution Task</th>
+- <th style="width: 20%;">Prereq Task</th>
++ <th style="width: 20%;">Prerequisite Task</th>
+  <th style="width: 20%;">Duration</th>
+  </tr>
+  </thead>
+  <tbody id="taskTableBody">
+  <tr>
+  <td>1</td>
+- <td><input type="text" id="task1_desc" placeholder="Please provide details in English."></td>
++ <td><input type="text" id="task1_desc" placeholder="[Integration] Secure required system/data access permissions and finalize integration methods (API/DB/file)."></td>
+  <td><input type="text" id="task1_prereq" placeholder="None"></td>
+  <td><input type="text" id="task1_duration" placeholder="1M"></td>
+  </tr>
+  <tr>
+  <td>2</td>
+- <td><input type="text" id="task2_desc" placeholder="Please provide details in English."></td>
++ <td><input type="text" id="task2_desc" placeholder="[Data] Collect sample data, then standardize columns/definitions/codes and define mapping rules."></td>
+  <td><input type="text" id="task2_prereq" placeholder="None"></td>
+- <td><input type="text" id="task2_duration" placeholder="2week"></td>
++ <td><input type="text" id="task2_duration" placeholder="2W"></td>
+  </tr>
+  <tr>
+  <td>3</td>
+- <td><input type="text" id="task3_desc" placeholder="Please provide details in English."></td>
++ <td><input type="text" id="task3_desc" placeholder="[Function] Define AI automation scope vs human validation scope (approval/exception) for the To-Be process, and design screens plus input/output specifications."></td>
+  <td><input type="text" id="task3_prereq" placeholder="1,2"></td>
+  <td><input type="text" id="task3_duration" placeholder="1M"></td>
+  </tr>
+  <tr>
+  <td>4</td>
+- <td><input type="text" id="task4_desc" placeholder="Please provide details in English."></td>
++ <td><input type="text" id="task4_desc" placeholder="e.g., [Validation] Apply quality/failure-prevention rules (evidence required/unknown handling/conflict branching) and validate with test cases."></td>
+  <td><input type="text" id="task4_prereq" placeholder="3"></td>
+- <td><input type="text" id="task4_duration" placeholder="2week"></td>
++ <td><input type="text" id="task4_duration" placeholder="2W"></td>
+  </tr>
+  <tr>
+  <td>5</td>
+- <td><input type="text" id="task5_desc" placeholder="Please provide details in English."></td>
++ <td><input type="text" id="task5_desc" placeholder="[Operations] Run pilot operations (collect user feedback), reflect improvements, and finalize the operations guide and training materials."></td>
+  <td><input type="text" id="task5_prereq" placeholder="4"></td>
+  <td><input type="text" id="task5_duration" placeholder="1M"></td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+  <div class="card">
+  <div class="card-title">📋 Final evaluation checklist</div>
+  <div class="validation-box" style="margin-top: 0; background: white;">
+ 
+  <!-- Step1 self-check equivalent -->
+  <h4 style="margin-bottom: 16px; color: var(--secondary);">① Basics & Pain Point</h4>
+  <div class="validation-item" id="vf-v1-how">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Project Definition Clarity</strong>
+- <span>“adopting AI” , target(Work scope) ( ) ?</span>
++ <span>Does the project definition clearly state the target work scope and how AI will be applied?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v1-painpoint">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Pain Point </strong>
+  <span>Is it specific about who/when/where pain, errors, or delays happen, with 1–2 lines of example?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v1-connection">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Impact linkage</strong>
+  <span>Is the solved pain point linked to at least one measurable result (time/cost/quality/risk)?</span>
+  </div>
+  </div>
+ 
+  <!-- Step3 self-check equivalent -->
+  <h4 style="margin: 24px 0 16px; color: var(--secondary);">② To-Be Scenario</h4>
+  <div class="validation-item" id="vf-v3-process">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Process design</strong>
+- <span>As-Is → To-Be week(/AI/system) output ?</span>
++ <span>Is the As-Is → To-Be process clear, including who (human/AI/system) produces each output?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v3-humanloop">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Human-in-the-loop</strong>
+- <span>AI output human , (///) ?</span>
++ <span>Are human review and intervention points clearly defined for AI outputs?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v3-exception">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+  <strong>Exception handling</strong>
+- <span>data /day/criteria AI “ /” , quarter ?</span>
++ <span>Does the exception plan cover missing data, threshold breaches, and out-of-scope requests?</span>
+  </div>
+  </div>
+ 
+  <!-- Step4 self-check equivalent -->
+  <h4 style="margin: 24px 0 16px; color: var(--secondary);">③ Data & Technology</h4>
+  <div class="validation-item" id="vf-v4-datasample">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>data</strong>
+- <span>data ?</span>
++ <strong>Data completeness</strong>
++ <span>Are all required input, knowledge, and feedback data sources defined?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v4-preprocessing">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>preprocessing plan</strong>
+- <span>data (required ) plan ?</span>
++ <strong>Preprocessing plan</strong>
++ <span>Is there a concrete plan to clean, transform, and validate required data?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v4-security">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>/Compliance</strong>
+- <span>personal data/sensitive data , / , / ?</span>
++ <strong>Security / Compliance</strong>
++ <span>Are controls for personal/sensitive data, access permissions, and retention clearly specified?</span>
+  </div>
+  </div>
+  <div class="validation-item" id="vf-v4-caseevidence">
+  <div class="validation-icon">?</div>
+  <div class="validation-text">
+- <strong>judgment evidence</strong>
+- <span>AI work judgment evidence( , , ) ?</span>
++ <strong>Decision evidence</strong>
++ <span>Are there objective criteria and reference cases to evaluate AI decisions?</span>
+  </div>
+  </div>
+  </div>
+  </div>
+ 
+  <div class="card">
+  <div class="card-title">📄 Preview</div>
+  <div class="preview-container" id="previewContainer">
+  </div>
+  </div>
+ 
+  <div class="nav-buttons">
+  <button class="btn btn-outline" onclick="prevStep()">← Previous</button>
+  <button class="btn btn-primary" onclick="exportToWord()">📝 Save as Word</button>
+  </div>
+  </section>
+  </main>
+ 
+  <div class="toast" id="toast">
+  <span id="toastIcon">✓</span>
+  <span id="toastMessage">Saved successfully.</span>
+  </div>
+ 
+  <div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+- <h3 id="modalTitle">Saved data Load</h3>
++ <h3 id="modalTitle">Load saved data</h3>
+  <p id="modalMessage">A previously saved proposal exists. Would you like to load it?</p>
+  <div class="modal-buttons">
+  <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+  <button class="btn btn-primary" onclick="confirmLoad()">Load</button>
+  </div>
+  </div>
+  </div>
+ 
+  <script>// State Management
+  let currentStep = 1;
+  const totalSteps = 6;
+ 
+  function storageAvailable() {
+  try {
+  const testKey = '__ai_hackathon_storage_test__';
+  localStorage.setItem(testKey, '1');
+  localStorage.removeItem(testKey);
+  return true;
+  } catch (e) {
+  return false;
+  }
+  }
+ 
+  function safeSetItem(key, value) {
+  if (!storageAvailable()) return false;
+@@ -2463,175 +2596,175 @@ Connect systems/tools to create an end-to-end execution flow and minimize handof
+  const techDescValid = techDescription.length >= 50 && /||||evidence|judgment||||||||case|apply|test|check|evidence|rationale|demo|experience|reference|article|blog|vendor/i.test(techDescription);
+  check('vf-v4-caseevidence', techDescValid);
+  }
+ 
+  function updateValidation(id, pass) {
+  const item = document.getElementById(id);
+  if (!item) return;
+  if (pass) {
+  item.classList.add('pass');
+  item.classList.remove('fail');
+  item.querySelector('.validation-icon').textContent = '✓';
+  } else {
+  item.classList.add('fail');
+  item.classList.remove('pass');
+  item.querySelector('.validation-icon').textContent = '!';
+  }
+  }
+  // Generate Preview - Real-time data (XSS )
+  function generatePreview() {
+  const data = collectFormData();
+  const container = document.getElementById('previewContainer');
+  // Quantitative effects HTML 
+  let quantitativeEffectsHTML = '';
+  if (data.effect_cost_enabled && data.effect_cost_value) {
+  quantitativeEffectsHTML += `<div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+- <strong>Please enter details.</strong>
++ <strong>Cost savings</strong>
+  <p style="margin: 8px 0;">${formatText(data.effect_cost_value)}</p>
+  ${data.effect_cost_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_cost_basis)}</p>` : ''}
+  </div>
+  `;
+  }
+  if (data.effect_revenue_enabled && data.effect_revenue_value) {
+  quantitativeEffectsHTML += `
+  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+- <strong>Please enter details.</strong>
++ <strong>Revenue uplift</strong>
+  <p style="margin: 8px 0;">${formatText(data.effect_revenue_value)}</p>
+  ${data.effect_revenue_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_revenue_basis)}</p>` : ''}
+  </div>
+  `;
+  }
+  if (data.effect_risk_enabled && data.effect_risk_value) {
+  quantitativeEffectsHTML += `
+  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+- <strong>Please enter details.</strong>
++ <strong>Risk reduction</strong>
+  <p style="margin: 8px 0;">${formatText(data.effect_risk_value)}</p>
+  ${data.effect_risk_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_risk_basis)}</p>` : ''}
+  </div>
+  `;
+  }
+  if (data.effect_strategic_enabled && data.effect_strategic_value) {
+  quantitativeEffectsHTML += `
+  <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+- <strong>Please enter details.</strong>
++ <strong>Strategic impact</strong>
+  <p style="margin: 8px 0;">${formatText(data.effect_strategic_value)}</p>
+  ${data.effect_strategic_basis ? `<p style="font-size: 13px; color: #64748b;"><em>evidence:</em> ${formatText(data.effect_strategic_basis)}</p>` : ''}
+  </div>`;
+  }
+  // Task HTML 
+  let taskTableHTML = '';
+  const tasks = [{ no: 1, ...data.task1 }, { no: 2, ...data.task2 }, { no: 3, ...data.task3 }, { no: 4, ...data.task4 }, { no: 5, ...data.task5 }];
+  const validTasks = tasks.filter(t => t && t.desc);
+  if (validTasks.length > 0) {
+  taskTableHTML = `<table class="preview-table">
+  <tr><th style="width: 10%;">No.</th><th>Task</th><th style="width: 15%;">Prereq</th><th style="width: 15%;">Duration</th></tr>
+  ${validTasks.map((t) => `<tr><td>${t.no}</td><td>${escapeHtml(t.desc)}</td><td>${escapeHtml(t.prereq) || '-'}</td><td>${escapeHtml(t.duration) || '-'}</td></tr>`).join('')}
+  </table>`;
+  }
+  // system 
+  const systemList = [...(data.systems || []), data.customSystems].filter(Boolean).join(', ');
+  container.innerHTML = `<div class="preview-header">
+- <h1>ExecutionProject Definition</h1>
++ <h1>Execution Plan</h1>
+  <h2>${escapeHtml(data.projectName) || '[Project Name]'}</h2>
+  </div>
+  
+  <div class="preview-section">
+  <h3>1. Overview</h3>
+  <table class="preview-table">
+  <tr><th>Project Name</th><td>${escapeHtml(data.projectName) || '-'}</td></tr>
+  <tr><th>Core Objective</th><td>${escapeHtml(data.coreProject) || '-'}</td></tr>
+  <tr><th>Department</th><td>${escapeHtml(data.department) || '-'}</td></tr>
+  <tr><th>AI Champion</th><td>${escapeHtml(data.champion) || '-'}</td></tr>
+  <tr><th>Project Definition</th><td>${formatText(data.projectDefinition)}</td></tr>
+  <tr><th>Problem to solve</th><td>${formatText(data.painPoint)}</td></tr>
+  <tr><th>Expected impact</th><td>${formatText(data.expectedEffect)}</td></tr>
+- <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'}months</td></tr>
++ <tr><th>Project Duration</th><td>${escapeHtml(data.projectDuration) || '-'} months</td></tr>
+  </table>
+  </div>
+  
+  <div class="preview-section">
+  <h3>2. As-Is Status</h3>
+  <div class="preview-content">
+  <p><strong>Current workflow:</strong></p>
+  <p>${formatText(data.asisDescription)}</p>
+  <br>
+  <p><strong>Issues:</strong></p>
+  <ul style="margin-left: 20px;">
+  ${data.asisTimeProblem ? `<li>Time inefficiency: ${escapeHtml(data.asisTimeProblem)}</li>` : ''}
+  ${data.asisQualityProblem ? `<li>Quality/accuracy issue: ${escapeHtml(data.asisQualityProblem)}</li>` : ''}
+  ${data.asisSystemProblem ? `<li>System/data issue: ${escapeHtml(data.asisSystemProblem)}</li>` : ''}
+  ${data.asisOtherProblem ? `<li>Other: ${escapeHtml(data.asisOtherProblem)}</li>` : ''}
+  </ul>
+  <br>
+- <p><strong> Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
++ <p><strong>Current systems:</strong> ${escapeHtml(systemList) || '-'}</p>
+  </div>
+  </div>
+  
+  <div class="preview-section">
+- <h3>3. To-Be Scenario (AI Adoption )</h3>
++ <h3>3. To-Be Scenario (AI Adoption)</h3>
+  <div class="preview-content">
+  <p><strong>Workflow after AI adoption:</strong></p>
+  <p>${formatText(data.tobeDescription)}</p>
+  <br>
+  <p><strong>Tasks performed by AI:</strong></p>
+  <p>${formatText(data.aiRole)}</p>
+  <br>
+  <p><strong>Tasks performed by humans:</strong></p>
+  <p>${formatText(data.humanRole)}</p>
+  <br>
+  <p><strong>AI interaction design:</strong></p>
+  <p>• Input: ${escapeHtml(data.aiInput) || '-'}</p>
+  <p>• Output: ${escapeHtml(data.aiOutput) || '-'}</p>
+  <br>
+  <p><strong>Exception handling:</strong></p>
+  <p>${formatText(data.exceptionHandling)}</p>
+  </div>
+  </div>
+  
+  <div class="preview-section">
+  <h3>4. Data & Technology Review</h3>
+  <div class="preview-content">
+  <p><strong>Required data:</strong></p>
+  <p>${formatText(data.requiredData)}</p>
+  
+  <p><strong>Data source/location:</strong> ${formatText(data.dataSource)}</p>
+  <p><strong>Data format:</strong> ${formatText(data.dataFormat)}</p>
+  <p><strong>Data refresh cycle:</strong> ${escapeHtml(data.dataUpdateCycle) || '-'}</p>
+  <br>
+  <p><strong>Expected data quality issues:</strong></p>
+  <p>${formatText(data.dataQualityIssue)}</p>
+  <br>
+  <p><strong>Preprocessing/cleanup plan:</strong></p>
+  <p>${formatText(data.dataPreprocessing)}</p>
+  <br>
+  <p><strong>Security/compliance considerations:</strong></p>
+  <p>${formatText(data.dataSecurity)}</p>
+  <br>
+  <p><strong>Reference benchmark:</strong></p>
+  <p>${formatText(data.feedbackReference)}</p>
+  <br>
+- <p><strong> Error judgment criteria:</strong></p>
++ <p><strong>Error judgment criteria:</strong></p>
+  <p>${formatText(data.feedbackErrorRule)}</p>
+  <br>
+  <p><strong>Relevant AI technologies:</strong> ${escapeHtml(data.techTags.join(', ')) || '-'}</p>
+  <br>
+  <p><strong>Application plan and rationale:</strong></p>
+  <p>${formatText(data.techDescription)}</p>
+  </div>
+  </div>
+  
+  <div class="preview-section">
+  <h3>5. Expected Impact & ROI</h3>
+  <div class="preview-content">
+  ${data.keyBenefit ? `
+  <div style="background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color: white; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px;">
+  <strong>🎯 Key expected impact:</strong> ${escapeHtml(data.keyBenefit)}
+  </div>
+  ` : ''}
+  
+  <p><strong>📊 Quantitative effects</strong></p>
+  ${quantitativeEffectsHTML || '<p style="color: #94a3b8;">Quantitative effects not found.</p>'}
+  
+  <br>
+  <p><strong>✨ Qualitative effects</strong></p>
+  <p>${formatText(data.qualitativeValue)}</p>
+  
