@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -1250,10 +1249,10 @@
       <div class="card">
         <div class="card-title">
           현재 업무 프로세스 (As-Is)
-          <button class="hint-btn" onclick="toggleHint('hint3')">💡 예시 보기</button>
+          <button class="hint-btn" onclick="toggleHint('hint3')">💡 작성 가이드</button>
         </div>
         <div class="hint-content" id="hint3">
-          <strong>🧭 작성 가이드: As-Is는 “지금 어떻게 굴러가는지”를 재현하는 단계입니다</strong>
+          <strong>🧭 As-Is는 “지금 어떻게 업무가 진행되는 지”를 재현하는 단계입니다</strong>
           <ul>
             <li> 정량화 (Quantify) : <br>
               - 해당 업무에 얼마나 시간이 걸리나? (시간/건)<br>
@@ -1264,15 +1263,15 @@
 
               - 오류율은 얼마나 되나? (%)<br>
             </li>
-            <li>프로세스 상세화 (Detail) <br>
+            <li>프로세스 상세화 (Detail) : <br>
               - 각 단계별 소요 시간 분해 <br>
               - 수작업 vs 시스템 비율 <br>
               - 현재 사용하는 툴/시스템은? <br>
             </li>
-            <li>문제의 영향 파악 (Impact) <br>
+            <li>문제의 영향 파악 (Impact) : <br>
               - 이 문제로 인한 비용은? (인건비, 지연 비용) <br>
               - 놓치고 있는 기회 비용은? <br>
-              - 품질/고객 만족도에 미치는 영향은? <br>
+              - 품질에 미치는 영향은? <br>
             </li>
           </ul>
           <strong>❌ 피해야 할 예시</strong>: 주관적 추정에 의존/뭉뚱그려 말하기/ AI 만능주의
@@ -1492,28 +1491,21 @@
           데이터 & 기술 검토
         </h2>
         <p class="section-desc">AI 구현에 필요한 데이터와 기술 요소를 검토합니다. 데이터 확보 가능성이 프로젝트 성공의 핵심입니다.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-title">
-          필요 데이터
-          <button class="hint-btn" onclick="toggleHint('hint5')">💡 데이터 체크리스트</button>
-        </div>
+        <button class="hint-btn" onclick="toggleHint('hint5')">💡 작성 가이드 </button>
         <div class="hint-content" id="hint5">
           <strong>✅ Pass 기준: Agentic AI 를 위해 고려해야할 3가지 데이터 유형 과 Tool </strong>
           <ul>
             <li> Input 데이터: Agent의 작업을 위한 원천 데이터 <br>
               - 사용자 요청 <br>
               - 계약서, 임상 데이터, 고객 문의 등 <br>
-
             </li>
             <li>Knowledge 데이터: Agent 가 참조할 지식/맥락 <br>
               - 내부 지식 (사내 규정, SOP, 사례집) <br>
               - 외부 DB, 웹서치 <br>
             </li>
-            <li> Feedback 데이터: Agent 검증 기준 <br>
-              - 정답 레이블 데이터 (정답 예시) <br>
-              - 품질 기준, 승인 이력 <br>
+            <li> Feedback 데이터: AI 결과물이 맞는지 판단할 평가 기준 <br>
+              - "이게 정답이다"라고 비교할 수 있는 기준 자료 (예: 올바른 보고서 예시, 과거 승인된 결과물) <br>
+              - 어떤 조건을 충족해야 '통과'인지 판단하는 규칙 (예: 적용해야 할 규정/스펙, 승인 이력) <br>
             </li>
             <li> 기타 Tool/Action: Agent 가 사용할 도구/시스템 <br>
               - 웹서치, 메일발송 <br>
@@ -1526,6 +1518,12 @@
             <li>데이터 부재: 아이디어는 있으나, 이를 뒷받침할 문서나 데이터가 디지털화되어 있지 않음</li>
             <li>막연한 기대: "인터넷에 있는 정보" 등 참조 대상이 너무 광범위</li>
           </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          필요 데이터
         </div>
         <div class="form-group">
           <label class="form-label">필요한 데이터 목록 <span class="required">*</span></label>
@@ -1599,6 +1597,29 @@
 - 조회 기록: 누가 언제 데이터를 열어봤는지 기록을 남길 필요가 있는지"></textarea>
           </div>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"> AI 결과물 평가 기준 </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">비교 기준 자료(정답과 비교할 수 있는 자료 ) </label>
+            <textarea class="form-textarea" id="feedbackReference" placeholder="예:
+- 과거에 사람이 작성하고 승인된 보고서/결과물 (올바른 예시)
+- 적용해야 할 규정/스펙/기준서 (예: US 제품에는 US Spec 적용)
+- 검토자가 확인하는 체크리스트 항목
+- 이전 승인 이력 (누가, 언제, 어떤 기준으로 승인했는지)"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label"> 오류 판단 기준 자료(이런 경우는 오류로 판단한다) </label>
+            <textarea class="form-textarea" id="feedbackErrorRule" placeholder="예:
+- 대상과 다른 기준을 적용한 경우 (예: US 제품에 EU 기준 매칭)
+- 필수 항목이 빠져 있거나 수치가 허용 범위를 벗어난 경우
+- 이전 승인 이력과 결과가 크게 달라진 경우 (사유 없이)
+- 적용한 규정/기준서의 버전이 최신이 아닌 경우"></textarea>
+          </div>
+        </div>
+        <p class="form-help">Tip: "AI가 틀렸을 때 어떻게 알 수 있는가?"를 기준으로 적어보세요.</p>
       </div>
 
       <div class="card">
