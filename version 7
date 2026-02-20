@@ -1108,7 +1108,7 @@
             <input type="text" class="form-input" id="projectName" placeholder="예: 교육 이수 현황 자동 관리 AI 비서">
           </div>
           <div class="form-group">
-            <label class="form-label">과제핵심목표 <span class="required">*</span></label>
+            <label class="form-label">과제 핵심 목표 <span class="required">*</span></label>
             <input type="text" class="form-input" id="coreProject" placeholder="예: 교육 이수율 100% 달성 및 관리 업무 자동화">
           </div>
         </div>
@@ -1138,10 +1138,10 @@
           </p>
 
           <div style="margin-top:12px; padding:12px; background:#f8fafc; border-radius:8px;">
-            <strong style="color:#0f172a;">📌 체크 포인트 (3개만)</strong>
+            <strong style="color:#0f172a;">📌 체크 포인트</strong>
             <ul style="margin:8px 0 0 18px; font-size:13px; color:#334155; line-height:1.7;">
               <li><strong>업무 범위</strong>: 어떤 업무/상황의 과제인가?</li>
-              <li><strong>AI 역할(최소)</strong>: AI가 어떤 방식으로 돕는가? (예: 취합/정리/요약/추출/알림)</li>
+              <li><strong>AI 수행 방식</strong>: AI가 어떤 방식으로 돕는가? (예: 취합/정리/요약/추출/알림)</li>
               <li><strong>성과 목표</strong>: 시간·비용·품질·리스크 중 무엇이 좋아지는가?</li>
             </ul>
           </div>
@@ -1183,12 +1183,12 @@
         <div class="form-group">
           <label class="form-label">현재 업무의 어려움과 비효율성 <span class="required">*</span></label>
           <textarea class="form-textarea" id="painPoint"></textarea>
-          <p class="form-help">Tip: "예: 월별 취합에 2시간 소요, 수작업 입력으로 인한 오류 발생 빈번 등 구체적인 고통 요소를 작성하세요."</p>
+          <p class="form-help">Tip: "월별 취합에 2시간 소요, 수작업 입력으로 인한 오류 발생 빈번" 등 구체적인 고통 요소를 작성하세요.</p>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-title">도입 예상 효과 (Connection)</div>
+        <div class="card-title">도입 예상 효과 </div>
         <div class="form-group">
           <label class="form-label">AI 도입 시 기대되는 효과 및 활용 <span class="required">*</span></label>
           <textarea class="form-textarea" id="expectedEffect" placeholder="예: 
@@ -1218,7 +1218,7 @@
         <div class="validation-item" id="v1-painpoint">
           <div class="validation-icon">?</div>
           <div class="validation-text">
-            <strong>Pain Point </strong>
+            <strong>Pain Point</strong>
             <span>누가/언제/어떤 업무에서 어떤 불편·오류·지연이 발생하는지, 사례(1~2줄)와 함께 구체적으로 적혀 있나요?</span>
           </div>
         </div>
@@ -1243,7 +1243,7 @@
           <span class="emoji">📊</span>
           As-Is 현황 분석
         </h2>
-        <p class="section-desc">AI 도입 전 현재 업무 프로세스를 상세히 분석합니다. Step 1에서 도출한 Pain Point 의 근본 원인을 파악합니다. </p>
+        <p class="section-desc">AI 도입 전 현재 업무 프로세스를 상세히 분석합니다. Step 1에서 도출한 Pain Point의 근본 원인을 파악합니다.</p>
       </div>
 
       <div class="card">
@@ -1299,7 +1299,7 @@
       </div>
       </div>
       <div class=" card">
-        <div class="card-title">현재 프로세스의 문제점 (실제 있는 세션만 작성해도 됩니다.)</div>
+        <div class="card-title">현재 프로세스의 문제점 (해당하는 항목만 작성해도 됩니다.)</div>
         <div class="grid-2">
           <div class="form-group">
             <label class="form-label">시간 비효율</label>
@@ -1459,7 +1459,7 @@
           <div class="validation-icon">?</div>
           <div class="validation-text">
             <strong>Process 재설계</strong>
-            <span>As-Is → To-Be 프로세스 변화가 단계별로 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
+            <span>As-Is → To-Be 프로세스 변화가 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
           </div>
         </div>
         <div class="validation-item" id="v3-humanloop">
@@ -1491,9 +1491,9 @@
           데이터 & 기술 검토
         </h2>
         <p class="section-desc">AI 구현에 필요한 데이터와 기술 요소를 검토합니다. 데이터 확보 가능성이 프로젝트 성공의 핵심입니다.</p>
-        <button class="hint-btn" onclick="toggleHint('hint5')">💡 작성 가이드 </button>
+        <button class="hint-btn" onclick="toggleHint('hint5')">💡 작성 가이드</button>
         <div class="hint-content" id="hint5">
-          <strong>✅ Pass 기준: Agentic AI 를 위해 고려해야할 3가지 데이터 유형 과 Tool </strong>
+          <strong>✅ Pass 기준: Agentic AI 를 위해 고려해야 할 3가지 데이터 유형과 Tool </strong>
           <ul>
             <li> Input 데이터: Agent의 작업을 위한 원천 데이터 <br>
               - 사용자 요청 <br>
@@ -1600,10 +1600,10 @@
       </div>
 
       <div class="card">
-        <div class="card-title"> AI 결과물 평가 기준 </div>
+        <div class="card-title"> AI 결과물 평가 기준</div>
         <div class="grid-2">
           <div class="form-group">
-            <label class="form-label">비교 기준 자료(정답과 비교할 수 있는 자료 ) </label>
+            <label class="form-label">비교 기준 자료(정답과 비교할 수 있는 자료) </label>
             <textarea class="form-textarea" id="feedbackReference" placeholder="예:
 - 과거에 사람이 작성하고 승인된 보고서/결과물 (올바른 예시)
 - 적용해야 할 규정/스펙/기준서 (예: US 제품에는 US Spec 적용)
@@ -1611,7 +1611,7 @@
 - 이전 승인 이력 (누가, 언제, 어떤 기준으로 승인했는지)"></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label"> 오류 판단 기준 자료(이런 경우는 오류로 판단한다) </label>
+            <label class="form-label"> 오류 판단 기준 자료(이런 경우를 오류로 판단한다)</label>
             <textarea class="form-textarea" id="feedbackErrorRule" placeholder="예:
 - 대상과 다른 기준을 적용한 경우 (예: US 제품에 EU 기준 매칭)
 - 필수 항목이 빠져 있거나 수치가 허용 범위를 벗어난 경우
@@ -1921,12 +1921,12 @@
       </div>
 
       <div class="card">
-        <div class="card-title">실행을 위한 필요 Task</div>
+        <div class="card-title">Task 내용</div>
         <table class="task-table">
           <thead>
             <tr>
               <th style="width: 5%;">No.</th>
-              <th style="width: 55%;">실행을 위한 필요 Task</th>
+              <th style="width: 55%;">Task 내용</th>
               <th style="width: 20%;">선행 Task</th>
               <th style="width: 20%;">수행 기간</th>
             </tr>
@@ -1981,7 +1981,7 @@
           <div class="validation-item" id="vf-v1-painpoint">
             <div class="validation-icon">?</div>
             <div class="validation-text">
-              <strong>Pain Point </strong>
+              <strong>Pain Point</strong>
               <span>누가/언제/어떤 업무에서 어떤 불편·오류·지연이 발생하는지, 사례(1~2줄)와 함께 구체적으로 적혀 있나요?</span>
             </div>
           </div>
@@ -1999,7 +1999,7 @@
             <div class="validation-icon">?</div>
             <div class="validation-text">
               <strong>Process 재설계</strong>
-              <span>As-Is → To-Be 프로세스 변화가 단계별로 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
+              <span>As-Is → To-Be 프로세스 변화가 단계별로 작성되어 있고 각 단계에 주체(사람/AI/시스템) 와 산출물이 명시되어 있나요? </span>
             </div>
           </div>
           <div class="validation-item" id="vf-v3-humanloop">
@@ -2515,8 +2515,8 @@
       const painPointVal = getVal('painPoint');
       const definitionVal = getVal('projectDefinition');
       const effectVal = getVal('expectedEffect');
-      const isPainPointValid = painPointVal.length >= 20 &&
-        /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복/.test(painPointVal);
+      const isPainPointValid = painPointVal.length >= 80 &&
+        /시간|비용|오류|수작업|비효율|지연|누락|중복|건|분|회|불필요|반복/.test(painPointVal);
       updateValidationUI('v1-painpoint', isPainPointValid, painPointVal.length > 0);
       const isDefinitionValid = definitionVal.length >= 20 &&
         /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성/.test(definitionVal);
@@ -2590,8 +2590,8 @@
       const painPointVal = (data.painPoint || '').trim();
       const definitionVal = (data.projectDefinition || '').trim();
       const effectVal = (data.expectedEffect || '').trim();
-      const isPainPointValid = painPointVal.length >= 20 &&
-        /시간|비용|오류|수작업|비효율|어려움|지연|불필요|반복/.test(painPointVal);
+      const isPainPointValid = painPointVal.length >= 60 &&
+        /시간|비용|오류|수작업|비효율|지연|불필요|반복/.test(painPointVal);
       const isDefinitionValid = definitionVal.length >= 20 &&
         /AI|자동|예측|분석|추천|모델|LLM|알고리즘|생성/.test(definitionVal);
       const isConnectionValid = effectVal.length >= 20 &&
@@ -2681,7 +2681,22 @@
       }
       // Task 테이블 HTML 생성
       let taskTableHTML = '';
-      const tasks = [{ no: 1, ...data.task1 }, { no: 2, ...data.task2 }, { no: 3, ...data.task3 }, { no: 4, ...data.task4 }, { no: 5, ...data.task5 }];
+      const tasks = [{
+        no: 1,
+        ...data.task1
+      }, {
+        no: 2,
+        ...data.task2
+      }, {
+        no: 3,
+        ...data.task3
+      }, {
+        no: 4,
+        ...data.task4
+      }, {
+        no: 5,
+        ...data.task5
+      }];
       const validTasks = tasks.filter(t => t && t.desc);
       if (validTasks.length > 0) {
         taskTableHTML = `
@@ -2743,7 +2758,7 @@
                         <p><strong>사람이 수행할 작업:</strong></p>
                         <p>${formatText(data.humanRole)}</p>
                         <br>
-                        <p><strong>AI 상호 설계:</strong></p>
+                        <p><strong>AI 상호작용 설계:</strong></p>
                         <p>• 입력(Input): ${escapeHtml(data.aiInput) || '-'}</p>
                         <p>• 출력(Output): ${escapeHtml(data.aiOutput) || '-'}</p>
                         <br>
